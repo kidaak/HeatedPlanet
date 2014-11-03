@@ -5,9 +5,6 @@ import common.ComponentBase;
 import common.IBuffer;
 import common.IGrid;
 import messaging.Message;
-import messaging.Publisher;
-import messaging.events.DisplayMessage;
-import messaging.events.NeedDisplayDataMessage;
 
 public class View extends ComponentBase {
 
@@ -17,12 +14,7 @@ public class View extends ComponentBase {
 	// set true to instrument stats (NOTE: some of these will change execution timing)
 	private final boolean STATISTIC_MODE = false; 
 	
-	private Publisher pub = Publisher.getInstance();
-	
 	EarthDisplay display = null;
-
-	// flag used to keep us from requesting more than once before getting response
-	boolean displayRequestPending = false; 
 
 	// set to true when initial conditions are overcome
 	boolean steadyState = false; 
@@ -105,19 +97,12 @@ public class View extends ComponentBase {
 			}
 			present(data);
 			lastDisplayTime = curTime;
-			displayRequestPending = false;
-		} else {
-			if (!displayRequestPending) {
-				pub.send(new NeedDisplayDataMessage());
-				displayRequestPending = true;
-			}
 		}
 	}
 
 	private void present(IGrid data) {
 
 		display.update(data);
-		pub.send(new DisplayMessage());
 	}
 
 	public void close() {

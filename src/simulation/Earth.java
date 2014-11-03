@@ -33,6 +33,8 @@ public final class Earth {
 	private GridCell prime = null;
 	private int timeStep = DEFAULT_SPEED;
 	private int gs = DEFAULT_DEGREES;
+	private float axialTilt;
+	private float eccentricity;
 	
 	//private ArrayBlockingQueue<IGrid> q;xa
 	
@@ -45,8 +47,11 @@ public final class Earth {
 		return prime;
 	}
 
-	public void configure(int gs, int timeStep) {
-
+	public void configure(int gs, int timeStep, float axialTilt, float eccentricity) {
+		// TODO: is any validation required here?
+		this.axialTilt = axialTilt;
+		this.eccentricity = eccentricity;
+		
 		if (gs <= 0 || gs > MAX_DEGREES)
 			throw new IllegalArgumentException("Invalid grid spacing");
 

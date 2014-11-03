@@ -1,4 +1,4 @@
 #!/bin/sh
 # run.sh
-java -cp bin EarthSim.Demo
+java -cp bin PlanetSim.Demo
 
