@@ -139,8 +139,8 @@ public final class GridCell implements EarthCell<GridCell> {
 	}
 	
 	@Override
-	public float calculateTemp(int sunPosition) {
-		float temp   = this.currTemp + (calTneighbors() - this.currTemp) / 5 + ( calTsun(sunPosition) + calTcool() ) / 10;
+	public float calculateTemp(int sunPosition,float sunLatitude, float distanceFromSun) {
+		float temp   = this.currTemp + (calTneighbors() - this.currTemp) / 5 + ( calTsun(sunPosition,sunLatitude,distanceFromSun) + calTcool(distanceFromSun) ) / 10;
 		this.newTemp = (temp > 0) ? temp : 0;    // avoid negative temperature
 		return this.newTemp; // new temp
 	}
@@ -198,15 +198,15 @@ public final class GridCell implements EarthCell<GridCell> {
 		return this.gs;
 	}
 	
-	public float calTsun(int sunPosition) {
+	public float calTsun(int sunPosition,float sunLatitude, float distanceFromSun) {
 		
 		int   sunLongitude      = getSunLocationOnEarth(sunPosition);
-		float attenuation_lat   = (float) Math.cos(Math.toRadians(this.latitude  + 1.0 * this.gs / 2));
+		float attenuation_lat   = (float) Math.cos(Math.toRadians(sunLatitude + this.latitude  + 1.0 * this.gs / 2));
 		//float attenuation_longi = (float) (( (Math.abs(sunLongitude - this.longitude) % 360 ) < 90 ) ? Math.cos(Math.toRadians(sunLongitude - this.longitude)) : 0);
 		float attenuation_longi = (float) Math.cos(Math.toRadians(sunLongitude - this.longitude));
 		attenuation_longi = attenuation_longi > 0 ? attenuation_longi : 0;
-		
-		return 278 * attenuation_lat * attenuation_longi;
+		attenuation_lat = attenuation_lat > 0 ? attenuation_lat : 0;
+		return (float) Math.pow(Earth.SEMI_MAJOR_AXIS/distanceFromSun, 2) * 278 * attenuation_lat * attenuation_longi;
 	}
 	
 	private void calSurfaceArea(int latitude, int gs) {
@@ -232,10 +232,10 @@ public final class GridCell implements EarthCell<GridCell> {
 		return j < (cols / 2) ? -(j + 1) * this.gs : (360) - (j + 1) * this.gs;
 	}
 
-	public float calTcool() {
+	public float calTcool(float distanceFromSun) {
 		float beta = (float) (this.surfarea / avgArea);  // actual grid area / average cell area
 		//return -1 * beta * avgsuntemp;
-		return -1 * beta * this.currTemp / 288 * avgsuntemp;
+		return (float) ( -1 * beta * this.currTemp / 288 * avgsuntemp / Math.pow(Earth.SEMI_MAJOR_AXIS/distanceFromSun, 2) );
 	}
 	
 	public static void setAvgSuntemp(float avg){

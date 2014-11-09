@@ -13,10 +13,13 @@ public final class Earth {
 
 	public static final double CIRCUMFERENCE = 4.003014 * Math.pow(10, 7);
 	public static final double SURFACE_AREA = 5.10072 * Math.pow(10, 14);
+	public static final double SEMI_MAJOR_AXIS = 1.4960 * Math.pow(10,11);
+	public static final double ORBITAL_PERIOD = 365.256*24*60; //in minutes
 
 	public static final int MAX_TEMP = 550; // shot in the dark here...
 	public static final int INITIAL_TEMP = 288;
 	public static final int MIN_TEMP = 0;
+	public static int EarthTimeStep = 1;
 
 	private static final int DEFAULT_DEGREES = 15;
 	private static final int DEFAULT_SPEED = 1; // minutes
@@ -35,6 +38,9 @@ public final class Earth {
 	private int gs = DEFAULT_DEGREES;
 	private float axialTilt;
 	private float eccentricity;
+	private float distanceFromSun;
+	private float orbitalAngle;
+	private float sunLatitude;
 	
 	//private ArrayBlockingQueue<IGrid> q;xa
 	
@@ -51,6 +57,10 @@ public final class Earth {
 		// TODO: is any validation required here?
 		this.axialTilt = axialTilt;
 		this.eccentricity = eccentricity;
+		this.orbitalAngle = 0.0f;
+		this.sunLatitude = axialTilt;
+		Earth.EarthTimeStep = timeStep;
+		updateDistanceFromSun();
 		
 		if (gs <= 0 || gs > MAX_DEGREES)
 			throw new IllegalArgumentException("Invalid grid spacing");
@@ -131,7 +141,7 @@ public final class Earth {
 		for (x = 0; x < height; x++) {
 			GridCell rowgrid = curr.getLeft();
 			for (y = 0; y < width; y++) {
-				totaltemp += rowgrid.calTsun(sunPositionCell);
+				totaltemp += rowgrid.calTsun(sunPositionCell,sunLatitude,distanceFromSun);
 				totalarea += rowgrid.getSurfarea();
 				rowgrid = rowgrid.getLeft();
 			}
@@ -154,6 +164,9 @@ public final class Earth {
 		Queue<GridCell> calcd = new LinkedList<GridCell>();
 
 		currentStep++;
+		updateOrbitalAngle();
+		updateDistanceFromSun();
+		updateSunLatitude();
 
 		int t = timeStep * currentStep;
 		int rotationalAngle = 360 - ((t % MAX_SPEED) * 360 / MAX_SPEED);
@@ -169,8 +182,8 @@ public final class Earth {
 		float suntotal = 0;
 		float calcdTemp = 0;
 		
-		calcdTemp = prime.calculateTemp(sunPositionCell);
-		suntotal = suntotal + prime.calTsun(sunPositionCell);
+		calcdTemp = prime.calculateTemp(sunPositionCell,sunLatitude,distanceFromSun);
+		suntotal = suntotal + prime.calTsun(sunPositionCell,sunLatitude,distanceFromSun);
 		grid.setTemperature(prime.getX(), prime.getY(), calcdTemp);
 		
 		prime.visited(true);
@@ -188,10 +201,10 @@ public final class Earth {
 				
 				child = itr.next();
 				child.visited(true);
-				calcdTemp = child.calculateTemp(sunPositionCell);
+				calcdTemp = child.calculateTemp(sunPositionCell,sunLatitude,distanceFromSun);
 				grid.setTemperature(child.getX(), child.getY(), calcdTemp);
 				bfs.add(child);
-				suntotal += child.calTsun(sunPositionCell);
+				suntotal += child.calTsun(sunPositionCell,sunLatitude,distanceFromSun);
 			}
 		}
 
@@ -202,6 +215,8 @@ public final class Earth {
 			c.swapTemp();
 			c = calcd.poll();
 		}
+		
+		//printGrid(grid);
 
 		Buffer.getBuffer().add(grid);
 	}
@@ -257,5 +272,28 @@ public final class Earth {
 
 	private int getLongitude(int x) {
 		return x < (width / 2) ? -(x + 1) * this.gs : (360) - (x + 1) * this.gs;
+	}
+	
+	private void updateOrbitalAngle(){
+		this.orbitalAngle += (float) ( 2 * Math.PI * Math.pow(Earth.SEMI_MAJOR_AXIS, 2) * Math.sqrt( 1 - Math.pow(eccentricity,2) ) * timeStep / ( Earth.ORBITAL_PERIOD * Math.pow(distanceFromSun, 2) ) );
+	}
+	
+	private void updateSunLatitude(){
+		this.sunLatitude = (float) (-this.axialTilt*Math.cos(orbitalAngle));
+	}
+	
+	private void updateDistanceFromSun(){
+		this.distanceFromSun = (float) ( Earth.SEMI_MAJOR_AXIS * (1 - Math.pow(eccentricity,2)) / ( 1 + eccentricity * Math.cos(orbitalAngle) ) );
+	}
+	
+	private void printGrid(IGrid grid){
+		System.out.println();
+		System.out.println("Grid - " + currentStep + " - "+ timeStep + " - " + distanceFromSun + " - " + orbitalAngle + " - " + sunLatitude);
+		for(int i = 0; i < grid.getGridHeight(); i++){
+			for( int j = 0; j < grid.getGridWidth(); j++){
+				System.out.print(grid.getTemperature(j, i)+" ,");
+			}
+			System.out.println();
+		}
 	}
 }
