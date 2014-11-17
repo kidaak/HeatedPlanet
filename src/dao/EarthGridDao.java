@@ -1,5 +1,7 @@
 package dao;
 
+import common.Grid;
+
 import dao.interfaces.IEarthGridDao;
 
 public class EarthGridDao implements IEarthGridDao {
@@ -35,6 +37,8 @@ public class EarthGridDao implements IEarthGridDao {
 	@Override
 	public ResponseType addEarthGrid(EarthGridQuery egq) {
 		// TODO Auto-generated method stub
+		
+		
 		return ResponseType.ERROR;
 	}
 

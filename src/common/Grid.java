@@ -1,10 +1,13 @@
 package common;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class Grid implements IGrid {
-
+public class Grid implements IGrid, Serializable {
+	
+	static final long serialVersionUID = -7894194241L;
+	
 	// Used to transport the temps in the buffer
 	private final int sunPosition, time, width, height;
 	private final float sunPositionDeg;
