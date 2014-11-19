@@ -11,18 +11,24 @@ public class Grid implements IGrid, Serializable {
 	// Used to transport the temps in the buffer
 	private final int sunPosition, time, width, height;
 	private final float sunPositionDeg;
-
+	private final float sunLatitudeDeg;
+	private final float distanceFromSun;
+	private final float orbitalAngle;
+	
 	// We use a TreeMap to not consume a contiguous amount of memory. It's
 	// backed by a Red/Black Tree, so we get pretty decent access times
 	private final Map<Integer, Float> grid;
 
-	public Grid(int sunPosition, float sunPositionDeg, int time, int width, int height) {
+	public Grid(int sunPosition, float sunPositionDeg, int time, int width, int height, float sunLatitudeDeg, float distanceFromSun,float orbitalAngle) {
 
 		this.sunPosition = sunPosition;
 		this.sunPositionDeg = sunPositionDeg;
 		this.time = time;
 		this.width = width;
 		this.height = height;
+		this.sunLatitudeDeg = sunLatitudeDeg;
+		this.distanceFromSun = distanceFromSun;
+		this.orbitalAngle = orbitalAngle;
 
 		grid = new TreeMap<Integer, Float>();
 	}
@@ -34,6 +40,9 @@ public class Grid implements IGrid, Serializable {
 		this.time = toCopy.time;
 		this.width = toCopy.width;
 		this.height = toCopy.height;
+		this.sunLatitudeDeg = toCopy.sunLatitudeDeg;
+		this.distanceFromSun = toCopy.distanceFromSun;
+		this.orbitalAngle = toCopy.orbitalAngle;
 		
 		this.grid = new TreeMap<Integer, Float>(toCopy.grid);
 	}
@@ -73,4 +82,17 @@ public class Grid implements IGrid, Serializable {
 	public int getGridHeight() {
 		return this.height;
 	}
+	
+	public float getSunLatitudeDeg(){
+		return this.sunLatitudeDeg;
+	}
+	
+	public float getDistanceFromSun(){
+		return this.distanceFromSun;
+	}
+	
+	public float getOrbitalAngle(){
+		return this.orbitalAngle;
+	}
+
 }

@@ -13,5 +13,11 @@ public interface IGrid {
 	public int getGridWidth();
 	
 	public int getGridHeight();
+	
+	public float getSunLatitudeDeg();
+	
+	public float getOrbitalAngle();
+	
+	public float getDistanceFromSun();
 
 }

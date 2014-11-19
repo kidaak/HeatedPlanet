@@ -82,6 +82,10 @@ public final class Earth {
 		} else
 			this.gs = gs;
 	}
+	
+	public void configureFromGrid(IGrid grid, int gs, int timeStep, float axialTilt, float eccentricity) {
+		
+	}
 
 	public void start() {
 		
@@ -177,7 +181,7 @@ public final class Earth {
 			sunPositionDeg = sunPositionDeg - 360;
 		}
 		
-		IGrid grid = new Grid(sunPositionCell, sunPositionDeg, t, width, height);
+		IGrid grid = new Grid(sunPositionCell, sunPositionDeg, t, width, height,sunLatitude,distanceFromSun,orbitalAngle);
 
 		float suntotal = 0;
 		float calcdTemp = 0;
