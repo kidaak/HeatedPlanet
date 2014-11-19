@@ -195,7 +195,7 @@ public class ControllerGUI extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(null,
 					"Please correct input. All fields need numbers");
 		} catch (IllegalArgumentException ex) {
-			JOptionPane.showMessageDialog(null, "Please correct input. All fields need numbers");
+			JOptionPane.showMessageDialog(null, "Please correct input: "+ex.getMessage());
 		}
 				
 		return false;

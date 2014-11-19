@@ -51,6 +51,12 @@ public class Controller extends ComponentBase {
 		if (presentationInterval < 0)
 			throw new IllegalArgumentException("Invalid presentation interval");
 		
+		if (axialTilt < -180 || axialTilt > 180)
+			throw new IllegalArgumentException("Axial tilt must be between -180 and 180");
+		
+		if (eccentricity < 0 || eccentricity >= 1)
+			throw new IllegalArgumentException("Eccentricy must be between 0 and 1");
+		
 		Buffer.getBuffer().create(this.bufferSize);
 		
 		// Instance model/view
