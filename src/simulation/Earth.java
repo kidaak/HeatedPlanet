@@ -83,8 +83,100 @@ public final class Earth {
 			this.gs = gs;
 	}
 	
+	//Call by giving last IGrid from database and then run generate() without running start()
 	public void configureFromGrid(IGrid grid, int gs, int timeStep, float axialTilt, float eccentricity) {
+		this.axialTilt = axialTilt;
+		this.eccentricity = eccentricity;
+		this.orbitalAngle = grid.getOrbitalAngle();
+		this.sunLatitude = grid.getSunLatitudeDeg();
+		this.distanceFromSun = grid.getDistanceFromSun();
+		Earth.EarthTimeStep = timeStep;
+		if (gs <= 0 || gs > MAX_DEGREES)
+			throw new IllegalArgumentException("Invalid grid spacing");
+
+		if (timeStep <= 0 || timeStep > MAX_SPEED)
+			throw new IllegalArgumentException("Invalid speed setting");
+
+		this.timeStep = timeStep;
+
+		// The following could be done better - if we have time, we should do so
+		if (MAX_DEGREES % gs != 0) {
+			for (int i=0; i < increments.length; i++) {
+				if (gs > increments[i]) {
+					this.gs = increments[i];
+				}
+			}
+			
+			System.out.println("gs: " + this.gs);
+		} else
+			this.gs = gs;
 		
+		int x = 0, y = 0;
+
+		width = (2 * MAX_DEGREES / this.gs); // rows
+		height = (MAX_DEGREES / this.gs); // cols
+
+		// do a reset
+		sunPositionCell = (width / 2) % width;
+		currentStep = 0;
+		
+		if (prime != null)
+			prime.setTemp(grid.getTemperature(x,y));
+		else
+			prime = new GridCell(INITIAL_TEMP, x, y, this.getLatitude(y), this.getLongitude(x), this.gs);
+
+		prime.setTop(null);
+
+		// South Pole
+		GridCell next = null, curr = prime;
+		for (x = 1; x < width; x++) {
+			this.createRowCell(curr, next, null, x, y);
+			curr = curr.getLeft();
+		}
+
+		// Stitch the grid row together
+		prime.setRight(curr);
+		curr.setLeft(prime);
+
+		// Create each grid row, with the exception of the south pole
+		GridCell bottom = prime, left = null;
+		for (y = 1; y < height - 1; y++) {
+
+			// curr should be changed, but actually have not.
+			this.createNextRow(bottom, curr, y); 
+			
+			curr = bottom.getTop();
+			
+			// left should be changed, but actually have not.
+			this.createRow(curr, next, bottom.getLeft(), left, y);
+			bottom = bottom.getTop();
+		}
+
+		this.createNextRow(bottom, curr, y);
+		curr = bottom.getTop();
+
+		// North Pole
+		this.createRow(curr, next, bottom.getLeft(), left, y);
+		
+		// Calculate the average sun temperature
+		float totaltemp = 0;
+		float totalarea = 0;
+		curr = prime;
+				
+		for (x = 0; x < height; x++) {
+			GridCell rowgrid = curr.getLeft();
+			
+			for (y = 0; y < width; y++) {
+				rowgrid.setTemp(grid.getTemperature(x,y));
+				totaltemp += rowgrid.calTsun(sunPositionCell,sunLatitude,distanceFromSun);
+				totalarea += rowgrid.getSurfarea();
+				rowgrid = rowgrid.getLeft();
+			}
+			curr = curr.getTop();
+		}
+		// Set initial average temperature
+		GridCell.setAvgSuntemp(totaltemp / (width * height));
+		GridCell.setAverageArea(totalarea / (width * height));
 	}
 
 	public void start() {
