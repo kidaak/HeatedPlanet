@@ -21,12 +21,9 @@ public class DatabaseTest
         Connection conn = DriverManager.
             getConnection("jdbc:h2:~/test", connectionProps);
         // add application code here
-        CoffeesTable ct = new CoffeesTable(conn, "test");
-        //ct.createTable();
-//        ct.populateTable();
-        ct.viewTable(conn);
-        
-        
+        GridTable gridTable = new GridTable(conn);
+        gridTable.createTable();
+
         conn.close();
         System.out.println("Done with test!");
     }
