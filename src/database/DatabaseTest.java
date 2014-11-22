@@ -23,7 +23,8 @@ public class DatabaseTest
         // add application code here
         //GridTable gridTable = new GridTable(conn);
         GridTable gridTable = GridTable.getGridTable();
-        //gridTable.createTable();
+        
+        gridTable.executeSqlGeneral("DROP TABLE Grid");
 
         conn.close();
         System.out.println("Done with test!");

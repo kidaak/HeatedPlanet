@@ -8,15 +8,21 @@ import java.security.NoSuchAlgorithmException;
 
 import common.Grid;
 import dao.interfaces.IEarthGridDao;
+import database.GridTable;
 
 public class EarthGridDao implements IEarthGridDao {
 	
 	private static final EarthGridDao instance;
+	private static final GridTable gridTable;
 	
 	//Static block initialization...
 	static {
 		try{
 			instance = new EarthGridDao();
+			gridTable = GridTable.getGridTable();
+			if(gridTable == null){
+				throw new Exception("GridTable is Null");
+			}
 		}catch (Exception e){
 			throw new RuntimeException("Failed to create DAO", e);
 		}

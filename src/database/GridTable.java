@@ -73,11 +73,11 @@ public class GridTable
                         "geographicPrecision INTEGER not null, " +
                         "temporalPrecision INTEGER not null, " +
                         //Grid Data
-                        "latitude INTEGER not null, " +
-                        "longitude INTEGER not null, " +
-                        "temperature INTEGER not null, " +
-                        "readingDate DATE not null, " +
-                        "readingTime TIME not null, " +
+                        //"latitude INTEGER not null, " +
+                        //"longitude INTEGER not null, " +
+                        //"temperature INTEGER not null, " +
+                        //"readingDate DATE not null, " +
+                        //"readingTime TIME not null, " +
                         "PRIMARY KEY (gridId))";
 
         Statement statement = null;
