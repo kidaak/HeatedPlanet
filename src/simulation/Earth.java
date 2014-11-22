@@ -4,6 +4,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import messaging.Publisher;
+import messaging.events.ProduceContinuousMessage;
+import messaging.events.SimResultMessage;
 import simulation.util.GridCell;
 import common.Buffer;
 import common.Grid;
@@ -42,9 +45,9 @@ public final class Earth {
 	private float orbitalAngle;
 	private float sunLatitude;
 	
-	//private ArrayBlockingQueue<IGrid> q;xa
-	
-	
+	// Used for publishing messages
+	protected Publisher pub = Publisher.getInstance();
+
 	public Earth() {
 		//this.q = q;
 	}
@@ -313,8 +316,8 @@ public final class Earth {
 		}
 		
 		//printGrid(grid);
+		pub.send(new SimResultMessage(grid));
 
-		Buffer.getBuffer().add(grid);
 	}
 
 	private void createRow(GridCell curr, GridCell next, GridCell bottom,

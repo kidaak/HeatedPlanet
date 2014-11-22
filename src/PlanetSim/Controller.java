@@ -19,9 +19,7 @@ public class Controller extends ComponentBase {
 	private Model model;
 	private View view;
 	
-	private Publisher pub = Publisher.getInstance();
-	
-	private int bufferSize = 100;
+	private int bufferSize = 1000;
 	private int precisionDigits;
 	private int geographicAccuracy;
 	private int temporalAccuracy;
@@ -64,7 +62,6 @@ public class Controller extends ComponentBase {
 		view = new View(gs, timeStep, presentationInterval);
 		
 		// Setup model initiative
-		pub.subscribe(ProduceContinuousMessage.class, model);
 		// kickstart message to the model.  After first message it will 
 		// continue to provide the message to itself and fill buffer.
 		pub.send(new ProduceContinuousMessage());

@@ -4,6 +4,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import messaging.Message;
 import messaging.MessageListener;
+import messaging.Publisher;
 
 public abstract class ComponentBase implements MessageListener, Runnable {
 
@@ -12,6 +13,9 @@ public abstract class ComponentBase implements MessageListener, Runnable {
 	// can be set to signal thread run loop should exit
 	protected Boolean stopThread = false; 
 	protected Boolean paused = false;
+
+	// Used for publishing and subscribing to messages
+	protected Publisher pub = Publisher.getInstance();
 
 	public void onMessage(Message msg) {
 

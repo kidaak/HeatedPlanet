@@ -5,6 +5,9 @@ import common.ComponentBase;
 import common.IBuffer;
 import common.IGrid;
 import messaging.Message;
+import messaging.events.SimResultMessage;
+import messaging.events.ViewPauseSimMessage;
+import messaging.events.ViewResumeSimMessage;
 
 public class View extends ComponentBase {
 
@@ -42,12 +45,36 @@ public class View extends ComponentBase {
 		this.display = new EarthDisplay();
 		display.display(gs, timeStep);
 		display.update((IGrid) null);
+		// Setup message subscriptions
+		pub.subscribe(SimResultMessage.class, this);
 	}
 
 	@Override
 	public void dispatchMessage(Message msg) {
-		// TODO Auto-generated method stub
+		if (msg instanceof SimResultMessage) {
+			process((SimResultMessage) msg);
+		} else {
+			System.err.printf("WARNING: No processor specified in class %s for message %s\n",
+					this.getClass().getName(), msg.getClass().getName());
+		}
 	}
+
+	static int addCnt = 0;
+	private void process(SimResultMessage msg) {
+		// Add result to buffer for later presentation
+		try {
+			System.out.printf("Adding message to buffer: %d %d\n", addCnt++, Buffer.getBuffer().getRemainingCapacity());
+			Buffer.getBuffer().add(msg.result);
+			// Throttle down the simulator if we're getting close to capacity
+			if(Buffer.getBuffer().getRemainingCapacity() < Buffer.getBuffer().getCapacity()*0.3) {
+				pub.send(new ViewPauseSimMessage());
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+//			e.printStackTrace();
+		}
+	}
+
 
 	@Override
 	public void runAutomaticActions() throws InterruptedException {
@@ -62,8 +89,11 @@ public class View extends ComponentBase {
 		// Check to see if there is anything in the data queue to process
 		IGrid data = null;
 		data = Buffer.getBuffer().get();
-
 		if (data != null) {
+			// Ask un-throttle the simulator if we're getting low on buffer entries
+			if(Buffer.getBuffer().getRemainingCapacity() > 0.6*Buffer.getBuffer().getCapacity()) {
+				pub.send(new ViewResumeSimMessage());
+			}
 			if (STATISTIC_MODE) {
 
 				if (!steadyState && steadyStateReached(data)) {
