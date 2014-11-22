@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 
 public class Buffer implements IBuffer {
 	
-//	private BlockingQueue<IGrid> buffer;
 	private LinkedList<IGrid> buffer;
 	
 	private static int size;
@@ -38,19 +37,14 @@ public class Buffer implements IBuffer {
 		if (grid == null)
 			throw new IllegalArgumentException("IGrid is null");
 		
-//		buffer.offer(grid, 1, TimeUnit.SECONDS);
 		buffer.offer(grid);
-		System.out.printf("Add complete: %d %d %d\n", size, buffer.size(), size-buffer.size());
+//		System.out.printf("Add complete: %d %d %d\n", size, buffer.size(), size-buffer.size());
 	}
 
 	@Override
 	public IGrid get() throws InterruptedException {
 //		return buffer.poll(10, TimeUnit.MILLISECONDS);
-		IGrid res = null;
-		if (buffer.size() > 0) {
-			res = buffer.poll();
-		}
-		return res;
+		return buffer.poll();
 	}
 	
 	@Override
@@ -65,7 +59,6 @@ public class Buffer implements IBuffer {
 
 	@Override
 	public int getRemainingCapacity() {
-//		return buffer.remainingCapacity();
 //		System.out.printf("remainingCapacity: %d %d %d\n", size, buffer.size(), size-buffer.size());
 		return Math.max(0,size - buffer.size());
 	}

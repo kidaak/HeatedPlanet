@@ -44,12 +44,12 @@ public class Model extends ComponentBase {
 	}
 
 	private void process(ViewPauseSimMessage msg) {
-		System.out.printf("Throttling simulator...\n");
+//		System.out.printf("Throttling simulator...\n");
 		throttled = true;
 	}
 
 	private void process(ViewResumeSimMessage msg) {
-		System.out.printf("...simulator producing\n");
+//		System.out.printf("...simulator producing\n");
 		throttled = false;
 	}
 

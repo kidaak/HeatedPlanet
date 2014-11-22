@@ -63,7 +63,7 @@ public class View extends ComponentBase {
 	private void process(SimResultMessage msg) {
 		// Add result to buffer for later presentation
 		try {
-			System.out.printf("Adding message to buffer: %d %d\n", addCnt++, Buffer.getBuffer().getRemainingCapacity());
+//			System.out.printf("Adding message to buffer: %d %d\n", addCnt++, Buffer.getBuffer().getRemainingCapacity());
 			Buffer.getBuffer().add(msg.result);
 			// Throttle down the simulator if we're getting close to capacity
 			if(Buffer.getBuffer().getRemainingCapacity() < Buffer.getBuffer().getCapacity()*0.3) {
