@@ -1,21 +1,60 @@
 package database;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 /**
  * Created by David Welker on 11/20/14.
  */
 public class GridTable
 {
-    private final Connection connection;
-
-    public GridTable(Connection connection)
-    {
-        this.connection = connection;
+    private static Connection connection;
+    private static final GridTable gt;
+    
+    private static final String DB_DRIVER = "org.h2.Driver";
+    private static final String DB_CONNECTION = "jdbc:h2:~/test";
+    private static final String DB_USER = "sa";
+    private static final String DB_PASSWORD = "";
+    
+    
+    static{
+    	Properties connectionProps = new Properties();
+        connectionProps.put("user", DB_USER);
+        connectionProps.put("password", DB_PASSWORD);
+        Connection conn = null;
+        try {
+			Class.forName(DB_DRIVER);
+			conn = DriverManager.getConnection(DB_CONNECTION, connectionProps);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+    	gt = new GridTable(conn);
+    	try {
+			gt.createTable();
+		} catch (SQLException e) {
+			if(!ignoreSQLException(e))
+				printSQLException(e);
+		}
     }
-
+    
+    private GridTable(Connection c){
+    	this.connection = c;
+    }
+    
+    public static GridTable getGridTable(){
+    	return gt;
+    }
+    
+    public Connection getConnection(){
+    	return connection;
+    }
+    
     public void createTable() throws SQLException
     {
         String createString =
@@ -59,7 +98,22 @@ public class GridTable
             }
         }
     }
-
+    
+    public void executeSqlGeneral(String SqlStatement) throws SQLException{
+    	Statement statement = null;
+    	try{
+    		statement = connection.createStatement();
+    		statement.execute(SqlStatement);
+    	}catch(SQLException e){
+    		printSQLException(e);
+    	}finally{
+    		if(statement != null){
+    			statement.close();
+    		}
+    	}
+    }
+    
+    
     private static void printSQLException(SQLException ex)
     {
         for (Throwable e : ex)
@@ -98,6 +152,8 @@ public class GridTable
         // 42Y55: Table already exists in schema
         if (sqlState.equalsIgnoreCase("42Y55"))
             return true;
+        if (sqlState.equalsIgnoreCase("42S01"))
+        	return true;
         return false;
     }
 }
