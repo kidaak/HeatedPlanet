@@ -81,12 +81,20 @@ public class GridDisplay extends JPanel {
 				int cellx = Math.round(x * cellWidth);
 				g.drawLine(cellx, 0, cellx, h);
 			}
-			// Draw sun position
+			
+			// Draw sun position longitude
 			g.setColor(Color.YELLOW);
 			float pixPerDeg = w/360.0f;
 			float degFromLeft = grid.getSunPositionDeg()+180f;
 			int sunx = Math.round(degFromLeft * pixPerDeg);
 			g.drawLine(sunx, 0, sunx, h);
+
+			// Draw sun position latitude
+			g.setColor(Color.YELLOW);
+			pixPerDeg = h/180.0f;
+			float degFromMiddle = grid.getSunLatitudeDeg();//+180f;
+			int suny = Math.round(-degFromMiddle * pixPerDeg + h/2);
+			g.drawLine(0, suny, w, suny);
 
 		}
 	}
