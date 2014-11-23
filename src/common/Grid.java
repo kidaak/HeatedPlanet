@@ -47,6 +47,13 @@ public class Grid implements IGrid, Serializable {
 		this.grid = new TreeMap<Integer, Float>(toCopy.grid);
 	}
 
+	public int getSunPosition(){
+		return this.sunPosition;
+	}
+	
+	public int getTime(){
+		return this.time;
+	}
 	@Override
 	public void setTemperature(int x, int y, float temp) {
 		if (y > height || x > width || x < 0 || y < 0)
@@ -62,6 +69,7 @@ public class Grid implements IGrid, Serializable {
 		
 		return grid.get(y * width + x);
 	}
+	
 
 	@Override
 	public float getSunPositionDeg() {
