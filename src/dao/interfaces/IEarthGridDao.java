@@ -11,4 +11,8 @@ public interface IEarthGridDao {
 	public ResponseType addEarthGrid(EarthGridQuery egq);
 	
 	public ResponseType updateEarthGrid(EarthGridQuery egq);
+	
+	public boolean isNameUnique(String name);
+	
+	public String[] getAllNames();
 }
