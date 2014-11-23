@@ -13,7 +13,7 @@ public class GridInterprolator {
 		if(newWidth > 2*newHeight)
 			newWidth = 2*newHeight;
 			
-		Grid newGrid = new Grid(grid.getSunPosition(),grid.getSunPositionDeg(),grid.getTime(),newWidth,newHeight,grid.getSunLatitudeDeg(),grid.getDistanceFromSun(),grid.getOrbitalAngle());
+		Grid newGrid = new Grid(grid.getSunPosition(),grid.getSunPositionDeg(),grid.getTime(),grid.getTimeStep(),newWidth,newHeight,grid.getSunLatitudeDeg(),grid.getDistanceFromSun(),grid.getOrbitalAngle());
 		
 		for(int j = 0; j < newGrid.getGridHeight(); j++){
 			for(int i = 0; i < newGrid.getGridWidth(); i++){
@@ -49,7 +49,7 @@ public class GridInterprolator {
 		if(newWidth > 2*newHeight)
 			newWidth = 2*newHeight;
 		//System.out.println(newHeight + ',' + newWidth);
-		Grid newGrid = new Grid(grid.getSunPosition(),grid.getSunPositionDeg(),grid.getTime(),newWidth,newHeight,grid.getSunLatitudeDeg(),grid.getDistanceFromSun(),grid.getOrbitalAngle());
+		Grid newGrid = new Grid(grid.getSunPosition(),grid.getSunPositionDeg(),grid.getTime(),grid.getTimeStep(),newWidth,newHeight,grid.getSunLatitudeDeg(),grid.getDistanceFromSun(),grid.getOrbitalAngle());
 		for(int j = 0; j < newGrid.getGridHeight(); j++){
 			for(int i = 0; i < newGrid.getGridWidth(); i++){
 				
@@ -70,6 +70,15 @@ public class GridInterprolator {
 		}
 		
 		return newGrid;
+	}
+	
+	public Grid decimateTime(Grid grid, int percentage){
+		
+		if( true ){
+			return grid;
+		}
+			
+		return null;
 	}
 	
 	

@@ -276,7 +276,7 @@ public final class Earth {
 			sunPositionDeg = sunPositionDeg - 360;
 		}
 		
-		IGrid grid = new Grid(sunPositionCell, sunPositionDeg, t, width, height,sunLatitude,distanceFromSun,orbitalAngle);
+		IGrid grid = new Grid(sunPositionCell, sunPositionDeg, t,timeStep, width, height,sunLatitude,distanceFromSun,orbitalAngle);
 
 		float suntotal = 0;
 		float calcdTemp = 0;

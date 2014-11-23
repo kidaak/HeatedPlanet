@@ -9,7 +9,7 @@ public class Grid implements IGrid, Serializable {
 	static final long serialVersionUID = -7894194241L;
 	
 	// Used to transport the temps in the buffer
-	private final int sunPosition, time, width, height;
+	private final int sunPosition, time, width, height, timestep;
 	private final float sunPositionDeg;
 	private final float sunLatitudeDeg;
 	private final float distanceFromSun;
@@ -19,8 +19,8 @@ public class Grid implements IGrid, Serializable {
 	// backed by a Red/Black Tree, so we get pretty decent access times
 	private final Map<Integer, Float> grid;
 
-	public Grid(int sunPosition, float sunPositionDeg, int time, int width, int height, float sunLatitudeDeg, float distanceFromSun,float orbitalAngle) {
-
+	public Grid(int sunPosition, float sunPositionDeg, int time, int timestep, int width, int height, float sunLatitudeDeg, float distanceFromSun,float orbitalAngle) {
+		this.timestep = timestep;
 		this.sunPosition = sunPosition;
 		this.sunPositionDeg = sunPositionDeg;
 		this.time = time;
@@ -43,7 +43,7 @@ public class Grid implements IGrid, Serializable {
 		this.sunLatitudeDeg = toCopy.sunLatitudeDeg;
 		this.distanceFromSun = toCopy.distanceFromSun;
 		this.orbitalAngle = toCopy.orbitalAngle;
-		
+		this.timestep = toCopy.timestep;
 		this.grid = new TreeMap<Integer, Float>(toCopy.grid);
 	}
 
@@ -101,6 +101,10 @@ public class Grid implements IGrid, Serializable {
 	
 	public float getOrbitalAngle(){
 		return this.orbitalAngle;
+	}
+	
+	public int getTimeStep(){
+		return this.timestep;
 	}
 
 }

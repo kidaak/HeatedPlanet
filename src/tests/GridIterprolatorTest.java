@@ -19,7 +19,7 @@ public class GridIterprolatorTest {
 	@Before
 	public void setUp() throws Exception {
 		GI = new GridInterprolator();
-		grid1 = new Grid(0,0,0,10,5,0,(float)Earth.SEMI_MAJOR_AXIS,0);
+		grid1 = new Grid(0,0,0,1,10,5,0,(float)Earth.SEMI_MAJOR_AXIS,0);
 		for(int i = 0; i < 5; i++){
 			for(int j = 0; j < 10; j++){
 				if(i < 2 && j > 5)
@@ -31,7 +31,7 @@ public class GridIterprolatorTest {
 			}
 		}
 		
-		grid2 = new Grid(0,0,0,4,2,0,(float)Earth.SEMI_MAJOR_AXIS,0);
+		grid2 = new Grid(0,0,1,0,4,2,0,(float)Earth.SEMI_MAJOR_AXIS,0);
 		grid2.setTemperature(0, 0, 100);
 		grid2.setTemperature(1, 0, 100);
 		grid2.setTemperature(2, 0, 200);
