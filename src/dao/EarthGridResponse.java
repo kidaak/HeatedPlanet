@@ -8,21 +8,18 @@ import dao.abstracts.EarthGridWrapperAbstract;
 
 public class EarthGridResponse extends EarthGridWrapperAbstract {
 	
-	private ResponseType result;
+	private ResponseType result;	
 	
-	
-	private EarthGridResponse(ResponseType result, int GridSpacing, double AxialTilt, double Eccentricity,
-			Calendar StartDate,	Calendar EndDate, Grid EarthGrid) 
+	private EarthGridResponse(ResponseType result, EarthGridProperties gridprops, Calendar EndDate, Grid[] EarthGrid, Calendar[] GridDates) 
 	{
-		super(GridSpacing, AxialTilt, Eccentricity, StartDate, EndDate, EarthGrid);
+		super(gridprops, EndDate, EarthGrid, GridDates);
 		
 		this.setResult(result);
 	}
 	
-	public static EarthGridResponse EarthGridResponseFactory(ResponseType result, Grid EarthGrid, EarthGridQuery query) 
+	public static EarthGridResponse EarthGridResponseFactory(ResponseType result, Grid[] EarthGrid, Calendar[] GridDates, EarthGridQuery query) 
 	{
-		return new EarthGridResponse(result, query.getGridSpacing(), query.getAxialTilt(),
-				query.getEccentricity(),query.getStartDate(), query.getEndDate(), EarthGrid);
+		return new EarthGridResponse(result, query.getProperties(), query.getEndDate(), EarthGrid, GridDates);
 	}
 	
 	public ResponseType getResult() {
@@ -34,10 +31,7 @@ public class EarthGridResponse extends EarthGridWrapperAbstract {
 	}
 	
 	public void setParametersFromQuery(EarthGridQuery query){
-		this.setGridSpacing(query.getGridSpacing());
-		this.setAxialTilt(query.getAxialTilt());
-		this.setEccentricity(query.getEccentricity());
-		this.setStartDate(query.getStartDate());
+		this.setProperties(query.getProperties());
 		this.setEndDate(query.getEndDate());
 	}
 	

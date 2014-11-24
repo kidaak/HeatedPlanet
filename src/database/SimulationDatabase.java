@@ -69,18 +69,18 @@ public class SimulationDatabase
                 "CREATE TABLE Simulation " +
                         "(simulationId INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, " +
                         //Physical Factors
-                        "tilt INTEGER NOT NULL," +
+                        "axialTilt DOUBLE NOT NULL," +
                         "eccentricity DOUBLE NOT NULL, " +
                         //Simulation Settings
                         "name VARCHAR(32) NOT NULL, " +
                         "gridSpacing INTEGER NOT NULL, " +
                         "simTimeStep INTEGER NOT NULL, " +
                         "simLength INTEGER NOT NULL, " +
-                        "simEndDate DATE NOT NULL," +
+                        "simEndDate TIMESTAMP NOT NULL," +
                         //Invocation Parameters
                         "precision INTEGER NOT NULL, " +
-                        "geographicPrecision INTEGER NOT NULL, " +
-                        "temporalPrecision INTEGER NOT NULL, " +
+                        "geoPrecision INTEGER NOT NULL, " +
+                        "timePrecision INTEGER NOT NULL, " +
                         //Indices
                         "PRIMARY KEY (simulationId), "+
                         "UNIQUE INDEX simId_UNIQUE (simulationId ASC)," +
@@ -99,7 +99,7 @@ public class SimulationDatabase
                         "(gridId INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, " +
                         //Grid Properties
                         "grid BLOB NOT NULL," +
-                        "gridDate DATE NOT NULL," +
+                        "gridDate TIMESTAMP NOT NULL," +
                         "simulationFid INTEGER UNSIGNED NOT NULL," +
                         //Indices
                         "PRIMARY KEY (gridId),"+
@@ -166,6 +166,9 @@ public class SimulationDatabase
         if (sqlState.equalsIgnoreCase("42Y55"))
             return true;
         if (sqlState.equalsIgnoreCase("42S01"))
+        	return true;
+        // 42S11: Index already exists in schema
+        if (sqlState.equalsIgnoreCase("42S11"))
         	return true;
         return false;
     }

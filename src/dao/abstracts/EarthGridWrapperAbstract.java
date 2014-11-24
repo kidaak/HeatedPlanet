@@ -4,173 +4,90 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import common.Grid;
+import dao.EarthGridProperties;
+import dao.EarthGridProperties.EarthGridProperty;
 
 public abstract class EarthGridWrapperAbstract {
-	private String name;
-	private int gridSpacing;
-	private double axialTilt, eccentricity;
-	private boolean hasRangeOfDates;
-	private Calendar startDate,endDate;
-	private Calendar[] gridDates;
+	private EarthGridProperties props;
+	private Calendar endDate;
+	private ArrayList<Calendar> gridDate;
 	private ArrayList<Grid> grid;
 	
 	/**
 	 * Constructor without a grid object. Used for query.
 	 * 
-	 * @param name Simulation name
-	 * @param gridSpacing Grid Spacing value
-	 * @param axialTilt Axial Tilt value
-	 * @param eccentricty Eccentricity value
-	 * @param startDate Start Date value
-	 * @param endDate End Date value
+	 * @param properties Properties object for EarthGrid
+	 * @param endDate The ending date of the simulation
 	 */
-	public EarthGridWrapperAbstract(String name, int gridSpacing, double axialTilt, double eccentricty,
-									Calendar startDate, Calendar endDate) {
+	public EarthGridWrapperAbstract(EarthGridProperties properties, Calendar endDate) {
 		
-		validateInputs(name, gridSpacing, axialTilt, eccentricty, startDate, endDate);
+		this.props = properties;
+		this.grid = new ArrayList<Grid>(1);
 		
-		grid = new ArrayList<Grid>(1);
-		
-		this.setGridSpacing(gridSpacing);
-		this.setAxialTilt(axialTilt);
-		this.setEccentricity(eccentricty);
-		this.setStartDate(startDate);
 		this.setEndDate(endDate);
 		this.setGrid(null);
-		
-		if(startDate.equals(endDate)){
-			this.setHasRangeOfDates(false);
-		}else{
-			this.setHasRangeOfDates(true);
-		}
+		this.setGridDate(null);
 	}
-	
-	/**
-	 * Single Grid constructor.
-	 * 
-	 * @param gs Grid Spacing value
-	 * @param at Axial Tilt value
-	 * @param e Eccentricity value
-	 * @param sd Start Date value
-	 * @param ed End Date value
-	 * @param g Grid object associated with the above parameters
-	 */
-	/*public EarthGridWrapperAbstract(int gs, double at, double e, Calendar sd, Calendar ed, Grid g) {
-		
-		validateInputs(gs, at, e, sd, ed);
-		
-		grid = new ArrayList<Grid>(1);
-		
-		this.setGridSpacing(gs);
-		this.setAxialTilt(at);
-		this.setEccentricity(e);
-		this.setStartDate(sd);
-		this.setEndDate(ed);
-		this.setGrid(g);
-		
-		if(sd.equals(ed)){
-			this.setHasRangeOfDates(false);
-		}else{
-			this.setHasRangeOfDates(true);
-		}
-	}
-	*/
 	
 	/**
 	 * EarthGrid constructor. For returning data.
 	 * 
-	 * @param name Simulation name
-	 * @param gridSpacing Grid Spacing value
-	 * @param axialTilt Axial Tilt value
-	 * @param eccentricty Eccentricity value
-	 * @param startDate Start Date value
-	 * @param endDate End Date value
+	 * @param properties Properties object for EarthGrid
+	 * @param endDate The ending date of the simulation
 	 * @param ga Array of Grid objects associated with the above parameters
+	 * @param gd Array of dates corresponding to the array of grids
 	 */
-	public EarthGridWrapperAbstract(String name, int gridSpacing, double axialTilt, double eccentricty,
-									Calendar startDate, Calendar endDate, Grid[] ga) {
+	public EarthGridWrapperAbstract(EarthGridProperties properties, Calendar endDate, Grid[] g, Calendar[] gd) {
 		
-		validateInputs(name, gridSpacing, axialTilt, eccentricty, startDate, endDate);
+		if(g.length != gd.length)
+			throw new IllegalArgumentException("Array of Grids must be the same length as the array of Grid Dates. ("+g.length+","+gd.length+")");
 		
-		grid = new ArrayList<Grid>(ga.length);
+		this.props = properties;
+		this.grid = new ArrayList<Grid>(g.length);
+		this.gridDate = new ArrayList<Calendar>(gd.length);
 		
-		this.setGridSpacing(gridSpacing);
-		this.setAxialTilt(axialTilt);
-		this.setEccentricity(eccentricty);
-		this.setStartDate(startDate);
 		this.setEndDate(endDate);
 		
-		for(int i = 0; i < grid.size(); i++)
-			this.setGridAt(i,ga[i]);
-		
-		if(startDate.equals(endDate)){
-			this.setHasRangeOfDates(false);
-		}else{
-			this.setHasRangeOfDates(true);
-		}
+		for(int i = 0; i < g.length; i++)
+			this.setGridAt(i,g[i]);
+		for(int i = 0; i < gd.length; i++)
+			this.setGridDateAt(i,gd[i]);
 	}
 	
 	/**
-	 * Method to validate the values of the parameters
+	 * EarthGrid constructor. For inserting data.
 	 * 
-	 * @param n Simulation Name. Must be set.
-	 * @param gs Grid Spacing. Must be >= 1
-	 * @param e Eccentricity. Must be >= 0 and < 1
-	 * @param at Axial Tilt. Must be between -180 and +180
-	 * @param sd Start Date. Must be equal to or before End Date
-	 * @param ed End Date. Must be equal to or after End Date
+	 * @param properties Properties object for EarthGrid
+	 * @param endDate The ending date of the simulation
+	 * @param g Grid objects associated with the above parameters
+	 * @param gd Date corresponding to the grid
 	 */
-	private void validateInputs(String n, int gs, double e, double at, Calendar sd, Calendar ed){
-		if(n == null || n.length() == 0)
-			throw new IllegalArgumentException("Simulation name is empty");
-		if(gs <= 0)
-			throw new IllegalArgumentException("Grid Spacing must be >= 1");
-		if(e < 0 || e >= 1)
-			throw new IllegalArgumentException("The eccentricity must be between 0 and 1, but strictly less than 1.00");
-		if(at < -180 || at > 180)
-			throw new IllegalArgumentException("The Axial Tilt must be between -180 and 180");
-		if(sd.after(ed))
-			throw new IllegalArgumentException("The Start Date must be a date before the End Date");
+	/*public EarthGridWrapperAbstract(EarthGridProperties properties, Calendar endDate, Grid g, Calendar gd) {
+				
+		this.props = properties;
+		this.grid = new ArrayList<Grid>(1);
+		this.gridDate = new ArrayList<Calendar>(1);
+		
+		this.setEndDate(endDate);
+		
+		this.setGrid(g);
+		this.setGridDate(gd);
 	}
-
+	 */
 	/*
 	 * Basic Getters and Setters
 	 */
 	public String getName() {
-		return name;
-	}
-	protected void setName(String name) {
-		this.name = name;
+		return props.getProperty(EarthGridProperty.NAME);
 	}
 	public int getGridSpacing() {
-		return gridSpacing;
-	}
-	protected void setGridSpacing(int gridSpacing) {
-		this.gridSpacing = gridSpacing;
+		return Integer.valueOf(props.getProperty(EarthGridProperty.GRID_SPACING));
 	}
 	public double getAxialTilt() {
-		return axialTilt;
-	}
-	protected void setAxialTilt(double axialTilt) {
-		this.axialTilt = axialTilt;
+		return Double.valueOf(props.getProperty(EarthGridProperty.AXIAL_TILT));
 	}
 	public double getEccentricity() {
-		return eccentricity;
-	}
-	protected void setEccentricity(double eccentricity) {
-		this.eccentricity = eccentricity;
-	}
-	public boolean hasRangeOfDates() {
-		return hasRangeOfDates;
-	}
-	protected void setHasRangeOfDates(boolean hasRangeOfDates) {
-		this.hasRangeOfDates = hasRangeOfDates;
-	}
-	public Calendar getStartDate() {
-		return startDate;
-	}
-	protected void setStartDate(Calendar startDate) {
-		this.startDate = startDate;
+		return Double.valueOf(props.getProperty(EarthGridProperty.ECCENTRICITY));
 	}
 	public Calendar getEndDate() {
 		return endDate;
@@ -178,16 +95,21 @@ public abstract class EarthGridWrapperAbstract {
 	protected void setEndDate(Calendar endDate) {
 		this.endDate = endDate;
 	}
-	
+	public EarthGridProperties getProperties(){
+		return this.props;
+	}
+	protected void setProperties(EarthGridProperties egp){
+		this.props = egp;
+	}
 	
 	/*
 	 * Specialized Grid Setters
 	 */
 	protected void setGrid(Grid g) {
-		this.setGridAt(0,g);
+		this.grid.add(0, g);
 	}
 	protected void setGridAt(int index, Grid g){
-		this.grid.set(index,g);
+		this.grid.add(index, g);
 	}
 	
 	/*
@@ -200,8 +122,31 @@ public abstract class EarthGridWrapperAbstract {
 		return this.grid.get(index);
 	}
 	public Grid[] getAllGrids(){
-		return (Grid[]) this.grid.toArray();
+		Grid[] g = {};
+		return this.grid.toArray(g);
 	}
 	
+	/*
+	 * Specialized Grid Date Setters
+	 */
+	protected void setGridDate(Calendar c){
+		this.gridDate.add(0, c);
+	}
+	protected void setGridDateAt(int index, Calendar c){
+		this.gridDate.add(index, c);
+	}
 	
+	/*
+	 * Specialized Grid Date Getters
+	 */
+	public Calendar getGridDate() {
+		return getGridDateAt(0);
+	}
+	public Calendar getGridDateAt(int index){
+		return this.gridDate.get(index);
+	}
+	public Calendar[] getAllGridDates(){
+		Calendar[] c = {};
+		return this.gridDate.toArray(c);
+	}
 }
