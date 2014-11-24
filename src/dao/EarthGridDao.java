@@ -8,19 +8,19 @@ import java.security.NoSuchAlgorithmException;
 
 import common.Grid;
 import dao.interfaces.IEarthGridDao;
-import database.GridTable;
+import database.SimulationDatabase;
 
 public class EarthGridDao implements IEarthGridDao {
 	
 	private static final EarthGridDao instance;
-	private static final GridTable gridTable;
+	private static final SimulationDatabase sdb;
 	
 	//Static block initialization...
 	static {
 		try{
 			instance = new EarthGridDao();
-			gridTable = GridTable.getGridTable();
-			if(gridTable == null){
+			sdb = SimulationDatabase.getSimulationDatabase();
+			if(sdb == null){
 				throw new Exception("GridTable is Null");
 			}
 		}catch (Exception e){
@@ -74,6 +74,20 @@ public class EarthGridDao implements IEarthGridDao {
 	public ResponseType updateEarthGrid(EarthGridQuery egq) {
 		// TODO Auto-generated method stub
 		return ResponseType.ERROR;
+	}
+
+
+	@Override
+	public boolean isNameUnique(String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public String[] getAllNames() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
