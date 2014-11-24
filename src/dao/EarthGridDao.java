@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import common.Grid;
 import dao.interfaces.IEarthGridDao;
 import database.SimulationDatabase;
 
@@ -88,16 +87,53 @@ public class EarthGridDao implements IEarthGridDao {
 		String sqlString = "";
 		
 		stmt = sdb.getConnection().createStatement();
+		// get the count of the number of rows for the specified name 
+		sqlString = "select count(*) as count from Simulation where name = '" + name + "'";
 		rs = stmt.executeQuery(sqlString);
 		
+		while (rs.next()) {
+			int counter = rs.getInt("count");
+			if (counter == 0) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 
 	@Override
-	public String[] getAllNames() {
-		// TODO Auto-generated method stub
-		return null;
+	public String[] getAllNames() throws SQLException {
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sqlString = "";
+		String[] names;
+		int counter = 0;
+		
+		stmt = sdb.getConnection().createStatement();
+		// get the count of the number of rows
+		sqlString = "select count(*) as count from Simulation";
+		rs = stmt.executeQuery(sqlString);
+		
+		while (rs.next()) {
+			counter = rs.getInt("count");
+		}
+		
+		//create an array of Strings of count size counter
+		names = new String[counter];
+				
+		stmt = sdb.getConnection().createStatement();
+		sqlString = "select name from Simulation"; 
+		rs = stmt.executeQuery(sqlString);
+
+		//reset  counter to 0 to fill the array
+		counter = 0;
+		while (rs.next()) {
+			names[counter] = rs.getString("name");
+			counter++;
+	    }
+		
+		return names;
 	}
 	
 	

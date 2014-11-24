@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.Properties;
 
+import dao.EarthGridDao;
+
 /**
  * Created by David Welker on 11/13/14.
  */
@@ -24,9 +26,15 @@ public class DatabaseTest
         //GridTable gridTable = new GridTable(conn);
         SimulationDatabase sdb = SimulationDatabase.getSimulationDatabase();
         
+        EarthGridDao dao = EarthGridDao.getEarthGridDao();
+        System.out.println(dao.isNameUnique("test"));
+        String[] names = dao.getAllNames();
+        for (int i=0; i < names.length; i++) {
+        	System.out.println(names[i]);
+        }
+        
         sdb.executeSqlGeneral("DROP TABLE Grid");
         sdb.executeSqlGeneral("DROP TABLE Simulation");
-        
 
         conn.close();
         System.out.println("Done with test!");
