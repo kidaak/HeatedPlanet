@@ -2,7 +2,6 @@ package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
@@ -10,15 +9,23 @@ import java.util.Properties;
 /**
  * Created by David Welker on 11/20/14.
  */
-public class GridTable
+public class SimulationDatabase
 {
     private static Connection connection;
-    private static final GridTable gt;
+    private static final SimulationDatabase sdb;
     
     private static final String DB_DRIVER = "org.h2.Driver";
     private static final String DB_CONNECTION = "jdbc:h2:~/test";
     private static final String DB_USER = "sa";
     private static final String DB_PASSWORD = "";
+    
+    private static final String SIM_NAME_INDEX_SQL = "CREATE INDEX simName_INDEX ON Simulation(name)";
+    private static final String SIM_ENDDATE_INDEX_SQL = "CREATE INDEX simEndDate_INDEX ON Simulation(simEndDate)";
+    private static final String GRID_GRIDDATE_INDEX_SQL = "CREATE INDEX gridDate_INDEX ON Grid(gridDate)";
+    private static final String GRID_SIMULATIONFID_INDEX_SQL = "CREATE INDEX simulationFid_INDEX ON Grid(simulationFid)";
+    private static final String GRID_SIMULATIONFID_FOREIGNKEY_SQL = "CONSTRAINT Grid2Simulation FOREIGN KEY (simulationFid) "+
+    																"REFERENCES Simulation(simulationId) "+
+    																"ON DELETE RESTRICT ON UPDATE CASCADE";
     
     
     static{
@@ -34,69 +41,75 @@ public class GridTable
 		} catch (SQLException e) {
 			printSQLException(e);
 		}
-    	gt = new GridTable(conn);
+        sdb = new SimulationDatabase(conn);
     	try {
-			gt.createTable();
+    		sdb.createSimulationTable();
+    		sdb.createGridTable();
 		} catch (SQLException e) {
 			if(!ignoreSQLException(e))
 				printSQLException(e);
 		}
     }
     
-    private GridTable(Connection c){
-    	this.connection = c;
+    private SimulationDatabase(Connection c){
+    	SimulationDatabase.connection = c;
     }
     
-    public static GridTable getGridTable(){
-    	return gt;
+    public static SimulationDatabase getSimulationDatabase(){
+    	return sdb;
     }
     
     public Connection getConnection(){
     	return connection;
     }
     
-    public void createTable() throws SQLException
+    private void createSimulationTable() throws SQLException
     {
-        String createString =
-                "create table GRID " +
-                        "(gridId INTEGER not null, " +
+        String createSimulationTableString =
+                "CREATE TABLE Simulation " +
+                        "(simulationId INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, " +
                         //Physical Factors
-                        "tilt INTEGER not null," +
-                        "eccentricity DOUBLE not null, " +
+                        "tilt INTEGER NOT NULL," +
+                        "eccentricity DOUBLE NOT NULL, " +
                         //Simulation Settings
-                        "name VARCHAR(32) not null, " +
-                        "gridSpacing INTEGER not null, " +
-                        "simTimeStep INTEGER not null, " +
-                        "simLength INTEGER not null, " +
+                        "name VARCHAR(32) NOT NULL, " +
+                        "gridSpacing INTEGER NOT NULL, " +
+                        "simTimeStep INTEGER NOT NULL, " +
+                        "simLength INTEGER NOT NULL, " +
+                        "simEndDate DATE NOT NULL," +
                         //Invocation Parameters
-                        "precision INTEGER not null, " +
-                        "geographicPrecision INTEGER not null, " +
-                        "temporalPrecision INTEGER not null, " +
-                        //Grid Data
-                        //"latitude INTEGER not null, " +
-                        //"longitude INTEGER not null, " +
-                        //"temperature INTEGER not null, " +
-                        //"readingDate DATE not null, " +
-                        //"readingTime TIME not null, " +
-                        "PRIMARY KEY (gridId))";
+                        "precision INTEGER NOT NULL, " +
+                        "geographicPrecision INTEGER NOT NULL, " +
+                        "temporalPrecision INTEGER NOT NULL, " +
+                        //Indices
+                        "PRIMARY KEY (simulationId), "+
+                        "UNIQUE INDEX simId_UNIQUE (simulationId ASC)," +
+                        "UNIQUE INDEX name_UNIQUE (name ASC)" +
+                        ")";
+        
+        executeSqlGeneral(createSimulationTableString);
+	    executeSqlGeneral(SIM_NAME_INDEX_SQL);
+	    executeSqlGeneral(SIM_ENDDATE_INDEX_SQL);
+    }
+    
+    private void createGridTable() throws SQLException
+    {
+        String createGridTableString =
+                "CREATE TABLE Grid " +
+                        "(gridId INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, " +
+                        //Grid Properties
+                        "grid BLOB NOT NULL," +
+                        "gridDate DATE NOT NULL," +
+                        "simulationFid INTEGER UNSIGNED NOT NULL," +
+                        //Indices
+                        "PRIMARY KEY (gridId),"+
+                        "UNIQUE INDEX gridId_UNIQUE (gridId ASC)," +
+                        GRID_SIMULATIONFID_FOREIGNKEY_SQL +
+                        ")";
 
-        Statement statement = null;
-        try
-        {
-            statement = connection.createStatement();
-            statement.executeUpdate(createString);
-        }
-        catch (SQLException e)
-        {
-            printSQLException(e);
-        }
-        finally
-        {
-            if (statement != null)
-            {
-                statement.close();
-            }
-        }
+        executeSqlGeneral(createGridTableString);
+        executeSqlGeneral(GRID_GRIDDATE_INDEX_SQL);
+        executeSqlGeneral(GRID_SIMULATIONFID_INDEX_SQL);
     }
     
     public void executeSqlGeneral(String SqlStatement) throws SQLException{

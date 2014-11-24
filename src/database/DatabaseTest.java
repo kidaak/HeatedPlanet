@@ -22,9 +22,11 @@ public class DatabaseTest
             getConnection("jdbc:h2:~/test", connectionProps);
         // add application code here
         //GridTable gridTable = new GridTable(conn);
-        GridTable gridTable = GridTable.getGridTable();
+        SimulationDatabase sdb = SimulationDatabase.getSimulationDatabase();
         
-        gridTable.executeSqlGeneral("DROP TABLE Grid");
+        sdb.executeSqlGeneral("DROP TABLE Grid");
+        sdb.executeSqlGeneral("DROP TABLE Simulation");
+        
 
         conn.close();
         System.out.println("Done with test!");
