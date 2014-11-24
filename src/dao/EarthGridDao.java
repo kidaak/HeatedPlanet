@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import common.Grid;
 import dao.interfaces.IEarthGridDao;
@@ -78,8 +81,15 @@ public class EarthGridDao implements IEarthGridDao {
 
 
 	@Override
-	public boolean isNameUnique(String name) {
-		// TODO Auto-generated method stub
+	public boolean isNameUnique(String name) throws SQLException {
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sqlString = "";
+		
+		stmt = sdb.getConnection().createStatement();
+		rs = stmt.executeQuery(sqlString);
+		
 		return false;
 	}
 
