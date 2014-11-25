@@ -43,11 +43,11 @@ public final class Earth {
 	private EarthGridProperties simProp;
 	private int timeStep = DEFAULT_SPEED;
 	private int gs = DEFAULT_DEGREES;
-	private float axialTilt;
-	private float eccentricity;
-	private float distanceFromSun;
-	private float orbitalAngle;
-	private float sunLatitude;
+	private double axialTilt;
+	private double eccentricity;
+	private double distanceFromSun;
+	private double orbitalAngle;
+	private double sunLatitude;
 	
 	// Used for publishing messages
 	protected Publisher pub = Publisher.getInstance();
@@ -186,8 +186,8 @@ public final class Earth {
 		
 		IGrid grid = new Grid(sunPositionCell, sunPositionDeg, t,timeStep, width, height,sunLatitude,distanceFromSun,orbitalAngle);
 
-		float suntotal = 0;
-		float calcdTemp = 0;
+		double suntotal = 0;
+		double calcdTemp = 0;
 		
 		calcdTemp = prime.calculateTemp(sunPositionCell,sunLatitude,distanceFromSun);
 		suntotal = suntotal + prime.calTsun(sunPositionCell,sunLatitude,distanceFromSun);

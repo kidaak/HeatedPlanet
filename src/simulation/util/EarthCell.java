@@ -10,9 +10,9 @@ public void setLatitude(int lat);
 	
 	public int getLongitude();
 	
-	public float calculateTemp(int time,float sunLatitude, float distanceFromSun);
+	public double calculateTemp(int time,double sunLatitude, double distanceFromSun);
 	
-	public float calTsun(int sunPosition,float sunLatitude, float distanceFromSun);
+	public double calTsun(int sunPosition,double sunLatitude, double distanceFromSun);
 
 	public void setGridProps(int x, int y, int latitude, int longitude, int gs);
 

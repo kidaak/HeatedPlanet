@@ -12,20 +12,20 @@ public final class GridCell implements EarthCell<GridCell> {
 	public int x, y, latitude, longitude, gs;
 	
 	// average temperature
-	private static float avgsuntemp;
-	private static float avgArea;
+	private static double avgsuntemp;
+	private static double avgArea;
 
 	private boolean visited;
-	private float currTemp, newTemp;
+	private double currTemp, newTemp;
 
 	private GridCell top = null, bottom = null, left = null, right = null;
 
 	// Cell properties: surface area, perimeter
-	private float lv, lb, lt, surfarea, pm;
+	private double lv, lb, lt, surfarea, pm;
 
-	public GridCell(float temp, int x, int y, int latitude, int longitude, int gs) {
+	public GridCell(double temp, int x, int y, int latitude, int longitude, int gs) {
 
-		if (temp > Float.MAX_VALUE) throw new IllegalArgumentException("Invalid temp provided");
+		if (temp > Double.MAX_VALUE) throw new IllegalArgumentException("Invalid temp provided");
 		if (x > Integer.MAX_VALUE || x < Integer.MIN_VALUE) throw new IllegalArgumentException("Invalid 'x' provided");
 		if (y > Integer.MAX_VALUE || y < Integer.MIN_VALUE) throw new IllegalArgumentException("Invalid 'y' provided");
 
@@ -35,7 +35,7 @@ public final class GridCell implements EarthCell<GridCell> {
 		this.visited = false;
 	}
 
-	public GridCell(GridCell top, GridCell bottom, GridCell left, GridCell right, float temp, int x, int y, int latitude, int longitude, int gs) {
+	public GridCell(GridCell top, GridCell bottom, GridCell left, GridCell right, double temp, int x, int y, int latitude, int longitude, int gs) {
 		
 		this(temp, x, y, latitude, longitude, gs);
 
@@ -94,14 +94,14 @@ public final class GridCell implements EarthCell<GridCell> {
 	}
 
 	@Override
-	public float getTemp() {
+	public double getTemp() {
 		return this.currTemp;
 	}
 
 	@Override
-	public void setTemp(float temp) {
+	public void setTemp(double temp) {
 
-		if (temp > Float.MAX_VALUE) throw new IllegalArgumentException("Invalid temp provided");
+		if (temp > Double.MAX_VALUE) throw new IllegalArgumentException("Invalid temp provided");
 		this.currTemp = temp;
 	}
 
@@ -139,8 +139,8 @@ public final class GridCell implements EarthCell<GridCell> {
 	}
 	
 	@Override
-	public float calculateTemp(int sunPosition,float sunLatitude, float distanceFromSun) {
-		float temp   = this.currTemp + (calTneighbors() - this.currTemp) / 5 + ( calTsun(sunPosition,sunLatitude,distanceFromSun) + calTcool(distanceFromSun) ) / 10;
+	public double calculateTemp(int sunPosition,double sunLatitude, double distanceFromSun) {
+		double temp   = this.currTemp + (calTneighbors() - this.currTemp) / 5 + ( calTsun(sunPosition,sunLatitude,distanceFromSun) + calTcool(distanceFromSun) ) / 10;
 		this.newTemp = (temp > 0) ? temp : 0;    // avoid negative temperature
 		return this.newTemp; // new temp
 	}
@@ -198,29 +198,29 @@ public final class GridCell implements EarthCell<GridCell> {
 		return this.gs;
 	}
 	
-	public float calTsun(int sunPosition,float sunLatitude, float distanceFromSun) {
+	public double calTsun(int sunPosition,double sunLatitude, double distanceFromSun) {
 		
 		int   sunLongitude      = getSunLocationOnEarth(sunPosition);
-		float attenuation_lat   = (float) Math.cos(Math.toRadians(sunLatitude + this.latitude  + 1.0 * this.gs / 2));
-		//float attenuation_longi = (float) (( (Math.abs(sunLongitude - this.longitude) % 360 ) < 90 ) ? Math.cos(Math.toRadians(sunLongitude - this.longitude)) : 0);
-		float attenuation_longi = (float) Math.cos(Math.toRadians(sunLongitude - this.longitude));
+		double attenuation_lat   = (double) Math.cos(Math.toRadians(sunLatitude + this.latitude  + 1.0 * this.gs / 2));
+		//double attenuation_longi = (double) (( (Math.abs(sunLongitude - this.longitude) % 360 ) < 90 ) ? Math.cos(Math.toRadians(sunLongitude - this.longitude)) : 0);
+		double attenuation_longi = (double) Math.cos(Math.toRadians(sunLongitude - this.longitude));
 		attenuation_longi = attenuation_longi > 0 ? attenuation_longi : 0;
 		attenuation_lat = attenuation_lat > 0 ? attenuation_lat : 0;
-		return (float) Math.pow(Earth.SEMI_MAJOR_AXIS/distanceFromSun, 2) * 278 * attenuation_lat * attenuation_longi;
+		return (double) Math.pow(Earth.SEMI_MAJOR_AXIS/distanceFromSun, 2) * 278 * attenuation_lat * attenuation_longi;
 	}
 	
 	private void calSurfaceArea(int latitude, int gs) {
 		
 		double p  = 1.0 * gs / 360;
-		this.lv   = (float) (Earth.CIRCUMFERENCE * p);
-		this.lb   = (float) (Math.cos(Math.toRadians(latitude)) * this.lv);
+		this.lv   = (double) (Earth.CIRCUMFERENCE * p);
+		this.lb   = (double) (Math.cos(Math.toRadians(latitude)) * this.lv);
 		this.lb   = this.lb > 0 ? this.lb: 0;
-		this.lt   = (float) (Math.cos(Math.toRadians(latitude + gs)) * this.lv);
+		this.lt   = (double) (Math.cos(Math.toRadians(latitude + gs)) * this.lv);
 		this.lt   = this.lt > 0 ? this.lt: 0;
 		double h  = Math.sqrt(Math.pow(this.lv,2) - 1/4 * Math.pow((this.lb - this.lt), 2));
 
-		this.pm = (float) (this.lt + this.lb + 2 * this.lv);
-		this.surfarea =  (float) (1.0/2 * (this.lt + this.lb) * h);
+		this.pm = (double) (this.lt + this.lb + 2 * this.lv);
+		this.surfarea =  (double) (1.0/2 * (this.lt + this.lb) * h);
 	}
 
 	// A help function for get the Sun's corresponding location on longitude.
@@ -232,35 +232,35 @@ public final class GridCell implements EarthCell<GridCell> {
 		return j < (cols / 2) ? -(j + 1) * this.gs : (360) - (j + 1) * this.gs;
 	}
 
-	public float calTcool(float distanceFromSun) {
-		float beta = (float) (this.surfarea / avgArea);  // actual grid area / average cell area
+	public double calTcool(double distanceFromSun) {
+		double beta = (double) (this.surfarea / avgArea);  // actual grid area / average cell area
 		//return -1 * beta * avgsuntemp;
-		return (float) ( -1 * beta * this.currTemp / 288 * avgsuntemp / Math.pow(Earth.SEMI_MAJOR_AXIS/distanceFromSun, 2) );
+		return (double) ( -1 * beta * this.currTemp / 288 * avgsuntemp / Math.pow(Earth.SEMI_MAJOR_AXIS/distanceFromSun, 2) );
 	}
 	
-	public static void setAvgSuntemp(float avg){
+	public static void setAvgSuntemp(double avg){
 		avgsuntemp = avg;
 	}
 	
-	public static float getAvgSuntemp(){
+	public static double getAvgSuntemp(){
 		return avgsuntemp;
 	}
 	
-	public float getSurfarea() {
+	public double getSurfarea() {
 		return this.surfarea;
 	}
 	
-	public static void setAverageArea(float avgarea) {
+	public static void setAverageArea(double avgarea) {
 		avgArea = avgarea;
 	}
 	
-	public static float getAverageArea() {
+	public static double getAverageArea() {
 		return avgArea;
 	}
 	
-	public float calTneighbors() {
+	public double calTneighbors() {
 
-		float top_temp = 0, bottom_temp = 0;
+		double top_temp = 0, bottom_temp = 0;
 
 		if (this.top != null) 	top_temp = this.lt / this.pm * this.top.getTemp();
 		if (this.bottom != null) 	bottom_temp = this.lb / this.pm * this.bottom.getTemp();

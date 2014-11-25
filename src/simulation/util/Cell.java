@@ -20,9 +20,9 @@ public interface Cell<T> {
 	
 	public T getLeft();
 
-	public float getTemp();
+	public double getTemp();
 	
-	public void setTemp(float temp);
+	public void setTemp(double temp);
 	
 	public void swapTemp();
 	
