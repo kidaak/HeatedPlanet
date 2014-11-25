@@ -2,6 +2,8 @@ package dao;
 
 import java.util.Calendar;
 
+import common.EarthGridProperties;
+
 import dao.abstracts.EarthGridWrapperAbstract;
 
 public class EarthGridQuery extends EarthGridWrapperAbstract {

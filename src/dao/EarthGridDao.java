@@ -16,8 +16,9 @@ import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import common.EarthGridProperties;
 import common.Grid;
-import dao.EarthGridProperties.EarthGridProperty;
+import common.EarthGridProperties.EarthGridProperty;
 import dao.interfaces.IEarthGridDao;
 import database.SimulationDatabase;
 

@@ -3,11 +3,11 @@ package test.dao;
 import java.sql.Statement;
 import java.util.Calendar;
 
+import common.EarthGridProperties;
 import common.Grid;
+import common.EarthGridProperties.EarthGridProperty;
 import dao.EarthGridDao;
 import dao.EarthGridInsert;
-import dao.EarthGridProperties;
-import dao.EarthGridProperties.EarthGridProperty;
 import dao.EarthGridQuery;
 import dao.EarthGridResponse;
 import database.SimulationDatabase;

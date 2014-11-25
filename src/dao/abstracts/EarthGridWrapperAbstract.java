@@ -3,9 +3,9 @@ package dao.abstracts;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import common.EarthGridProperties;
 import common.Grid;
-import dao.EarthGridProperties;
-import dao.EarthGridProperties.EarthGridProperty;
+import common.EarthGridProperties.EarthGridProperty;
 
 public abstract class EarthGridWrapperAbstract {
 	private EarthGridProperties props;
