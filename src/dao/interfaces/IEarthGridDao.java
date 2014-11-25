@@ -10,17 +10,24 @@ import dao.ResponseType;
 
 public interface IEarthGridDao {
 	
-	public EarthGridResponse queryEarthGridSimulation(EarthGridQuery query) throws SQLException;
+	public EarthGridResponse queryEarthGridSimulation(EarthGridQuery query) 
+			throws SQLException, NumberFormatException, ClassNotFoundException, IOException;
 	
-	public EarthGridResponse queryEarthGridSimulationByName(EarthGridQuery query) throws SQLException, IOException, ClassNotFoundException;
+	public EarthGridResponse queryEarthGridSimulationByName(EarthGridQuery query) 
+			throws SQLException, IOException, ClassNotFoundException;
 	
-	public ResponseType insertEarthGridSimulation(EarthGridInsert egq) throws SQLException, NumberFormatException, IOException;
+	public ResponseType insertEarthGridSimulation(EarthGridInsert egq) 
+			throws SQLException, NumberFormatException, IOException;
 	
-	public int getSimulationIdFromName(String name) throws SQLException;
+	public int getSimulationIdFromName(String name) 
+			throws SQLException;
 		
-	public boolean isNameUnique(String name) throws SQLException;
+	public boolean isNameUnique(String name) 
+			throws SQLException;
 	
-	public String[] getAllNames() throws SQLException;
+	public String[] getAllNames() 
+			throws SQLException;
 	
-	public void resetDatabase(String secretCode) throws SQLException;
+	public void resetDatabase(String secretCode) 
+			throws SQLException;
 }

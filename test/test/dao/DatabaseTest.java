@@ -76,10 +76,14 @@ public class DatabaseTest
 	        
 	        EGProps.setProperty(EarthGridProperty.NAME, "InsertedName3");
 	        EarthGridQuery egq = new EarthGridQuery(EGProps, cal4);
-	        
 	        EarthGridResponse response = dao.queryEarthGridSimulationByName(egq);
 	        
+	        EGProps.setProperty(EarthGridProperty.NAME, "InsertedName2");
+	        EarthGridQuery egq2 = new EarthGridQuery(EGProps, cal2);
+	        EarthGridResponse response2 = dao.queryEarthGridSimulation(egq2);
+	        
 	        System.out.println(response.getResult().name());
+	        System.out.println(response2.getResult().name());
 	        
         }catch(Exception e){
         	e.printStackTrace();
