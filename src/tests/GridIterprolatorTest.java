@@ -6,7 +6,9 @@ import interpolator.GridInterprolator;
 import org.junit.Before;
 import org.junit.Test;
 
+import common.EarthGridProperties;
 import common.Grid;
+import common.EarthGridProperties.EarthGridProperty;
 import simulation.Earth;
 
 public class GridIterprolatorTest {
@@ -14,11 +16,13 @@ public class GridIterprolatorTest {
 	private GridInterprolator GI;
 	private Grid grid1;
 	private Grid grid2;
-	
+	private EarthGridProperties ep;
 
 	@Before
 	public void setUp() throws Exception {
-		GI = new GridInterprolator();
+		ep = new EarthGridProperties();
+		ep.setProperty(EarthGridProperty.GEO_PRECISION, 50);
+		GI = new GridInterprolator(ep);
 		grid1 = new Grid(0,0,0,1,10,5,0,(float)Earth.SEMI_MAJOR_AXIS,0);
 		for(int i = 0; i < 5; i++){
 			for(int j = 0; j < 10; j++){
@@ -45,7 +49,10 @@ public class GridIterprolatorTest {
 	
 	@Test
 	public void test2() {
-		Grid newGrid = GI.interpolateSpace(grid2, 40);
+		ep.setProperty(EarthGridProperty.GEO_PRECISION, 40);
+		ep.setProperty(EarthGridProperty.PRECISION, 3);
+		GI = new GridInterprolator(ep);
+		Grid newGrid = GI.interpolateSpace(grid2);
 		assertEquals(newGrid.getTemperature(0,0),100,0.1);
 		assertEquals(newGrid.getTemperature(9,0),200,0.1);
 		assertEquals(newGrid.getTemperature(0,4),200,0.1);
@@ -59,7 +66,10 @@ public class GridIterprolatorTest {
 	@Test
 	public void test1() {
 		printGrid(grid1);
-		Grid newGrid = GI.decimateSpace(grid1, 50);
+		ep.setProperty(EarthGridProperty.GEO_PRECISION, 50);
+		ep.setProperty(EarthGridProperty.PRECISION, 3);
+		GI = new GridInterprolator(ep);
+		Grid newGrid = GI.decimateSpace(grid1);
 		printGrid(newGrid);
 	
 		assertEquals(newGrid.getTemperature(0,0),(2*300.0+0.5*200.0)/2.5,0.1);
@@ -68,6 +78,20 @@ public class GridIterprolatorTest {
 		assertEquals(newGrid.getTemperature(3,1),300,0.1);
 		assertTrue(newGrid.getGridWidth() == 4);
 		assertTrue(newGrid.getGridHeight() == 2);
+	}
+
+	@Test
+	public void test3(){
+		float temp = 12.34567898765f;
+		
+		System.out.println(GI.roundTemp(temp, 12));
+		assertEquals(GI.roundTemp(temp, 0),12f,1e-8f);
+		assertEquals(GI.roundTemp(temp, 1),12.3f,0.00000001f);
+		assertEquals(GI.roundTemp(temp, 2),12.34f,0.0000001f);
+		assertEquals(GI.roundTemp(temp, 3),12.345f,0.00000001f);
+		assertEquals(GI.roundTemp(temp, 4),12.3456f,0.00000001f);
+		assertEquals(GI.roundTemp(temp, 5),12.34567f,0.00000001f);
+		//assertEquals(GI.roundTemp(temp, 6),12.345678f,0.0000001f);  Requires Double Precision
 	}
 	
 	public void printGrid(Grid printGrid){
