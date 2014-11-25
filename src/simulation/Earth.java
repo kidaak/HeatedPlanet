@@ -34,6 +34,7 @@ public final class Earth {
 	private static final int[] increments = { 1,2,3,4,5,6, 9, 10, 12, 15, 18, 20, 30, 36, 45, 60, 90, 180 };
 
 	private int currentStep;
+	private int simDurationStep;
 	private int width;
 	private int height;
 	private int sunPositionCell;
@@ -69,7 +70,8 @@ public final class Earth {
 		updateDistanceFromSun();
 		
 		this.timeStep = simProp.getPropertyInt(EarthGridProperty.SIMULATION_TIME_STEP);//TODO: is this duplicated?
-
+		simDurationStep = (int) Math.ceil(simProp.getPropertyInt(EarthGridProperty.SIMULATION_LENGTH)*(365.0/12.0)*(60*24)/timeStep);
+		
 		Integer gs = simProp.getPropertyInt(EarthGridProperty.GRID_SPACING);
 		// The following could be done better - if we have time, we should do so
 		if (MAX_DEGREES % gs != 0) {
@@ -158,6 +160,10 @@ public final class Earth {
 		// Don't attempt to generate if output queue is full...
 		if(Buffer.getBuffer().getRemainingCapacity() == 0) {
 			return;
+		}
+		
+		if( currentStep > simDurationStep) {
+			throw new InterruptedException("Simulation Completed!");
 		}
 		
 		//System.out.println("generating grid...");

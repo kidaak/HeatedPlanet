@@ -89,6 +89,7 @@ public class ControllerGUI extends JFrame implements ActionListener {
 		settingsPanel.add(inputField("Presentation Rate",Float.toString(Controller.DEFAULT_PRESENTATION_RATE)));
 		settingsPanel.add(inputField("Axial Tilt",Float.toString(Controller.DEFAULT_AXIAL_TILT)));
 		settingsPanel.add(inputField("Orbital Eccentricity",Float.toString(Controller.DEFAULT_ECCENTRICITY)));
+		settingsPanel.add(inputField("Simulation Duration (months)",Integer.toString(Controller.DEFAULT_DURATION)));
 
 		return settingsPanel;
 	}
@@ -189,6 +190,7 @@ public class ControllerGUI extends JFrame implements ActionListener {
 			final float presentationRate = Float.parseFloat(inputs.get("Presentation Rate").getText());
 			final float axialTilt = Float.parseFloat(inputs.get("Axial Tilt").getText());
 			final float eccentricity = Float.parseFloat(inputs.get("Orbital Eccentricity").getText());
+			final int simDuration = Integer.parseInt(inputs.get("Simulation Duration (months)").getText());
 			
 			EarthGridProperties simProp = new EarthGridProperties();
 			simProp.setProperty(EarthGridProperties.EarthGridProperty.GRID_SPACING, gs);
@@ -196,6 +198,7 @@ public class ControllerGUI extends JFrame implements ActionListener {
 			simProp.setProperty(EarthGridProperties.EarthGridProperty.PRESENTATION_RATE, presentationRate);
 			simProp.setProperty(EarthGridProperties.EarthGridProperty.AXIAL_TILT, axialTilt);
 			simProp.setProperty(EarthGridProperties.EarthGridProperty.ECCENTRICITY, eccentricity);
+			simProp.setProperty(EarthGridProperties.EarthGridProperty.SIMULATION_LENGTH, simDuration);
 			
 			controller.start(simProp);
 			

@@ -13,7 +13,7 @@ public class EarthGridProperties implements Serializable{
 	public static enum EarthGridProperty {
 		NAME, 
 		GRID_SPACING, SIMULATION_TIME_STEP, SIMULATION_LENGTH, PRECISION, GEO_PRECISION, TIME_PRECISION,
-		AXIAL_TILT, ECCENTRICITY, PRESENTATION_RATE
+		AXIAL_TILT, ECCENTRICITY, PRESENTATION_RATE, 
 	};
 	
 	public EarthGridProperties(){

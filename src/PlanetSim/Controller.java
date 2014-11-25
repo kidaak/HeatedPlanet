@@ -16,6 +16,7 @@ public class Controller extends ComponentBase {
 	public static final float DEFAULT_PRESENTATION_RATE = 0.01f;
 	public static final float DEFAULT_AXIAL_TILT = 23.44f;
 	public static final float DEFAULT_ECCENTRICITY = 0.0167f;
+	public static final int DEFAULT_DURATION = 12;
 	
 	private Model model;
 	private View view;
