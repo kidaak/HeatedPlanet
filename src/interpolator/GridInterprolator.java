@@ -72,46 +72,56 @@ public class GridInterprolator {
 		return newGrid;
 	}
 	
-	public Grid decimateTime(Grid grid, int percentage){
-		
-		if( true ){
-			return grid;
-		}
-			
+	public Grid decimateTime(Grid grid, int Percentage){
+		int time = grid.getTime();
+		int timestep = grid.getTimeStep();
+		int i = time/timestep;
+		float value = (float) Math.floor(100.0f/Percentage);
+		float x = i/value;
+		//System.out.println(time + "," + timestep + "," + i + "," + value + "," + x);
+		for(int j = 0; j <= Percentage; j++){
+			//System.out.print(Math.abs(x-j)+", ");
+			if( Math.abs(x-j) < 1e-4 ){
+				//System.out.println("");
+				return grid;
+			}
+		}	
+		//System.out.println("");
 		return null;
 	}
 	
-	
-	public ArrayList<Grid> decimate(ArrayList<Grid> gridList,int spacialPercentage, int temporalPercentage){
-		ArrayList<Grid> newGrid = new ArrayList<Grid>();
+	public ArrayList<Grid> interprolateTime(ArrayList<Grid> gridList){
+		ArrayList<Grid> newGridList = new ArrayList<Grid>();
 		Grid lastGrid = null;
 		
 		for(Grid grid : gridList){
 			
 			if(lastGrid != null){
-				
+				int timestep = lastGrid.getTimeStep();
+				int t1 = lastGrid.getTime();
+				int t2 = grid.getTime();
+				int currentTime = t1 + timestep;
+				while(currentTime < t2){
+					Grid newGrid = new Grid(lastGrid.getSunPosition(),lastGrid.getSunPositionDeg(),lastGrid.getTime()+lastGrid.getTimeStep(),lastGrid.getTimeStep(),lastGrid.getGridWidth(),lastGrid.getGridHeight(),lastGrid.getSunLatitudeDeg(),lastGrid.getDistanceFromSun(),lastGrid.getOrbitalAngle());
+					for(int i = 0; i < lastGrid.getGridWidth(); i++){
+						for(int j = 0; j < lastGrid.getGridHeight(); j++){
+							float T1 = lastGrid.getTemperature(i, j);
+							float T2 = grid.getTemperature(i, j);
+							float slope = (T2-T1)/(t2-t1);
+							float temp = slope*(currentTime-t1)+T1;
+							newGrid.setTemperature(i, j, temp);
+						}
+					}
+					newGridList.add(newGrid);
+					currentTime += timestep;
+				}
 			}
 			
 			lastGrid = grid;
+			newGridList.add(lastGrid);
 		}
 		
-		return newGrid;
-	}
-	
-	public ArrayList<Grid> interprolate(ArrayList<Grid> gridList, int spacialPercentage, int temporalPercentage ){
-		ArrayList<Grid> newGrid = new ArrayList<Grid>();
-		Grid lastGrid = null;
-		
-		for(Grid grid : gridList){
-			
-			if(lastGrid != null){
-				
-			}
-			
-			lastGrid = grid;
-		}
-		
-		return newGrid;
+		return newGridList;
 	}
 	
 	public class CellCorners{
