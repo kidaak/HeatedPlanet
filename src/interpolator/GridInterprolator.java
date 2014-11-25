@@ -15,7 +15,7 @@ public class GridInterprolator {
 	}
 	
 	public Grid decimateSpace(Grid grid){
-		int Percentage = Integer.parseInt(properties.getProperty(EarthGridProperties.EarthGridProperty.GEO_PRECISION));
+		int Percentage = properties.getPropertyInt(EarthGridProperties.EarthGridProperty.GEO_PRECISION);
 		int newHeight = grid.getGridHeight()*Percentage/100;
 		int newWidth = grid.getGridWidth()*Percentage/100;
 		if(newHeight > 180)
@@ -43,7 +43,7 @@ public class GridInterprolator {
 						tempSum += grid.getTemperature(n, m)*w;
 					}
 				}
-				int precision = Integer.parseInt(properties.getProperty(EarthGridProperty.PRECISION));
+				int precision = properties.getPropertyInt(EarthGridProperty.PRECISION);
 				newGrid.setTemperature(i, j, roundTemp(tempSum/weight,precision));
 			}
 		}
@@ -53,7 +53,7 @@ public class GridInterprolator {
 	
 	public Grid interpolateSpace(Grid grid){
 		//System.out.println("Called InterpolateSpace - " + grid.getGridHeight()*100.0/Percentage);
-		int Percentage = Integer.parseInt(properties.getProperty(EarthGridProperties.EarthGridProperty.GEO_PRECISION));
+		int Percentage = properties.getPropertyInt(EarthGridProperties.EarthGridProperty.GEO_PRECISION);
 		int newHeight = (int) Math.floor(grid.getGridHeight()*100./Percentage);
 		int newWidth = (int) Math.floor(grid.getGridWidth()*100./Percentage);
 		if(newHeight > 180)
@@ -85,7 +85,7 @@ public class GridInterprolator {
 	}
 	
 	public Grid decimateTime(Grid grid){
-		int Percentage = Integer.parseInt(properties.getProperty(EarthGridProperties.EarthGridProperty.TIME_PRECISION));
+		int Percentage = properties.getPropertyInt(EarthGridProperties.EarthGridProperty.TIME_PRECISION);
 		int time = grid.getTime();
 		int timestep = grid.getTimeStep();
 		int i = time/timestep;
@@ -96,7 +96,7 @@ public class GridInterprolator {
 			//System.out.print(Math.abs(x-j)+", ");
 			if( Math.abs(x-j) < 1e-4 ){
 				//System.out.println("");
-				int precision = Integer.parseInt(properties.getProperty(EarthGridProperty.PRECISION));
+				int precision = properties.getPropertyInt(EarthGridProperty.PRECISION);
 				for(int m = 0; m < grid.getGridHeight(); m++){
 					for(int n = 0; n < grid.getGridWidth(); n++){
 						grid.setTemperature(n, m, roundTemp(grid.getTemperature(n, m),precision));
