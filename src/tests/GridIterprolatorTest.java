@@ -82,16 +82,16 @@ public class GridIterprolatorTest {
 
 	@Test
 	public void test3(){
-		float temp = 12.34567898765f;
+		double temp = 12.34567898765;
 		
 		System.out.println(GI.roundTemp(temp, 12));
-		assertEquals(GI.roundTemp(temp, 0),12f,1e-8f);
-		assertEquals(GI.roundTemp(temp, 1),12.3f,0.00000001f);
-		assertEquals(GI.roundTemp(temp, 2),12.34f,0.0000001f);
-		assertEquals(GI.roundTemp(temp, 3),12.345f,0.00000001f);
-		assertEquals(GI.roundTemp(temp, 4),12.3456f,0.00000001f);
-		assertEquals(GI.roundTemp(temp, 5),12.34567f,0.00000001f);
-		//assertEquals(GI.roundTemp(temp, 6),12.345678f,0.0000001f);  Requires Double Precision
+		assertEquals(GI.roundTemp(temp, 0),12,1e-8f);
+		assertEquals(GI.roundTemp(temp, 1),12.3,0.00000001);
+		assertEquals(GI.roundTemp(temp, 2),12.34,0.00000001);
+		assertEquals(GI.roundTemp(temp, 3),12.345,0.00000001);
+		assertEquals(GI.roundTemp(temp, 4),12.3456,0.00000001);
+		assertEquals(GI.roundTemp(temp, 5),12.34567,0.00000001);
+		assertEquals(GI.roundTemp(temp, 6),12.345678,0.0000001f); 
 	}
 	
 	public void printGrid(Grid printGrid){

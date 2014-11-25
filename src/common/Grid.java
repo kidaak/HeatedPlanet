@@ -17,7 +17,7 @@ public class Grid implements IGrid, Serializable {
 	
 	// We use a TreeMap to not consume a contiguous amount of memory. It's
 	// backed by a Red/Black Tree, so we get pretty decent access times
-	private final Map<Integer, Float> grid;
+	private final Map<Integer, Double> grid;
 
 	public Grid(int sunPosition, float sunPositionDeg, int time, int timestep, int width, int height, float sunLatitudeDeg, float distanceFromSun,float orbitalAngle) {
 		this.timestep = timestep;
@@ -30,7 +30,7 @@ public class Grid implements IGrid, Serializable {
 		this.distanceFromSun = distanceFromSun;
 		this.orbitalAngle = orbitalAngle;
 
-		grid = new TreeMap<Integer, Float>();
+		grid = new TreeMap<Integer, Double>();
 	}
 	
 	public Grid(Grid toCopy) {
@@ -44,7 +44,7 @@ public class Grid implements IGrid, Serializable {
 		this.distanceFromSun = toCopy.distanceFromSun;
 		this.orbitalAngle = toCopy.orbitalAngle;
 		this.timestep = toCopy.timestep;
-		this.grid = new TreeMap<Integer, Float>(toCopy.grid);
+		this.grid = new TreeMap<Integer, Double>(toCopy.grid);
 	}
 
 	public int getSunPosition(){
@@ -55,7 +55,7 @@ public class Grid implements IGrid, Serializable {
 		return this.time;
 	}
 	@Override
-	public void setTemperature(int x, int y, float temp) {
+	public void setTemperature(int x, int y, double temp) {
 		if (y > height || x > width || x < 0 || y < 0)
 			throw new IllegalArgumentException("index (" + x + ", " + y + ") out of bounds");
 		
@@ -63,7 +63,7 @@ public class Grid implements IGrid, Serializable {
 	}
 
 	@Override
-	public float getTemperature(int x, int y) {
+	public double getTemperature(int x, int y) {
 		if (y >= height || x >= width || x < 0 || y < 0)
 			throw new IllegalArgumentException("index (" + x + ", " + y + ") out of bounds");
 		

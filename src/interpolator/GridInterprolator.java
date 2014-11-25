@@ -124,10 +124,10 @@ public class GridInterprolator {
 					Grid newGrid = new Grid(lastGrid.getSunPosition(),lastGrid.getSunPositionDeg(),lastGrid.getTime()+lastGrid.getTimeStep(),lastGrid.getTimeStep(),lastGrid.getGridWidth(),lastGrid.getGridHeight(),lastGrid.getSunLatitudeDeg(),lastGrid.getDistanceFromSun(),lastGrid.getOrbitalAngle());
 					for(int i = 0; i < lastGrid.getGridWidth(); i++){
 						for(int j = 0; j < lastGrid.getGridHeight(); j++){
-							float T1 = lastGrid.getTemperature(i, j);
-							float T2 = grid.getTemperature(i, j);
-							float slope = (T2-T1)/(t2-t1);
-							float temp = slope*(currentTime-t1)+T1;
+							double T1 = lastGrid.getTemperature(i, j);
+							double T2 = grid.getTemperature(i, j);
+							double slope = (T2-T1)/(t2-t1);
+							double temp = slope*(currentTime-t1)+T1;
 							newGrid.setTemperature(i, j, temp);
 						}
 					}
@@ -188,8 +188,8 @@ public class GridInterprolator {
 		}
 	}
 	
-	public float roundTemp(float temp, int precision){
-		System.out.println(Math.floor(temp * Math.pow(10f,precision)));
-		return (float) (Math.floor(temp * Math.pow(10f,precision)) / Math.pow(10f, precision));
+	public double roundTemp(double temp, int precision){
+		System.out.println(Math.floor(temp * Math.pow(10.0,precision)));
+		return (double) (Math.floor(temp * Math.pow(10.0,precision)) / Math.pow(10.0, precision));
 	}
 }
