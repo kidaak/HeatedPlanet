@@ -8,6 +8,8 @@ import dao.EarthGridDao;
 import dao.EarthGridInsert;
 import dao.EarthGridProperties;
 import dao.EarthGridProperties.EarthGridProperty;
+import dao.EarthGridQuery;
+import dao.EarthGridResponse;
 import database.SimulationDatabase;
 
 /**
@@ -19,9 +21,9 @@ public class DatabaseTest
     {
         SimulationDatabase sdb = SimulationDatabase.getSimulationDatabase();
         EarthGridDao dao = EarthGridDao.getEarthGridDao();
-        
+                
         EarthGridProperties EGProps = new EarthGridProperties();
-        EGProps.setProperty(EarthGridProperty.NAME, "Name1");
+        EGProps.setProperty(EarthGridProperty.NAME, "InsertedName1");
         EGProps.setProperty(EarthGridProperty.AXIAL_TILT, 1.0);
         EGProps.setProperty(EarthGridProperty.ECCENTRICITY, 0.99);
         EGProps.setProperty(EarthGridProperty.GRID_SPACING, 1);
@@ -72,12 +74,17 @@ public class DatabaseTest
 	        	System.out.println("ID = "+dao.getSimulationIdFromName(names[i]));
 	        }
 	        
-	        dao.queryEarthGridSimulationByName("InsertedName2");
+	        EGProps.setProperty(EarthGridProperty.NAME, "InsertedName3");
+	        EarthGridQuery egq = new EarthGridQuery(EGProps, cal4);
+	        
+	        EarthGridResponse response = dao.queryEarthGridSimulationByName(egq);
+	        
+	        System.out.println(response.getResult().name());
 	        
         }catch(Exception e){
         	e.printStackTrace();
         }finally{
-        	dao.resetDatabase(42);
+        	dao.resetDatabase("42");
         }
 
         System.out.println("Done with test!");

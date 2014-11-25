@@ -1,7 +1,9 @@
 package dao;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.sql.Blob;
 import java.sql.PreparedStatement;
@@ -10,7 +12,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import common.Grid;
 import dao.EarthGridProperties.EarthGridProperty;
 import dao.interfaces.IEarthGridDao;
 import database.SimulationDatabase;
@@ -20,15 +26,19 @@ public class EarthGridDao implements IEarthGridDao {
 	private static final EarthGridDao instance;
 	private static final SimulationDatabase sdb;
 	
+	//RegEx to find the row count from a RestultSet toString
+	private static final Pattern rowsPattern = Pattern.compile("rows: (\\d+)");
+	
 	//SQL Statements
 	private static final String GetSimulationIdFromNameSql = "SELECT simulationId FROM Simulation WHERE name = ?";
 	private static final String InsertSimulationSql = "INSERT INTO Simulation "+
 							"(name,axialTilt,eccentricity,gridSpacing,simTimeStep,simLength,precision,geoPrecision,timePrecision,simEndDate) "+
 							"VALUES (?,?,?,?,?,?,?,?,?,?)";
 	private static final String InsertGridSql = "INSERT INTO Grid (Grid,gridDate,simulationFid) VALUES (?,?,?)";
-	private static final String QueryGridSqlStart = "SELECT * FROM Simulation AS S WHERE ";
-	private static final String QueryGridSqlJoin = " JOIN Grid AS G ON S.simulationId = g.simulationFid";
+	private static final String QueryGridSqlStart = "SELECT * FROM Simulation AS S LEFT JOIN Grid AS G ON S.simulationId = G.simulationFid ";
 	private static final String QueryGridByFidSql = "SELECT * FROM Grid WHERE simulationFid = ? ";
+	
+	private static final String QueryGridBySimName = "SELECT * FROM Simulation AS S LEFT JOIN Grid AS G ON S.simulationId = G.simulationFid WHERE S.name = ?";
 
 	//Static block initialization...
 	static {
@@ -59,22 +69,54 @@ public class EarthGridDao implements IEarthGridDao {
 	}
 	
 	@Override
-	//TODO
-	public EarthGridResponse queryEarthGridSimulationByName(String name)
-			throws SQLException {
+	public EarthGridResponse queryEarthGridSimulationByName(EarthGridQuery egq)
+			throws SQLException, IOException, ClassNotFoundException {
 		
-		int simId = getSimulationIdFromName(name);
+		String name = egq.getName();
 		
-		PreparedStatement simStmt = sdb.getConnection().prepareStatement(QueryGridByFidSql);
-		simStmt.setInt(1,simId);
+		PreparedStatement simStmt = sdb.getConnection().prepareStatement(QueryGridBySimName);
+		simStmt.setString(1, name);
+		
 		ResultSet rs = simStmt.executeQuery();
+		EarthGridResponse egr;		
 		
-		while(rs.next()){
-			System.out.println(rs.toString() );
-			System.out.println(String.valueOf(rs.getInt("gridId")) );
+		if(rs.first()){
+			//Extract number of rows from the ResultSet toString
+			Matcher m = rowsPattern.matcher(rs.toString());
+			m.find();
+			int numRows = Integer.valueOf(m.group(1) );
+			
+			//Create arrays of appropriate size
+			Grid[] grids = new Grid[numRows];
+			Calendar[] gridDates = new Calendar[numRows];
+			
+			int count = 0;
+			while(rs.next()){
+				System.out.println(rs.toString() );
+				System.out.println(String.valueOf(rs.getInt("gridId")) );
+				
+				Calendar tempCal = Calendar.getInstance();
+				tempCal.setTimeInMillis(rs.getTimestamp("gridDate").getTime());
+				
+				Blob tempBlob = rs.getBlob("Grid");
+				byte[] tempGrid = tempBlob.getBytes(1, (int) tempBlob.length());
+				ByteArrayInputStream in = new ByteArrayInputStream(tempGrid);
+			    ObjectInputStream is = new ObjectInputStream(in);
+				
+				grids[count] = (Grid) is.readObject();
+				gridDates[count] = tempCal;
+				count++;
+			}
+			if(numRows > 1){
+				egr = EarthGridResponse.EarthGridResponseFactory(ResponseType.FOUND_MANY, grids, gridDates, egq);
+			}else{
+				egr = EarthGridResponse.EarthGridResponseFactory(ResponseType.FOUND_ONE, grids, gridDates, egq);
+			}
+		}else{
+			egr = EarthGridResponse.EarthGridResponseFactory(ResponseType.NOTFOUND, null, null, egq);
 		}
 		
-		return null;
+		return egr;
 	}
 
 	@Override
@@ -173,8 +215,8 @@ public class EarthGridDao implements IEarthGridDao {
 
 
 	@Override
-	public void resetDatabase(int secretCode) throws SQLException {
-		if(secretCode == 42){
+	public void resetDatabase(String secretCode) throws SQLException {
+		if(secretCode.equals("42") ){
 			sdb.executeSqlGeneral("DROP TABLE IF EXISTS Grid");
 	        sdb.executeSqlGeneral("DROP TABLE IF EXISTS Simulation");
 		}

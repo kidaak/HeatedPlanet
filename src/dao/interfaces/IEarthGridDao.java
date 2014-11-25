@@ -12,7 +12,7 @@ public interface IEarthGridDao {
 	
 	public EarthGridResponse queryEarthGridSimulation(EarthGridQuery query) throws SQLException;
 	
-	public EarthGridResponse queryEarthGridSimulationByName(String name) throws SQLException;
+	public EarthGridResponse queryEarthGridSimulationByName(EarthGridQuery query) throws SQLException, IOException, ClassNotFoundException;
 	
 	public ResponseType insertEarthGridSimulation(EarthGridInsert egq) throws SQLException, NumberFormatException, IOException;
 	
@@ -22,5 +22,5 @@ public interface IEarthGridDao {
 	
 	public String[] getAllNames() throws SQLException;
 	
-	public void resetDatabase(int secretCode) throws SQLException;
+	public void resetDatabase(String secretCode) throws SQLException;
 }

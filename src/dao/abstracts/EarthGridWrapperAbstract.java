@@ -23,6 +23,7 @@ public abstract class EarthGridWrapperAbstract {
 		
 		this.props = properties;
 		this.grid = new ArrayList<Grid>(1);
+		this.gridDate = new ArrayList<Calendar>(1);
 		
 		this.setEndDate(endDate);
 		this.setGrid(null);
@@ -39,19 +40,27 @@ public abstract class EarthGridWrapperAbstract {
 	 */
 	public EarthGridWrapperAbstract(EarthGridProperties properties, Calendar endDate, Grid[] g, Calendar[] gd) {
 		
-		if(g.length != gd.length)
-			throw new IllegalArgumentException("Array of Grids must be the same length as the array of Grid Dates. ("+g.length+","+gd.length+")");
+		if(g != null && gd != null){
+			if(g.length != gd.length)
+				throw new IllegalArgumentException("Array of Grids must be the same length as the array of Grid Dates. ("+g.length+","+gd.length+")");
+			
+			this.grid = new ArrayList<Grid>(g.length);
+			this.gridDate = new ArrayList<Calendar>(gd.length);
+			
+			for(int i = 0; i < g.length; i++)
+				this.setGridAt(i,g[i]);
+			for(int i = 0; i < gd.length; i++)
+				this.setGridDateAt(i,gd[i]);
+		}else{
+			this.grid = new ArrayList<Grid>(1);
+			this.gridDate = new ArrayList<Calendar>(1);
+			this.setGrid(null);
+			this.setGridDate(null);
+		}
 		
 		this.props = properties;
-		this.grid = new ArrayList<Grid>(g.length);
-		this.gridDate = new ArrayList<Calendar>(gd.length);
-		
 		this.setEndDate(endDate);
 		
-		for(int i = 0; i < g.length; i++)
-			this.setGridAt(i,g[i]);
-		for(int i = 0; i < gd.length; i++)
-			this.setGridDateAt(i,gd[i]);
 	}
 	
 	/**

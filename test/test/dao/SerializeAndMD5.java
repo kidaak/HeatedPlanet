@@ -33,10 +33,8 @@ public class SerializeAndMD5 {
 			System.out.println(md5String);
 			
 		}catch(IOException ex){
-			// TODO Auto-generated catch block
 			ex.printStackTrace();
 		} catch (NoSuchAlgorithmException ex) {
-			// TODO Auto-generated catch block
 			ex.printStackTrace();
 		}
 
