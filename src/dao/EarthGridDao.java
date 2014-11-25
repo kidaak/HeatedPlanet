@@ -70,13 +70,13 @@ public class EarthGridDao implements IEarthGridDao {
 		ArrayList<String> args = new ArrayList<String>();
 		
 		//TODO Flesh out the rest of the properties to query on
-		if(!props.getProperty(EarthGridProperty.NAME).trim().equals("")){
+		if(!props.getPropertyString(EarthGridProperty.NAME).trim().equals("")){
 			sb.append("Name = ? AND ");
-			args.add(props.getProperty(EarthGridProperty.NAME).trim());
+			args.add(props.getPropertyString(EarthGridProperty.NAME).trim());
 		}
-		if(!props.getProperty(EarthGridProperty.AXIAL_TILT).trim().equals("")){
+		if(!props.getPropertyString(EarthGridProperty.AXIAL_TILT).trim().equals("")){
 			sb.append("axialTilt = ? AND ");
-			args.add(props.getProperty(EarthGridProperty.AXIAL_TILT).trim());
+			args.add(props.getPropertyString(EarthGridProperty.AXIAL_TILT).trim());
 		}
 		//Get rid of trailing " AND "
 		sb.replace(sb.length()-5, sb.length(), "");
@@ -121,20 +121,20 @@ public class EarthGridDao implements IEarthGridDao {
 		//Set Statement values based on the EarthGridProperties object
 		EarthGridProperties props = insert.getProperties();
 		PreparedStatement simStmt = sdb.getConnection().prepareStatement(InsertSimulationSql);
-		simStmt.setString(1, props.getProperty(EarthGridProperty.NAME));
-		simStmt.setDouble(2, Double.valueOf(props.getProperty(EarthGridProperty.AXIAL_TILT)));
-		simStmt.setDouble(3, Double.valueOf(props.getProperty(EarthGridProperty.ECCENTRICITY)));
-		simStmt.setInt(4, Integer.valueOf(props.getProperty(EarthGridProperty.GRID_SPACING)));
-		simStmt.setInt(5, Integer.valueOf(props.getProperty(EarthGridProperty.SIMULATION_TIME_STEP)));
-		simStmt.setInt(6, Integer.valueOf(props.getProperty(EarthGridProperty.SIMULATION_LENGTH)));
-		simStmt.setInt(7, Integer.valueOf(props.getProperty(EarthGridProperty.PRECISION)));
-		simStmt.setInt(8, Integer.valueOf(props.getProperty(EarthGridProperty.GEO_PRECISION)));
-		simStmt.setInt(9, Integer.valueOf(props.getProperty(EarthGridProperty.TIME_PRECISION)));
+		simStmt.setString(1, props.getPropertyString(EarthGridProperty.NAME));
+		simStmt.setDouble(2, Double.valueOf(props.getPropertyString(EarthGridProperty.AXIAL_TILT)));
+		simStmt.setDouble(3, Double.valueOf(props.getPropertyString(EarthGridProperty.ECCENTRICITY)));
+		simStmt.setInt(4, Integer.valueOf(props.getPropertyString(EarthGridProperty.GRID_SPACING)));
+		simStmt.setInt(5, Integer.valueOf(props.getPropertyString(EarthGridProperty.SIMULATION_TIME_STEP)));
+		simStmt.setInt(6, Integer.valueOf(props.getPropertyString(EarthGridProperty.SIMULATION_LENGTH)));
+		simStmt.setInt(7, Integer.valueOf(props.getPropertyString(EarthGridProperty.PRECISION)));
+		simStmt.setInt(8, Integer.valueOf(props.getPropertyString(EarthGridProperty.GEO_PRECISION)));
+		simStmt.setInt(9, Integer.valueOf(props.getPropertyString(EarthGridProperty.TIME_PRECISION)));
 		simStmt.setTimestamp(10, Calendar2Timestamp(insert.getEndDate()), insert.getEndDate());
 		simStmt.execute();
 		
 		//Get the ID of the newly inserted Simulation
-		int newSimId = getSimulationIdFromName(props.getProperty(EarthGridProperty.NAME));
+		int newSimId = getSimulationIdFromName(props.getPropertyString(EarthGridProperty.NAME));
 		
 		//Insert Each Grid using Simulation ID
 		int numGrids = insert.getAllGrids().length;

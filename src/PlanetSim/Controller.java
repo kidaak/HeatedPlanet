@@ -7,6 +7,7 @@ import simulation.Model;
 import view.View;
 import common.Buffer;
 import common.ComponentBase;
+import common.EarthGridProperties;
 
 public class Controller extends ComponentBase {
 	
@@ -38,28 +39,13 @@ public class Controller extends ComponentBase {
 		this.temporalAccuracy = temporalAccuracy;
 	}
 	
-	public void start(int gs, int timeStep, float presentationInterval, float axialTilt, float eccentricity) {
-		
-		if (gs < 1 || gs > Integer.MAX_VALUE)
-			throw new IllegalArgumentException("Invalid grid spacing");
-		
-		if (timeStep < 1 || gs > Integer.MAX_VALUE)
-			throw new IllegalArgumentException("Invalid time step");
-		
-		if (presentationInterval < 0)
-			throw new IllegalArgumentException("Invalid presentation interval");
-		
-		if (axialTilt < -180 || axialTilt > 180)
-			throw new IllegalArgumentException("Axial tilt must be between -180 and 180");
-		
-		if (eccentricity < 0 || eccentricity >= 1)
-			throw new IllegalArgumentException("Eccentricy must be between 0 and 1");
+	public void start(EarthGridProperties simProp) {
 		
 		Buffer.getBuffer().create(this.bufferSize);
 		
 		// Instance model/view
-		model = new Model(gs, timeStep, axialTilt, eccentricity);
-		view = new View(gs, timeStep, presentationInterval);
+		model = new Model(simProp);
+		view = new View(simProp);
 		
 		// Setup model initiative
 		// kickstart message to the model.  After first message it will 

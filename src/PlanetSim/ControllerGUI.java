@@ -19,6 +19,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import common.EarthGridProperties;
+import common.EarthGridProperties.EarthGridProperty;
+
 public class ControllerGUI extends JFrame implements ActionListener {
 
 	/**
@@ -186,8 +189,15 @@ public class ControllerGUI extends JFrame implements ActionListener {
 			final float presentationRate = Float.parseFloat(inputs.get("Presentation Rate").getText());
 			final float axialTilt = Float.parseFloat(inputs.get("Axial Tilt").getText());
 			final float eccentricity = Float.parseFloat(inputs.get("Orbital Eccentricity").getText());
-
-			controller.start(gs, timeStep, presentationRate, axialTilt, eccentricity);
+			
+			EarthGridProperties simProp = new EarthGridProperties();
+			simProp.setProperty(EarthGridProperties.EarthGridProperty.GRID_SPACING, gs);
+			simProp.setProperty(EarthGridProperties.EarthGridProperty.SIMULATION_TIME_STEP, timeStep);
+			simProp.setProperty(EarthGridProperties.EarthGridProperty.PRESENTATION_RATE, presentationRate);
+			simProp.setProperty(EarthGridProperties.EarthGridProperty.AXIAL_TILT, axialTilt);
+			simProp.setProperty(EarthGridProperties.EarthGridProperty.ECCENTRICITY, eccentricity);
+			
+			controller.start(simProp);
 			
 			return true;
 

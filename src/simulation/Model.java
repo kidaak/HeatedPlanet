@@ -1,6 +1,7 @@
 package simulation;
 
 import common.ComponentBase;
+import common.EarthGridProperties;
 import messaging.Message;
 import messaging.Publisher;
 import messaging.events.ProduceContinuousMessage;
@@ -11,9 +12,9 @@ public class Model extends ComponentBase {
 	Earth model;
 	boolean throttled = false;
 	
-	public Model(int gs, int timeStep, float axialTilt, float eccentricity) {
+	public Model(EarthGridProperties simProp) {
 		model = new Earth();
-		model.configure(gs, timeStep, axialTilt, eccentricity);
+		model.configure(simProp);
 		model.start();
 		
 		//Setup message subscriptions

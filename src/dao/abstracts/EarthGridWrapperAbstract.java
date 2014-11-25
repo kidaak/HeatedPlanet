@@ -87,16 +87,16 @@ public abstract class EarthGridWrapperAbstract {
 	 * Basic Getters and Setters
 	 */
 	public String getName() {
-		return props.getProperty(EarthGridProperty.NAME);
+		return props.getPropertyString(EarthGridProperty.NAME);
 	}
 	public int getGridSpacing() {
-		return Integer.valueOf(props.getProperty(EarthGridProperty.GRID_SPACING));
+		return props.getPropertyInt(EarthGridProperty.GRID_SPACING);
 	}
 	public double getAxialTilt() {
-		return Double.valueOf(props.getProperty(EarthGridProperty.AXIAL_TILT));
+		return props.getPropertyFloat(EarthGridProperty.AXIAL_TILT);
 	}
 	public double getEccentricity() {
-		return Double.valueOf(props.getProperty(EarthGridProperty.ECCENTRICITY));
+		return props.getPropertyFloat(EarthGridProperty.ECCENTRICITY);
 	}
 	public Calendar getEndDate() {
 		return endDate;

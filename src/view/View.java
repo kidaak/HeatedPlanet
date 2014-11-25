@@ -2,8 +2,10 @@ package view;
 
 import common.Buffer;
 import common.ComponentBase;
+import common.EarthGridProperties;
 import common.IBuffer;
 import common.IGrid;
+import common.EarthGridProperties.EarthGridProperty;
 import messaging.Message;
 import messaging.events.SimResultMessage;
 import messaging.events.ViewPauseSimMessage;
@@ -38,12 +40,12 @@ public class View extends ComponentBase {
 	long startCpuTime;
 	long presentationCnt = 1;
 
-	public View(int gs, int timeStep, float presentationInterval) {
+	public View(EarthGridProperties simProp) {
 		
-		this.timeStep = timeStep;
-		this.presentationInterval = presentationInterval;
+		this.timeStep = simProp.getPropertyInt(EarthGridProperty.SIMULATION_TIME_STEP);
+		this.presentationInterval = simProp.getPropertyFloat(EarthGridProperty.PRESENTATION_RATE);
 		this.display = new EarthDisplay();
-		display.display(gs, timeStep);
+		display.display(simProp.getPropertyInt(EarthGridProperty.GRID_SPACING), timeStep);
 		display.update((IGrid) null);
 		// Setup message subscriptions
 		pub.subscribe(SimResultMessage.class, this);

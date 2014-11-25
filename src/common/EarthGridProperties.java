@@ -13,7 +13,7 @@ public class EarthGridProperties implements Serializable{
 	public static enum EarthGridProperty {
 		NAME, 
 		GRID_SPACING, SIMULATION_TIME_STEP, SIMULATION_LENGTH, PRECISION, GEO_PRECISION, TIME_PRECISION,
-		AXIAL_TILT, ECCENTRICITY
+		AXIAL_TILT, ECCENTRICITY, PRESENTATION_RATE
 	};
 	
 	public EarthGridProperties(){
@@ -78,15 +78,27 @@ public class EarthGridProperties implements Serializable{
 			if(value < 0 || value >= 1)
 				throw new IllegalArgumentException("The eccentricity must be between 0 and 1, but strictly less than 1.00");
 			break;
+		case PRESENTATION_RATE:
+			if(value < 0)
+				throw new IllegalArgumentException("The presentation rate must be 0 or larger");
+			break;
 		default:
 			throw new IllegalArgumentException(prop.name()+" is not expecting a double.");
 	}
 	internalSetProperty(prop,String.valueOf(value));
 	}
 	
-	public String getProperty(EarthGridProperty prop){
+	public String getPropertyString(EarthGridProperty prop) {
 		if(ht.containsKey(prop))
 			return ht.get(prop);
 		throw new NoSuchElementException(prop.name()+" was not found in this property set.");
+	}
+
+	public Integer getPropertyInt(EarthGridProperty prop) {
+		return Integer.parseInt(getPropertyString(prop));
+	}
+
+	public Float getPropertyFloat(EarthGridProperty prop) {
+		return Float.parseFloat(getPropertyString(prop));
 	}
 }
