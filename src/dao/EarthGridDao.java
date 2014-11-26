@@ -237,15 +237,68 @@ public class EarthGridDao implements IEarthGridDao {
 			}else 
 				//Check if the property is a Integer Property
 				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridIntProperties, propType)){
-				//TODO Flesh out for all Integer properties
+//TODO VERIFY
+					int value = props.getPropertyInt(propType);
+					switch(propType){
+						case GRID_SPACING:
+							//Add the argument to the list to be used later in the PreparedStatement
+							simStmt.setInt(i+1, value);
+							break;
+						case SIMULATION_TIME_STEP:
+							//Add the argument to the list to be used later in the PreparedStatement
+							simStmt.setInt(i+1, value);
+							break;
+						case SIMULATION_LENGTH:
+							//Add the argument to the list to be used later in the PreparedStatement
+							simStmt.setInt(i+1, value);
+							break;
+						case PRECISION:
+							//Add the argument to the list to be used later in the PreparedStatement
+							simStmt.setInt(i+1, value);
+							break;
+						case GEO_PRECISION:
+							//Add the argument to the list to be used later in the PreparedStatement
+							simStmt.setInt(i+1, value);
+							break;
+						case TIME_PRECISION:
+							//Add the argument to the list to be used later in the PreparedStatement
+							simStmt.setInt(i+1, value);
+							break;
+						default:
+							throw new IllegalArgumentException(propType.name()+" is not expecting an integer.");
+				}
 			}else 
 				//Check if the property is a Float Property
 				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridFloatProperties, propType)){
-				//TODO Flesh out for all Float properties
+					float value = props.getPropertyFloat(propType);
+					switch(propType){
+						case AXIAL_TILT:
+							//Add the argument to the list to be used later in the PreparedStatement
+							simStmt.setFloat(i+1, value);
+							break;
+						case ECCENTRICITY:
+							//Add the argument to the list to be used later in the PreparedStatement
+							simStmt.setFloat(i+1, value);
+							break;
+// we don't need a case for presentation rate here, correct?
+						default:
+							throw new IllegalArgumentException(propType.name()+" is not expecting a double.");
+					}
 			}else 
 				//Check if the property is a Calendar Property
 				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridCalendarProperties, propType)){
-				//TODO Flesh out for all Calendar Properties
+					Calendar value = props.getPropertyCalendar(propType);
+					switch(propType){
+// we don't need a case for start date here, correct?
+						case END_DATE:
+							//Add the argument to the list to be used later in the PreparedStatement
+// not sure how to format value here
+							simStmt.setDate(i+1, value);
+							break;
+						default:
+							throw new IllegalArgumentException(propType.name()+" is not expecting a Calendar.");	
+				}
+//TODO END VERIFY
 			}else{
 				throw new IllegalArgumentException("Somehow EarthGridProperty "+propType.name()+" is not in the list for types");
 			}
