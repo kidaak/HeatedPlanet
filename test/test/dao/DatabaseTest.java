@@ -12,7 +12,6 @@ import dao.EarthGridInsert;
 import dao.EarthGridQuery;
 import dao.EarthGridResponse;
 import dao.ResponseType;
-import database.SimulationDatabase;
 
 /**
  * Created by David Welker on 11/13/14.
@@ -31,7 +30,6 @@ public class DatabaseTest
          cal4.add(Calendar.HOUR_OF_DAY, 3);
          
     	
-    	SimulationDatabase sdb = SimulationDatabase.getSimulationDatabase();
         EarthGridDao dao = EarthGridDao.getEarthGridDao();
                 
         EarthGridProperties EGProps = new EarthGridProperties();
@@ -60,7 +58,6 @@ public class DatabaseTest
         Calendar[] calArray1 = {cal1};
         Calendar[] calArray2 = {cal2,cal3};
         Calendar[] calArray3 = {cal1,cal2,cal3,cal4};
-        Calendar[] calArray4 = {};
         
         try{
         	EarthGridInsert insert1 = new EarthGridInsert(EGProps, gridArray1, calArray1);
@@ -166,7 +163,7 @@ public class DatabaseTest
                 }
             }
         }finally{
-        	dao.resetDatabase("42");
+        	//dao.resetDatabase("42");
         }
 
         System.out.println("Done with test!");
