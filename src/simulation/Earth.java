@@ -162,7 +162,7 @@ public final class Earth {
 			return;
 		}
 		
-		if( currentStep > simDurationStep) {
+		if( currentStep >= simDurationStep) {
 			throw new InterruptedException("Simulation Completed!");
 		}
 		
