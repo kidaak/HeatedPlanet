@@ -30,12 +30,20 @@ public class ControllerGUI extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 6146431536208036768L;
 	
 	private Controller controller;
+
+	private int precisionDigits;
+	private int geographicAccuracy;
+	private int temporalAccuracy;
 	
 	private HashMap<String, JTextField> inputs = new HashMap<String, JTextField>();
 	private HashMap<String, JButton> buttons = new HashMap<String, JButton>();
 
 	public ControllerGUI(int precisionDigits, int geographicAccuracy, int temporalAccuracy) {
-		controller = new Controller(precisionDigits, geographicAccuracy, temporalAccuracy);
+		this.precisionDigits = precisionDigits;
+		this.geographicAccuracy = geographicAccuracy;
+		this.temporalAccuracy = temporalAccuracy;
+		
+		controller = new Controller();
 
 		setupWindow();
 		pack();
@@ -193,12 +201,15 @@ public class ControllerGUI extends JFrame implements ActionListener {
 			final int simDuration = Integer.parseInt(inputs.get("Simulation Duration (months)").getText());
 			
 			EarthGridProperties simProp = new EarthGridProperties();
-			simProp.setProperty(EarthGridProperties.EarthGridProperty.GRID_SPACING, gs);
-			simProp.setProperty(EarthGridProperties.EarthGridProperty.SIMULATION_TIME_STEP, timeStep);
-			simProp.setProperty(EarthGridProperties.EarthGridProperty.PRESENTATION_RATE, presentationRate);
-			simProp.setProperty(EarthGridProperties.EarthGridProperty.AXIAL_TILT, axialTilt);
-			simProp.setProperty(EarthGridProperties.EarthGridProperty.ECCENTRICITY, eccentricity);
-			simProp.setProperty(EarthGridProperties.EarthGridProperty.SIMULATION_LENGTH, simDuration);
+			simProp.setProperty(EarthGridProperty.GRID_SPACING, gs);
+			simProp.setProperty(EarthGridProperty.SIMULATION_TIME_STEP, timeStep);
+			simProp.setProperty(EarthGridProperty.PRESENTATION_RATE, presentationRate);
+			simProp.setProperty(EarthGridProperty.AXIAL_TILT, axialTilt);
+			simProp.setProperty(EarthGridProperty.ECCENTRICITY, eccentricity);
+			simProp.setProperty(EarthGridProperty.SIMULATION_LENGTH, simDuration);
+			simProp.setProperty(EarthGridProperty.PRECISION, precisionDigits);
+			simProp.setProperty(EarthGridProperty.TIME_PRECISION, temporalAccuracy);
+			simProp.setProperty(EarthGridProperty.GEO_PRECISION, geographicAccuracy);
 			
 			controller.start(simProp);
 			

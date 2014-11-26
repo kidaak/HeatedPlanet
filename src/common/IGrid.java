@@ -20,4 +20,10 @@ public interface IGrid {
 	
 	public double getDistanceFromSun();
 
+	public int getSunPosition();
+	
+	public int getTime();
+	
+	public int getTimeStep();
+
 }

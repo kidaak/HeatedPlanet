@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import common.EarthGridProperties;
 import common.EarthGridProperties.EarthGridProperty;
 import common.Grid;
+import common.IGrid;
 
 public class GridInterprolator {
 
@@ -14,7 +15,26 @@ public class GridInterprolator {
 		this.properties = properties;
 	}
 	
-	public Grid decimateSpace(Grid grid){
+	public IGrid decimateAll(IGrid grid) {
+		// Will return null if determined that grid should not be stored
+		return decimateSpace(decimateTime(grid));
+	}
+	
+	public ArrayList<Grid> interpolateAll(Grid[] daoGrid) {
+		ArrayList<Grid> gridList = new ArrayList<Grid>();
+		// First interpolate space for each result grid
+		for(Grid grid : daoGrid) {
+			gridList.add(interpolateSpace(grid));
+		}
+		// Now interpolate across time
+		gridList = interpolateTime(gridList);
+		return gridList;
+	}
+	
+	public IGrid decimateSpace(IGrid grid){
+		if(grid == null) {
+			return null;
+		}
 		int Percentage = properties.getPropertyInt(EarthGridProperties.EarthGridProperty.GEO_PRECISION);
 		int newHeight = grid.getGridHeight()*Percentage/100;
 		int newWidth = grid.getGridWidth()*Percentage/100;
@@ -23,7 +43,9 @@ public class GridInterprolator {
 		if(newWidth > 2*newHeight)
 			newWidth = 2*newHeight;
 			
-		Grid newGrid = new Grid(grid.getSunPosition(),grid.getSunPositionDeg(),grid.getTime(),grid.getTimeStep(),newWidth,newHeight,grid.getSunLatitudeDeg(),grid.getDistanceFromSun(),grid.getOrbitalAngle());
+		//NOTE: here we break the interface abstraction :(
+		//      If time allows find a way to update this...
+		IGrid newGrid = new Grid(grid.getSunPosition(),grid.getSunPositionDeg(),grid.getTime(),grid.getTimeStep(),newWidth,newHeight,grid.getSunLatitudeDeg(),grid.getDistanceFromSun(),grid.getOrbitalAngle());
 		
 		for(int j = 0; j < newGrid.getGridHeight(); j++){
 			for(int i = 0; i < newGrid.getGridWidth(); i++){
@@ -84,7 +106,7 @@ public class GridInterprolator {
 		return newGrid;
 	}
 	
-	public Grid decimateTime(Grid grid){
+	public IGrid decimateTime(IGrid grid){
 		int Percentage = properties.getPropertyInt(EarthGridProperties.EarthGridProperty.TIME_PRECISION);
 		int time = grid.getTime();
 		int timestep = grid.getTimeStep();
@@ -109,7 +131,7 @@ public class GridInterprolator {
 		return null;
 	}
 	
-	public ArrayList<Grid> interprolateTime(ArrayList<Grid> gridList){
+	public ArrayList<Grid> interpolateTime(ArrayList<Grid> gridList){
 		ArrayList<Grid> newGridList = new ArrayList<Grid>();
 		Grid lastGrid = null;
 		

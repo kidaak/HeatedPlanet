@@ -1,5 +1,6 @@
 package PlanetSim;
 
+import persistenceManager.PersistenceManager;
 import messaging.Message;
 import messaging.Publisher;
 import messaging.events.ProduceContinuousMessage;
@@ -20,24 +21,16 @@ public class Controller extends ComponentBase {
 	
 	private Model model;
 	private View view;
+	private PersistenceManager persistenceManager;
 	
 	private int bufferSize = 1000;
-	private int precisionDigits;
-	private int geographicAccuracy;
-	private int temporalAccuracy;
 	
 	private Thread modelThread;
 	private Thread viewThread;
+	private Thread persistenceThread;
 	private Thread t;
 	
-	public Controller(int precisionDigits, int geographicAccuracy, int temporalAccuracy) {
-		
-		if (bufferSize < 1 || bufferSize > Integer.MAX_VALUE) 
-			throw new IllegalArgumentException("Invalid size");
-		
-		this.precisionDigits = precisionDigits;
-		this.geographicAccuracy = geographicAccuracy;
-		this.temporalAccuracy = temporalAccuracy;
+	public Controller() {
 	}
 	
 	public void start(EarthGridProperties simProp) {
@@ -47,6 +40,7 @@ public class Controller extends ComponentBase {
 		// Instance model/view
 		model = new Model(simProp);
 		view = new View(simProp);
+		persistenceManager = new PersistenceManager();
 		
 		// Setup model initiative
 		// kickstart message to the model.  After first message it will 
@@ -60,6 +54,9 @@ public class Controller extends ComponentBase {
 
 		viewThread = new Thread(view,"view");
 		viewThread.start();
+		
+		persistenceThread = new Thread(persistenceManager,"persistenceMgr");
+		persistenceThread.start();
 		
 		// Kick off run loop
 		paused = false;
@@ -84,6 +81,9 @@ public class Controller extends ComponentBase {
 		viewThread.interrupt();
 		viewThread.join();
 		
+		persistenceThread.interrupt();
+		persistenceThread.join();
+		
 		// remove subscriptions
 		Publisher.unsubscribeAll();
 		
@@ -92,6 +92,8 @@ public class Controller extends ComponentBase {
 		model = null;
 		view.close();
 		view = null;
+//		persistenceManager.close();
+		persistenceManager = null;
 		
 		t = null;
 	}

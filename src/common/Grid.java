@@ -47,10 +47,12 @@ public class Grid implements IGrid, Serializable {
 		this.grid = new TreeMap<Integer, Double>(toCopy.grid);
 	}
 
+	@Override
 	public int getSunPosition(){
 		return this.sunPosition;
 	}
 	
+	@Override
 	public int getTime(){
 		return this.time;
 	}
@@ -91,18 +93,22 @@ public class Grid implements IGrid, Serializable {
 		return this.height;
 	}
 	
+	@Override
 	public double getSunLatitudeDeg(){
 		return this.sunLatitudeDeg;
 	}
 	
+	@Override
 	public double getDistanceFromSun(){
 		return this.distanceFromSun;
 	}
 	
+	@Override
 	public double getOrbitalAngle(){
 		return this.orbitalAngle;
 	}
 	
+	@Override
 	public int getTimeStep(){
 		return this.timestep;
 	}

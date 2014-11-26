@@ -9,6 +9,7 @@ import org.junit.Test;
 import common.EarthGridProperties;
 import common.Grid;
 import common.EarthGridProperties.EarthGridProperty;
+import common.IGrid;
 import simulation.Earth;
 
 public class GridIterprolatorTest {
@@ -69,7 +70,7 @@ public class GridIterprolatorTest {
 		ep.setProperty(EarthGridProperty.GEO_PRECISION, 50);
 		ep.setProperty(EarthGridProperty.PRECISION, 3);
 		GI = new GridInterprolator(ep);
-		Grid newGrid = GI.decimateSpace(grid1);
+		IGrid newGrid = GI.decimateSpace(grid1);
 		printGrid(newGrid);
 	
 		assertEquals(newGrid.getTemperature(0,0),(2*300.0+0.5*200.0)/2.5,0.1);
@@ -94,7 +95,7 @@ public class GridIterprolatorTest {
 		assertEquals(GI.roundTemp(temp, 6),12.345678,0.0000001f); 
 	}
 	
-	public void printGrid(Grid printGrid){
+	public void printGrid(IGrid printGrid){
 		for(int i = 0; i < printGrid.getGridHeight(); i++){
 			for(int j =0; j< printGrid.getGridWidth(); j++){
 				System.out.print(printGrid.getTemperature(j, i)+", ");
