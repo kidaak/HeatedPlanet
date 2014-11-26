@@ -27,7 +27,7 @@ public class EarthGridDao implements IEarthGridDao {
 	private static final EarthGridDao instance;
 	private static final SimulationDatabase sdb;
 	
-	//RegEx to find the row count from a RestultSet toString
+	//RegEx to find the row count from a ResultSet toString
 	private static final Pattern rowsPattern = Pattern.compile("rows: (\\d+)");
 	
 	//Canned SQL Statements
@@ -97,15 +97,109 @@ public class EarthGridDao implements IEarthGridDao {
 			}else 
 				//Check if the property is a Integer Property
 				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridIntProperties, propType)){
-				//TODO Flesh out for all Integer properties
+//TODO VERIFY
+				int value = props.getPropertyInt(propType);
+				switch(propType){
+					case GRID_SPACING:
+						//Do basic validation on the value
+						if(value <= 0)
+							throw new IllegalArgumentException("Grid Spacing must be >= 1");
+						//Add to the WHERE Clause using StringBuilder
+						sb.append("gridSpacing = ? AND ");
+						//Add the argument to the list to be used later in the PreparedStatement
+						args.add(Integer.toString(value));
+						break;
+					case SIMULATION_TIME_STEP:
+						//Do basic validation on the value
+						if(value <= 0)
+							throw new IllegalArgumentException("Simulation Time Step must be >= 1");
+						//Add to the WHERE Clause using StringBuilder
+						sb.append("simTimeStep = ? AND ");
+						//Add the argument to the list to be used later in the PreparedStatement
+						args.add(Integer.toString(value));
+						break;
+					case SIMULATION_LENGTH:
+						//Do basic validation on the value
+						if(value <= 0)
+							throw new IllegalArgumentException("Simulation Length must be >= 1");
+						//Add to the WHERE Clause using StringBuilder
+						sb.append("simLength = ? AND ");
+						//Add the argument to the list to be used later in the PreparedStatement
+						args.add(Integer.toString(value));
+						break;
+					case PRECISION:
+						//Do basic validation on the value
+						if(value <= 0)
+							throw new IllegalArgumentException("Precision must be >= 1");
+						//Add to the WHERE Clause using StringBuilder
+						sb.append("precision = ? AND ");
+						//Add the argument to the list to be used later in the PreparedStatement
+						args.add(Integer.toString(value));
+						break;
+					case GEO_PRECISION:
+						//Do basic validation on the value
+						if(value <= 0)
+							throw new IllegalArgumentException("Geographic Precision must be >= 1");
+						//Add to the WHERE Clause using StringBuilder
+						sb.append("geoPrecision = ? AND ");
+						//Add the argument to the list to be used later in the PreparedStatement
+						args.add(Integer.toString(value));
+						break;
+					case TIME_PRECISION:
+						//Do basic validation on the value
+						if(value <= 0)
+							throw new IllegalArgumentException("Time Precision must be >= 1");
+						//Add to the WHERE Clause using StringBuilder
+						sb.append("timePrecision = ? AND ");
+						//Add the argument to the list to be used later in the PreparedStatement
+						args.add(Integer.toString(value));
+						break;
+					default:
+						throw new IllegalArgumentException(propType.name()+" is not expecting an integer.");
+				}
 			}else 
 				//Check if the property is a Float Property
 				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridFloatProperties, propType)){
-				//TODO Flesh out for all Float properties
+				float value = props.getPropertyFloat(propType);
+				switch(propType){
+					case AXIAL_TILT:
+						if(value < -180 || value > 180)
+							throw new IllegalArgumentException("The Axial Tilt must be between -180 and 180 degrees");
+						//Add to the WHERE Clause using StringBuilder
+						sb.append("axialTilt = ? AND ");
+						//Add the argument to the list to be used later in the PreparedStatement
+						args.add(Float.toString(value));
+						break;
+					case ECCENTRICITY:
+						if(value < 0 || value >= 1)
+							throw new IllegalArgumentException("The eccentricity must be between 0 and 1, but strictly less than 1.00");
+						//Add to the WHERE Clause using StringBuilder
+						sb.append("eccentricity = ? AND ");
+						//Add the argument to the list to be used later in the PreparedStatement
+						args.add(Float.toString(value));
+						break;
+// we don't need a case for presentation rate here, correct?
+					default:
+						throw new IllegalArgumentException(propType.name()+" is not expecting a double.");
+				}
 			}else 
 				//Check if the property is a Calendar Property
 				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridCalendarProperties, propType)){
-				//TODO Flesh out for all Calendar Properties
+				Calendar value = props.getPropertyCalendar(propType);
+				switch(propType){
+// we don't need a case for start date here, correct?
+					case END_DATE:
+						if(value == null)
+							throw new IllegalArgumentException("End Date is empty");
+						//Add to the WHERE Clause using StringBuilder
+						sb.append("simEndDate = ? AND ");
+						//Add the argument to the list to be used later in the PreparedStatement
+						args.add(String.valueOf(value.getTimeInMillis()));
+						break;
+					default:
+						throw new IllegalArgumentException(propType.name()+" is not expecting a Calendar.");
+				}		
+//TODO END VERIFY
 			}else{
 				throw new IllegalArgumentException("Somehow EarthGridProperty "+propType.name()+" is not in the list for types");
 			}
@@ -273,7 +367,6 @@ public class EarthGridDao implements IEarthGridDao {
 		String[] stringArray = {};
 		
 		stmt = sdb.getConnection().createStatement();
-		//create an array of Strings of count size counter
 		rs = stmt.executeQuery(sqlString);
 		
 		while(rs.next()){
@@ -283,7 +376,6 @@ public class EarthGridDao implements IEarthGridDao {
 		return names.toArray(stringArray);
 	}
 
-
 	@Override
 	public void resetDatabase(String secretCode) throws SQLException {
 		if(secretCode.equals("42") ){
@@ -291,7 +383,6 @@ public class EarthGridDao implements IEarthGridDao {
 	        sdb.executeSqlGeneral("DROP TABLE IF EXISTS Simulation");
 		}
 	}
-
 
 	@Override
 	public int getSimulationIdFromName(String name) throws SQLException {
