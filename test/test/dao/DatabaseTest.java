@@ -1,5 +1,6 @@
 package test.dao;
 
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Calendar;
 
@@ -10,6 +11,7 @@ import dao.EarthGridDao;
 import dao.EarthGridInsert;
 import dao.EarthGridQuery;
 import dao.EarthGridResponse;
+import dao.ResponseType;
 import database.SimulationDatabase;
 
 /**
@@ -55,16 +57,19 @@ public class DatabaseTest
         
         try{
         	EarthGridInsert insert1 = new EarthGridInsert(EGProps, cal1, gridArray1, calArray1);
-        	dao.insertEarthGridSimulation(insert1);
+        	ResponseType response1 = dao.insertEarthGridSimulation(insert1);
+        	System.out.println(response1.name());
         	
             EGProps.setProperty(EarthGridProperty.NAME, "InsertedName2");
             EarthGridInsert insert2 = new EarthGridInsert(EGProps, cal2, gridArray2, calArray2);
-            dao.insertEarthGridSimulation(insert2);
-            
+            ResponseType response2 = dao.insertEarthGridSimulation(insert2);
+            System.out.println(response2.name());
+        	
             EGProps.setProperty(EarthGridProperty.NAME, "InsertedName3");
             EarthGridInsert insert3 = new EarthGridInsert(EGProps, cal1, gridArray3, calArray3);
-	        dao.insertEarthGridSimulation(insert3);
-	        
+            ResponseType response3 = dao.insertEarthGridSimulation(insert3);
+            System.out.println(response3.name());
+        	
 	        System.out.println(dao.isNameUnique("InsertedName2"));
 	        System.out.println(dao.isNameUnique("name"));
 	        System.out.println(dao.getAllNames().length);
@@ -76,17 +81,36 @@ public class DatabaseTest
 	        
 	        EGProps.setProperty(EarthGridProperty.NAME, "InsertedName3");
 	        EarthGridQuery egq = new EarthGridQuery(EGProps, cal4);
-	        EarthGridResponse response = dao.queryEarthGridSimulationByName(egq);
+	        EarthGridResponse response4 = dao.queryEarthGridSimulationByName(egq);
 	        
 	        EGProps.setProperty(EarthGridProperty.NAME, "InsertedName2");
 	        EarthGridQuery egq2 = new EarthGridQuery(EGProps, cal2);
-	        EarthGridResponse response2 = dao.queryEarthGridSimulation(egq2);
+	        EarthGridResponse response5 = dao.queryEarthGridSimulation(egq2);
 	        
-	        System.out.println(response.getResult().name());
-	        System.out.println(response2.getResult().name());
+	        System.out.println(response4.getResult().name());
+	        System.out.println(response5.getResult().name());
 	        
-        }catch(Exception e){
-        	e.printStackTrace();
+        }catch(SQLException ex){
+        	for (Throwable e : ex)
+            {
+                if (e instanceof SQLException)
+                {
+                    SQLException sqlException = (SQLException) e;
+                    if ( true )
+                    {
+                    	sqlException.printStackTrace(System.out);
+                        System.out.println("SQLState: " + sqlException.getSQLState());
+                        System.out.println("Error Code: " + sqlException.getErrorCode());
+                        System.out.println("Message: " + sqlException.getMessage());
+                        Throwable t = ex.getCause();
+                        while (t != null)
+                        {
+                            System.out.println("Cause: " + t);
+                            t = t.getCause();
+                        }
+                    }
+                }
+            }
         }finally{
         	dao.resetDatabase("42");
         }

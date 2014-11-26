@@ -65,11 +65,53 @@ public class EarthGridDao implements IEarthGridDao {
 	public EarthGridResponse queryEarthGridSimulation(EarthGridQuery query) 
 			throws SQLException, NumberFormatException, ClassNotFoundException, IOException {
 		
-		EarthGridProperties props = query.getProperties();
-		StringBuilder sb = new StringBuilder("WHERE ");
-		ArrayList<String> args = new ArrayList<String>();
 		
-		//TODO Flesh out the rest of the properties to query on
+		EarthGridProperties props = query.getProperties();
+		EarthGridProperty[] definedProps = props.definedProperties();
+		
+		//StringBuilder for WHERE statement
+		StringBuilder sb = new StringBuilder("WHERE ");
+		//Ordered list of arguments
+		ArrayList<String> args = new ArrayList<String>(definedProps.length);
+		
+		//Loop through all the defined properties and build the WHERE clause
+		for(int i = 0; i<definedProps.length; i++){
+			//Get the Property Type
+			EarthGridProperty propType = definedProps[i];
+			//Check if the property is a String Property
+			if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridStringProperties, propType)){
+				String value = props.getPropertyString(propType).trim();
+				switch(propType){
+					case NAME:
+						//Do basic validation on the value
+						if(value == null || value.trim().length() == 0)
+							throw new IllegalArgumentException("Simulation name is empty");
+						//Add to the WHERE Clause using StringBuilder
+						sb.append("Name = ? AND ");
+						//Add the argument to the list to be used later in the PreparedStatement
+						args.add(value);
+						break;
+					default:
+						throw new IllegalArgumentException(propType.name()+" is not expecting a string.");
+				}
+			}else 
+				//Check if the property is a Integer Property
+				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridIntProperties, propType)){
+				//TODO Flesh out for all Integer properties
+			}else 
+				//Check if the property is a Float Property
+				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridFloatProperties, propType)){
+				//TODO Flesh out for all Float properties
+			}else 
+				//Check if the property is a Calendar Property
+				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridCalendarProperties, propType)){
+				//TODO Flesh out for all Calendar Properties
+			}else{
+				throw new IllegalArgumentException("Somehow EarthGridProperty "+propType.name()+" is not in the list for types");
+			}
+		}
+		//TODO Use these as a basis for filling out the above
+		/*
 		if(!props.getPropertyString(EarthGridProperty.NAME).trim().equals("")){
 			sb.append("Name = ? AND ");
 			args.add(props.getPropertyString(EarthGridProperty.NAME).trim());
@@ -78,10 +120,45 @@ public class EarthGridDao implements IEarthGridDao {
 			sb.append("axialTilt = ? AND ");
 			args.add(props.getPropertyString(EarthGridProperty.AXIAL_TILT).trim());
 		}
+		*/
 		//Get rid of trailing " AND "
 		sb.replace(sb.length()-5, sb.length(), "");
 		
 		PreparedStatement simStmt = sdb.getConnection().prepareStatement(QueryGridSqlStart+sb.toString());
+		//TODO Refactor this to be smarter about how it adds arguments. Should be similar to above, and we can skip the ArrayList args
+		for(int i = 0; i<definedProps.length; i++){
+			//Get the Property Type
+			EarthGridProperty propType = definedProps[i];
+			//Check if the property is a String Property
+			if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridStringProperties, propType)){
+				String value = props.getPropertyString(propType).trim();
+				switch(propType){
+					case NAME:
+						//Add the argument to the list to be used later in the PreparedStatement
+						simStmt.setString(i+1, value);
+						break;
+					default:
+						throw new IllegalArgumentException(propType.name()+" is not expecting a string.");
+				}
+			}else 
+				//Check if the property is a Integer Property
+				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridIntProperties, propType)){
+				//TODO Flesh out for all Integer properties
+			}else 
+				//Check if the property is a Float Property
+				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridFloatProperties, propType)){
+				//TODO Flesh out for all Float properties
+			}else 
+				//Check if the property is a Calendar Property
+				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridCalendarProperties, propType)){
+				//TODO Flesh out for all Calendar Properties
+			}else{
+				throw new IllegalArgumentException("Somehow EarthGridProperty "+propType.name()+" is not in the list for types");
+			}
+		}
+		
+		//TODO Use this as a framework for above
+		/*
 		for(int i = 0; i<args.size(); i++){
 			String arg = args.get(i);
 			if(isDouble(arg)){
@@ -94,7 +171,7 @@ public class EarthGridDao implements IEarthGridDao {
 				simStmt.setString(i+1, arg);
 			}
 		}
-		
+		*/
 		ResultSet rs = simStmt.executeQuery();
 		
 		return ResultSet2EarthGridResponse(rs, query);
@@ -131,7 +208,15 @@ public class EarthGridDao implements IEarthGridDao {
 		simStmt.setInt(8, Integer.valueOf(props.getPropertyString(EarthGridProperty.GEO_PRECISION)));
 		simStmt.setInt(9, Integer.valueOf(props.getPropertyString(EarthGridProperty.TIME_PRECISION)));
 		simStmt.setTimestamp(10, Calendar2Timestamp(insert.getEndDate()), insert.getEndDate());
-		simStmt.execute();
+		
+		try{
+			simStmt.execute();
+		}catch(SQLException e){
+			String sqlState = e.getSQLState();
+			if(sqlState.equalsIgnoreCase("23505"))
+				return ResponseType.ERROR_DUPLICATE;
+			throw new SQLException(e);
+		}
 		
 		//Get the ID of the newly inserted Simulation
 		int newSimId = getSimulationIdFromName(props.getPropertyString(EarthGridProperty.NAME));
