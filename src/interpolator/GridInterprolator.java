@@ -76,8 +76,8 @@ public class GridInterprolator {
 						tempSum += grid.getTemperature(n, m)*w;
 					}
 				}
-				
-				newGrid.setTemperature(i, j, tempSum/weight);
+				int precision = properties.getPropertyInt(EarthGridProperty.PRECISION);
+				newGrid.setTemperature(i, j, roundTemp(tempSum/weight,precision));
 			}
 		}
 		
@@ -128,7 +128,8 @@ public class GridInterprolator {
 							double T2 = grid.getTemperature(i, j);
 							double slope = (T2-T1)/(t2-t1);
 							double temp = slope*(currentTime-t1)+T1;
-							newGrid.setTemperature(i, j, temp);
+							int precision = properties.getPropertyInt(EarthGridProperty.PRECISION);
+							newGrid.setTemperature(i, j, roundTemp(temp,precision));
 						}
 					}
 					newGridList.add(newGrid);
@@ -189,7 +190,7 @@ public class GridInterprolator {
 	}
 	
 	public double roundTemp(double temp, int precision){
-		System.out.println(Math.floor(temp * Math.pow(10.0,precision)));
+		//System.out.println(Math.floor(temp * Math.pow(10.0,precision)));
 		return (double) (Math.floor(temp * Math.pow(10.0,precision)) / Math.pow(10.0, precision));
 	}
 }
