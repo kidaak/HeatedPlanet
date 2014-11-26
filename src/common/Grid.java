@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class Grid implements IGrid, Serializable {
+public class Grid implements IGrid, Serializable, Comparable<Grid> {
 	
 	static final long serialVersionUID = -7894194241L;
 	
@@ -111,6 +111,11 @@ public class Grid implements IGrid, Serializable {
 	@Override
 	public int getTimeStep(){
 		return this.timestep;
+	}
+
+	@Override
+	public int compareTo(Grid g) {
+		return this.time-g.getTime();
 	}
 
 }

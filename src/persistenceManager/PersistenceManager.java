@@ -43,6 +43,7 @@ public class PersistenceManager extends ComponentBase {
 			//TODO: store value in persistent storage...how do these methods work?
 			//      I want to be able to pass it EarthGridProperties and IGrid and
 			//      have it do the right thing.
+			//You need to send it an EarthGridInsert object, which wraps EarthGridProperties and the Grids - ikerman
 //			dao.insertEarthGridSimulation(egq);
 //			System.out.printf("storing grid %d!\n", msg.result.getTime());
 		}
@@ -55,9 +56,15 @@ public class PersistenceManager extends ComponentBase {
 		ArrayList<Grid> gridList = null;
 		try {
 			//TODO: why does query require endDate outside queryspec?
+			//Fixed this. That was implemented before dates were part of EarthGridProperties
 			//TODO: why is there a separate query method for when named query is performed?
+			//It's hung over from the above point. In theory we could just pass the query method on the 
+			//  DAO an EarthGridProperties, but that's too much refactoring right now, IMO
 			//TODO: what is best way to tell the query was successful? 
-			response = dao.queryEarthGridSimulation(new EarthGridQuery(querySpec, null));
+			//It'll return an EarthGridResponse object where the result field is set to 
+			//   ResponseType.FOUND_ONE or FOUND_MANY. If nothing was found, but not due to an error
+			//   it returns a ResponseType.NOTFOUND
+			response = dao.queryEarthGridSimulation(new EarthGridQuery(querySpec));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

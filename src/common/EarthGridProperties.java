@@ -6,8 +6,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.NoSuchElementException;
 
-import common.EarthGridProperties.EarthGridProperty;
-
 public class EarthGridProperties implements Serializable{
 
 	private static final long serialVersionUID = -7343880418422792826L;
@@ -107,16 +105,16 @@ public class EarthGridProperties implements Serializable{
 	public void setProperty(EarthGridProperty prop, int value) throws IllegalArgumentException{
 		switch(prop){
 			case GRID_SPACING:
-				if(value <= 0)
-					throw new IllegalArgumentException("Grid Spacing must be >= 1");
+				if(value <= 0 || value > 180)
+					throw new IllegalArgumentException("Grid Spacing must be >= 1 and <= 180 degrees");
 				break;
 			case SIMULATION_TIME_STEP:
-				if(value <= 0)
-					throw new IllegalArgumentException("Simulation Time Step must be >= 1");
+				if(value <= 0 || value > 525600)
+					throw new IllegalArgumentException("Simulation Time Step must be >= 1 and <= 525600 minutes");
 				break;
 			case SIMULATION_LENGTH:
-				if(value <= 0)
-					throw new IllegalArgumentException("Simulation Length must be >= 1");
+				if(value <= 0 || value > 1200)
+					throw new IllegalArgumentException("Simulation Length must be >= 1 and <= 1200 months");
 				break;
 			case PRECISION:
 				if(value <= 0)

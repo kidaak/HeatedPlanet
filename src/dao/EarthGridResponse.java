@@ -10,16 +10,16 @@ public class EarthGridResponse extends EarthGridWrapperAbstract {
 	
 	private ResponseType result;	
 	
-	private EarthGridResponse(ResponseType result, EarthGridProperties gridprops, Calendar EndDate, Grid[] EarthGrid, Calendar[] GridDates) 
+	private EarthGridResponse(ResponseType result, EarthGridProperties gridprops, Grid[] EarthGrid, Calendar[] GridDates) 
 	{
-		super(gridprops, EndDate, EarthGrid, GridDates);
+		super(gridprops, EarthGrid, GridDates);
 		
 		this.setResult(result);
 	}
 	
 	public static EarthGridResponse EarthGridResponseFactory(ResponseType result, Grid[] EarthGrid, Calendar[] GridDates, EarthGridQuery query) 
 	{
-		return new EarthGridResponse(result, query.getProperties(), query.getEndDate(), EarthGrid, GridDates);
+		return new EarthGridResponse(result, query.getProperties(), EarthGrid, GridDates);
 	}
 	
 	public ResponseType getResult() {
@@ -32,7 +32,6 @@ public class EarthGridResponse extends EarthGridWrapperAbstract {
 	
 	public void setParametersFromQuery(EarthGridQuery query){
 		this.setProperties(query.getProperties());
-		this.setEndDate(query.getEndDate());
 	}
 	
 }

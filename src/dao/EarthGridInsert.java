@@ -8,9 +8,8 @@ import dao.abstracts.EarthGridWrapperAbstract;
 
 public class EarthGridInsert extends EarthGridWrapperAbstract {
 
-	public EarthGridInsert(EarthGridProperties properties, Calendar endDate,
-			Grid[] g, Calendar[] gd) {
-		super(properties, endDate, g, gd);
+	public EarthGridInsert(EarthGridProperties properties, Grid[] g, Calendar[] gd) {
+		super(properties, g, gd);
 	}
 
 }

@@ -9,7 +9,6 @@ import common.EarthGridProperties.EarthGridProperty;
 
 public abstract class EarthGridWrapperAbstract {
 	private EarthGridProperties props;
-	private Calendar endDate;
 	private ArrayList<Calendar> gridDate;
 	private ArrayList<Grid> grid;
 	
@@ -19,13 +18,12 @@ public abstract class EarthGridWrapperAbstract {
 	 * @param properties Properties object for EarthGrid
 	 * @param endDate The ending date of the simulation
 	 */
-	public EarthGridWrapperAbstract(EarthGridProperties properties, Calendar endDate) {
+	public EarthGridWrapperAbstract(EarthGridProperties properties) {
 		
 		this.props = properties;
 		this.grid = new ArrayList<Grid>(1);
 		this.gridDate = new ArrayList<Calendar>(1);
 		
-		this.setEndDate(endDate);
 		this.setGrid(null);
 		this.setGridDate(null);
 	}
@@ -38,7 +36,7 @@ public abstract class EarthGridWrapperAbstract {
 	 * @param ga Array of Grid objects associated with the above parameters
 	 * @param gd Array of dates corresponding to the array of grids
 	 */
-	public EarthGridWrapperAbstract(EarthGridProperties properties, Calendar endDate, Grid[] g, Calendar[] gd) {
+	public EarthGridWrapperAbstract(EarthGridProperties properties, Grid[] g, Calendar[] gd) {
 		
 		if(g != null && gd != null){
 			if(g.length != gd.length)
@@ -58,31 +56,10 @@ public abstract class EarthGridWrapperAbstract {
 			this.setGridDate(null);
 		}
 		
-		this.props = properties;
-		this.setEndDate(endDate);
-		
+		this.props = properties;		
 	}
 	
-	/**
-	 * EarthGrid constructor. For inserting data.
-	 * 
-	 * @param properties Properties object for EarthGrid
-	 * @param endDate The ending date of the simulation
-	 * @param g Grid objects associated with the above parameters
-	 * @param gd Date corresponding to the grid
-	 */
-	/*public EarthGridWrapperAbstract(EarthGridProperties properties, Calendar endDate, Grid g, Calendar gd) {
-				
-		this.props = properties;
-		this.grid = new ArrayList<Grid>(1);
-		this.gridDate = new ArrayList<Calendar>(1);
-		
-		this.setEndDate(endDate);
-		
-		this.setGrid(g);
-		this.setGridDate(gd);
-	}
-	 */
+	
 	/*
 	 * Basic Getters and Setters
 	 */
@@ -99,11 +76,9 @@ public abstract class EarthGridWrapperAbstract {
 		return props.getPropertyFloat(EarthGridProperty.ECCENTRICITY);
 	}
 	public Calendar getEndDate() {
-		return endDate;
+		return props.getPropertyCalendar(EarthGridProperty.END_DATE);
 	}
-	protected void setEndDate(Calendar endDate) {
-		this.endDate = endDate;
-	}
+
 	public EarthGridProperties getProperties(){
 		return this.props;
 	}

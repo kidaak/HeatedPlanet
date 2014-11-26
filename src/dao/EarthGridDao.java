@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,8 +38,8 @@ public class EarthGridDao implements IEarthGridDao {
 							"VALUES (?,?,?,?,?,?,?,?,?,?)";
 	private static final String InsertGridSql = "INSERT INTO Grid (Grid,gridDate,simulationFid) VALUES (?,?,?)";
 	private static final String QueryGridSqlStart = "SELECT * FROM Simulation AS S LEFT JOIN Grid AS G ON S.simulationId = G.simulationFid ";
-	private static final String QueryGridByFidSql = "SELECT * FROM Grid WHERE simulationFid = ? ";
-	private static final String QueryGridBySimName = "SELECT * FROM Simulation AS S LEFT JOIN Grid AS G ON S.simulationId = G.simulationFid WHERE S.name = ?";
+	//private static final String QueryGridByFidSql = "SELECT * FROM Grid WHERE simulationFid = ? ";
+	//private static final String QueryGridBySimName = "SELECT * FROM Simulation AS S LEFT JOIN Grid AS G ON S.simulationId = G.simulationFid WHERE S.name = ?";
 
 	//Static block initialization...
 	static {
@@ -94,61 +95,41 @@ public class EarthGridDao implements IEarthGridDao {
 					default:
 						throw new IllegalArgumentException(propType.name()+" is not expecting a string.");
 				}
-			}else 
-				//Check if the property is a Integer Property
-				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridIntProperties, propType)){
-//TODO VERIFY
+			}else if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridIntProperties, propType)){
+
 				int value = props.getPropertyInt(propType);
 				switch(propType){
 					case GRID_SPACING:
-						//Do basic validation on the value
-						if(value <= 0)
-							throw new IllegalArgumentException("Grid Spacing must be >= 1");
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("gridSpacing = ? AND ");
 						//Add the argument to the list to be used later in the PreparedStatement
 						args.add(Integer.toString(value));
 						break;
 					case SIMULATION_TIME_STEP:
-						//Do basic validation on the value
-						if(value <= 0)
-							throw new IllegalArgumentException("Simulation Time Step must be >= 1");
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("simTimeStep = ? AND ");
 						//Add the argument to the list to be used later in the PreparedStatement
 						args.add(Integer.toString(value));
 						break;
 					case SIMULATION_LENGTH:
-						//Do basic validation on the value
-						if(value <= 0)
-							throw new IllegalArgumentException("Simulation Length must be >= 1");
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("simLength = ? AND ");
 						//Add the argument to the list to be used later in the PreparedStatement
 						args.add(Integer.toString(value));
 						break;
 					case PRECISION:
-						//Do basic validation on the value
-						if(value <= 0)
-							throw new IllegalArgumentException("Precision must be >= 1");
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("precision = ? AND ");
 						//Add the argument to the list to be used later in the PreparedStatement
 						args.add(Integer.toString(value));
 						break;
 					case GEO_PRECISION:
-						//Do basic validation on the value
-						if(value <= 0)
-							throw new IllegalArgumentException("Geographic Precision must be >= 1");
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("geoPrecision = ? AND ");
 						//Add the argument to the list to be used later in the PreparedStatement
 						args.add(Integer.toString(value));
 						break;
 					case TIME_PRECISION:
-						//Do basic validation on the value
-						if(value <= 0)
-							throw new IllegalArgumentException("Time Precision must be >= 1");
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("timePrecision = ? AND ");
 						//Add the argument to the list to be used later in the PreparedStatement
@@ -157,69 +138,53 @@ public class EarthGridDao implements IEarthGridDao {
 					default:
 						throw new IllegalArgumentException(propType.name()+" is not expecting an integer.");
 				}
-			}else 
-				//Check if the property is a Float Property
-				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridFloatProperties, propType)){
+			}else if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridFloatProperties, propType)){
 				float value = props.getPropertyFloat(propType);
 				switch(propType){
 					case AXIAL_TILT:
-						if(value < -180 || value > 180)
-							throw new IllegalArgumentException("The Axial Tilt must be between -180 and 180 degrees");
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("axialTilt = ? AND ");
 						//Add the argument to the list to be used later in the PreparedStatement
 						args.add(Float.toString(value));
 						break;
 					case ECCENTRICITY:
-						if(value < 0 || value >= 1)
-							throw new IllegalArgumentException("The eccentricity must be between 0 and 1, but strictly less than 1.00");
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("eccentricity = ? AND ");
 						//Add the argument to the list to be used later in the PreparedStatement
 						args.add(Float.toString(value));
 						break;
-// we don't need a case for presentation rate here, correct?
 					default:
 						throw new IllegalArgumentException(propType.name()+" is not expecting a double.");
 				}
-			}else 
-				//Check if the property is a Calendar Property
-				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridCalendarProperties, propType)){
+			}else if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridCalendarProperties, propType)){
 				Calendar value = props.getPropertyCalendar(propType);
 				switch(propType){
-// we don't need a case for start date here, correct?
-					case END_DATE:
-						if(value == null)
-							throw new IllegalArgumentException("End Date is empty");
+					case START_DATE:
 						//Add to the WHERE Clause using StringBuilder
-						sb.append("simEndDate = ? AND ");
+						sb.append("G.gridDate >= ? AND ");
+						//Add the argument to the list to be used later in the PreparedStatement
+						args.add(String.valueOf(value.getTimeInMillis()));
+						break;
+					case END_DATE:
+						//Add to the WHERE Clause using StringBuilder
+						sb.append("G.gridDate <= ? AND ");
 						//Add the argument to the list to be used later in the PreparedStatement
 						args.add(String.valueOf(value.getTimeInMillis()));
 						break;
 					default:
 						throw new IllegalArgumentException(propType.name()+" is not expecting a Calendar.");
 				}		
-//TODO END VERIFY
 			}else{
 				throw new IllegalArgumentException("Somehow EarthGridProperty "+propType.name()+" is not in the list for types");
 			}
 		}
-		//TODO Use these as a basis for filling out the above
-		/*
-		if(!props.getPropertyString(EarthGridProperty.NAME).trim().equals("")){
-			sb.append("Name = ? AND ");
-			args.add(props.getPropertyString(EarthGridProperty.NAME).trim());
-		}
-		if(!props.getPropertyString(EarthGridProperty.AXIAL_TILT).trim().equals("")){
-			sb.append("axialTilt = ? AND ");
-			args.add(props.getPropertyString(EarthGridProperty.AXIAL_TILT).trim());
-		}
-		*/
 		//Get rid of trailing " AND "
 		sb.replace(sb.length()-5, sb.length(), "");
 		
+		//TODO Remove after testing
+		System.out.println(QueryGridSqlStart+sb.toString());
 		PreparedStatement simStmt = sdb.getConnection().prepareStatement(QueryGridSqlStart+sb.toString());
-		//TODO Refactor this to be smarter about how it adds arguments. Should be similar to above, and we can skip the ArrayList args
+		
 		for(int i = 0; i<definedProps.length; i++){
 			//Get the Property Type
 			EarthGridProperty propType = definedProps[i];
@@ -237,7 +202,6 @@ public class EarthGridDao implements IEarthGridDao {
 			}else 
 				//Check if the property is a Integer Property
 				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridIntProperties, propType)){
-//TODO VERIFY
 					int value = props.getPropertyInt(propType);
 					switch(propType){
 						case GRID_SPACING:
@@ -280,7 +244,6 @@ public class EarthGridDao implements IEarthGridDao {
 							//Add the argument to the list to be used later in the PreparedStatement
 							simStmt.setFloat(i+1, value);
 							break;
-// we don't need a case for presentation rate here, correct?
 						default:
 							throw new IllegalArgumentException(propType.name()+" is not expecting a double.");
 					}
@@ -289,53 +252,33 @@ public class EarthGridDao implements IEarthGridDao {
 				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridCalendarProperties, propType)){
 					Calendar value = props.getPropertyCalendar(propType);
 					switch(propType){
-// we don't need a case for start date here, correct?
+						case START_DATE:
+							simStmt.setTimestamp(i+1, Calendar2Timestamp(value));
+							break;
 						case END_DATE:
-							//Add the argument to the list to be used later in the PreparedStatement
-// not sure how to format value here
-							simStmt.setDate(i+1, value);
+							simStmt.setTimestamp(i+1, Calendar2Timestamp(value));
 							break;
 						default:
 							throw new IllegalArgumentException(propType.name()+" is not expecting a Calendar.");	
 				}
-//TODO END VERIFY
 			}else{
 				throw new IllegalArgumentException("Somehow EarthGridProperty "+propType.name()+" is not in the list for types");
 			}
 		}
-		
-		//TODO Use this as a framework for above
-		/*
-		for(int i = 0; i<args.size(); i++){
-			String arg = args.get(i);
-			if(isDouble(arg)){
-				simStmt.setDouble(i+1, Double.parseDouble(arg) );
-			}else if(isInteger(arg)){
-				simStmt.setInt(i+1, Integer.parseInt(arg) );
-			//}else if(){
-				//TODO Need to implement adding Calendar and Timestamp query fields
-			}else{
-				simStmt.setString(i+1, arg);
-			}
-		}
-		*/
 		ResultSet rs = simStmt.executeQuery();
 		
 		return ResultSet2EarthGridResponse(rs, query);
 	}
 	
 	@Override
-	public EarthGridResponse queryEarthGridSimulationByName(EarthGridQuery egq)
+	public EarthGridResponse queryEarthGridSimulationByName(String name)
 			throws SQLException, IOException, ClassNotFoundException {
 		
-		String name = egq.getName();
+		EarthGridProperties props = new EarthGridProperties();
+		props.setProperty(EarthGridProperty.NAME, name);
 		
-		PreparedStatement simStmt = sdb.getConnection().prepareStatement(QueryGridBySimName);
-		simStmt.setString(1, name);
-		
-		ResultSet rs = simStmt.executeQuery();
-		
-		return ResultSet2EarthGridResponse(rs, egq);
+		EarthGridQuery egq = new EarthGridQuery(props);
+		return queryEarthGridSimulation(egq);
 	}
 
 	@Override
@@ -452,31 +395,89 @@ public class EarthGridDao implements IEarthGridDao {
 		return id;
 	}
 	
+	/**
+	 * This method takes a ResultSet from a query specified by an EarthGridQuery and transforms it
+	 * into an EarthGridResponse. If results from more than one simulation are found, only results
+	 * from the "most populous" simulation will be returned.
+	 * 
+	 * @param results A ResultSet
+	 * @param query The EarthGridQuery object that created the ResultSet
+	 * @return The EarthGridResponse object containing the results from the ResultSet
+	 * @throws NumberFormatException
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
+	 * @throws IOException
+	 */
 	private EarthGridResponse ResultSet2EarthGridResponse(ResultSet results, EarthGridQuery query) 
 			throws NumberFormatException, ClassNotFoundException, SQLException, IOException{
 		
 		EarthGridResponse egr;		
 		
-		if(results.first()){
+		if(results.isBeforeFirst()){
 			//Extract number of rows from the ResultSet toString
 			Matcher m = rowsPattern.matcher(results.toString());
 			m.find();
-			int numRows = Integer.valueOf(m.group(1))-1;
+			int numRows = Integer.valueOf(m.group(1));
 			
 			//Create arrays of appropriate size
-			Grid[] grids = new Grid[numRows];
-			Calendar[] gridDates = new Calendar[numRows];
+			ArrayList<Grid> grids = new ArrayList<Grid>(numRows);
+			ArrayList<Calendar> gridDates = new ArrayList<Calendar>(numRows);
+			int[] simIds = new int[numRows];
+			int[] simSortIds = new int[numRows];
 			
 			int count = 0;
+			
 			while(results.next()){
-				grids[count] = Blob2Grid(results.getBlob("Grid"));
-				gridDates[count] = Timestamp2Calendar(results.getTimestamp("gridDate"));
+				simIds[count] = results.getInt("simulationId");
+				simSortIds[count] = simIds[count];
+				grids.add(Blob2Grid(results.getBlob("Grid")) );
+				gridDates.add(Timestamp2Calendar(results.getTimestamp("gridDate")) );
 				count++;
 			}
+			
+			//Determine which Simulation returns the most results (grids)
+			Arrays.sort(simSortIds);
+			int prevId = simSortIds[0];
+			int maxId = -1;
+			int maxCount = -1;
+			int curCount = 1;
+			for(int i = 1; i<simSortIds.length; i++){
+				if(simSortIds[i] == prevId){
+					curCount++;
+				}else{
+					if(curCount > maxCount){
+						maxCount = curCount;
+						maxId = prevId;
+					}
+					curCount = 1;
+					prevId = simSortIds[i];
+				}
+			}
+			if(curCount > maxCount){
+				maxCount = curCount;
+				maxId = prevId;
+			}
+			
+			//Remove any Grids that aren't from the biggest simulation
+			for(int i = 0; i<simIds.length;i++){
+				if(simIds[i] != maxId){
+					grids.remove(i);
+					gridDates.remove(i);
+				}
+			}
+			
+			//Fix the sorting of the arrays
+			Grid[] finalGrids = grids.toArray(new Grid[grids.size()]);
+			Arrays.sort(finalGrids);
+			Calendar[] finalGridDates = gridDates.toArray(new Calendar[gridDates.size()]);
+			Arrays.sort(finalGridDates);
+			
 			if(count > 1){
-				egr = EarthGridResponse.EarthGridResponseFactory(ResponseType.FOUND_MANY, grids, gridDates, query);
+				egr = EarthGridResponse.EarthGridResponseFactory(
+						ResponseType.FOUND_MANY, finalGrids, finalGridDates, query);
 			}else if(count == 1){
-				egr = EarthGridResponse.EarthGridResponseFactory(ResponseType.FOUND_ONE, grids, gridDates, query);
+				egr = EarthGridResponse.EarthGridResponseFactory(
+						ResponseType.FOUND_ONE, finalGrids, finalGridDates, query);
 			}else{
 				egr = EarthGridResponse.EarthGridResponseFactory(ResponseType.NOTFOUND, null, null, query);
 			}
@@ -517,27 +518,5 @@ public class EarthGridDao implements IEarthGridDao {
 	
 	private Timestamp Calendar2Timestamp(Calendar c){
 		return new Timestamp(c.getTimeInMillis());
-	}
-	
-	private boolean isDouble(String s){
-		try{
-			double n = Double.parseDouble(s);
-		}catch(NumberFormatException e){
-			return false;
-		}catch(NullPointerException e){
-			return false;
-		}
-		return true;
-	}
-	
-	private boolean isInteger(String s){
-		try{
-			int n = Integer.parseInt(s);
-		}catch(NumberFormatException e){
-			return false;
-		}catch(NullPointerException e){
-			return false;
-		}
-		return true;
 	}
 }

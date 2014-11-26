@@ -13,7 +13,7 @@ public interface IEarthGridDao {
 	public EarthGridResponse queryEarthGridSimulation(EarthGridQuery query) 
 			throws SQLException, NumberFormatException, ClassNotFoundException, IOException;
 	
-	public EarthGridResponse queryEarthGridSimulationByName(EarthGridQuery query) 
+	public EarthGridResponse queryEarthGridSimulationByName(String name) 
 			throws SQLException, IOException, ClassNotFoundException;
 	
 	public ResponseType insertEarthGridSimulation(EarthGridInsert egq) 
