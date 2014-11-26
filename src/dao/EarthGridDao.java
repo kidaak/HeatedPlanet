@@ -459,7 +459,7 @@ public class EarthGridDao implements IEarthGridDao {
 			}
 			
 			//Remove any Grids that aren't from the biggest simulation
-			for(int i = 0; i<simIds.length;i++){
+			for(int i = simIds.length-1; i>=0;i--){
 				if(simIds[i] != maxId){
 					grids.remove(i);
 					gridDates.remove(i);

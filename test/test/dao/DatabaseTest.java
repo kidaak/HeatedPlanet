@@ -113,6 +113,37 @@ public class DatabaseTest
 	        for(int i = 0; i< gridresponse6.length; i++)
 	        	System.out.println(gridresponse6[i].getSunPosition()+"@"+calresponse6[i].getTime());
 	        
+	        EarthGridProperties egpQuery7 = new EarthGridProperties();
+	        egpQuery7.setProperty(EarthGridProperty.START_DATE,cal3);
+	        EarthGridQuery egq7 = new EarthGridQuery(egpQuery7);
+	        EarthGridResponse response7 = dao.queryEarthGridSimulation(egq7);
+	        System.out.println(response7.getResult().name());
+	        Grid[] gridresponse7 = response7.getAllGrids();
+	        Calendar[] calresponse7 = response7.getAllGridDates();
+	        for(int i = 0; i< gridresponse7.length; i++)
+	        	System.out.println(gridresponse7[i].getSunPosition()+"@"+calresponse7[i].getTime());
+	        
+	        EarthGridProperties egpQuery8 = new EarthGridProperties();
+	        egpQuery8.setProperty(EarthGridProperty.END_DATE,cal3);
+	        EarthGridQuery egq8 = new EarthGridQuery(egpQuery8);
+	        EarthGridResponse response8 = dao.queryEarthGridSimulation(egq8);
+	        System.out.println(response8.getResult().name());
+	        Grid[] gridresponse8 = response8.getAllGrids();
+	        Calendar[] calresponse8 = response8.getAllGridDates();
+	        for(int i = 0; i< gridresponse8.length; i++)
+	        	System.out.println(gridresponse8[i].getSunPosition()+"@"+calresponse8[i].getTime());
+	        
+	        EarthGridProperties egpQuery9 = new EarthGridProperties();
+	        egpQuery9.setProperty(EarthGridProperty.END_DATE,cal3);
+	        egpQuery9.setProperty(EarthGridProperty.START_DATE,cal2);
+	        EarthGridQuery egq9 = new EarthGridQuery(egpQuery9);
+	        EarthGridResponse response9 = dao.queryEarthGridSimulation(egq9);
+	        System.out.println(response9.getResult().name());
+	        Grid[] gridresponse9 = response9.getAllGrids();
+	        Calendar[] calresponse9 = response9.getAllGridDates();
+	        for(int i = 0; i< gridresponse9.length; i++)
+	        	System.out.println(gridresponse9[i].getSunPosition()+"@"+calresponse9[i].getTime());
+	        
         }catch(SQLException ex){
         	for (Throwable e : ex)
             {
