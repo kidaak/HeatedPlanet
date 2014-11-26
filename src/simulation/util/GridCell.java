@@ -203,11 +203,23 @@ public final class GridCell implements EarthCell<GridCell> {
 		int   sunLongitude      = getSunLocationOnEarth(sunPosition);
 		double attenuation_lat   = (double) Math.cos(Math.toRadians(sunLatitude + this.latitude  + 1.0 * this.gs / 2));
 		//double attenuation_longi = (double) (( (Math.abs(sunLongitude - this.longitude) % 360 ) < 90 ) ? Math.cos(Math.toRadians(sunLongitude - this.longitude)) : 0);
-		double attenuation_longi = (double) Math.cos(Math.toRadians(sunLongitude - this.longitude));
-		attenuation_longi = attenuation_longi > 0 ? attenuation_longi : 0;
-		attenuation_lat = attenuation_lat > 0 ? attenuation_lat : 0;
-		return (double) Math.pow(Earth.SEMI_MAJOR_AXIS/distanceFromSun, 2) * 278 * attenuation_lat * attenuation_longi;
-	}
+		double attenuation_longi = (double) Math.cos(Math.toRadians(sunLongitude - (this.longitude + 1.0 * this.gs/2) ));
+		
+		double cosSunLat = Math.cos(Math.toRadians(sunLatitude));
+		double cosGridLat = Math.cos(Math.toRadians(this.latitude  + 1.0 * this.gs / 2));
+		double sinSunLat = Math.sin(Math.toRadians(sunLatitude));
+		double sinGridLat = Math.sin(Math.toRadians(this.latitude  + 1.0 * this.gs / 2));
+		double cosLong = Math.cos(Math.toRadians(sunLongitude - (this.longitude + 1.0 * this.gs/2)));
+		double dAngle = Math.acos(sinSunLat*sinGridLat+cosSunLat*cosGridLat*cosLong);
+		System.out.println(dAngle);
+		if(dAngle > Math.PI/2)
+			return 0;
+		else
+			return (double) Math.pow(Earth.SEMI_MAJOR_AXIS/distanceFromSun, 2) * 278 * Math.abs(attenuation_lat * attenuation_longi);
+		
+		//attenuation_longi = attenuation_longi > 0 ? attenuation_longi : 0;
+		//attenuation_lat = attenuation_lat > 0 ? attenuation_lat : 0;
+		}
 	
 	private void calSurfaceArea(int latitude, int gs) {
 		
