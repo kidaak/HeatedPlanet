@@ -81,7 +81,7 @@ public final class Earth {
 				}
 			}
 			
-			System.out.println("gs: " + this.gs);
+			//System.out.println("gs: " + this.gs);
 		} else
 			this.gs = gs;
 	}

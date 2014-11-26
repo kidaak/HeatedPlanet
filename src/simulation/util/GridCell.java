@@ -211,7 +211,7 @@ public final class GridCell implements EarthCell<GridCell> {
 		double sinGridLat = Math.sin(Math.toRadians(this.latitude  + 1.0 * this.gs / 2));
 		double cosLong = Math.cos(Math.toRadians(sunLongitude - (this.longitude + 1.0 * this.gs/2)));
 		double dAngle = Math.acos(sinSunLat*sinGridLat+cosSunLat*cosGridLat*cosLong);
-		System.out.println(dAngle);
+		//System.out.println(dAngle);
 		if(dAngle > Math.PI/2)
 			return 0;
 		else

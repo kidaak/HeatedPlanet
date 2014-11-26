@@ -110,7 +110,7 @@ public class GridInterprolator {
 		int Percentage = properties.getPropertyInt(EarthGridProperties.EarthGridProperty.TIME_PRECISION);
 		int time = grid.getTime();
 		int timestep = grid.getTimeStep();
-		int i = time/timestep;
+		int i = (time/timestep)%100;
 		float value = (float) Math.floor(100.0f/Percentage);
 		float x = i/value;
 		//System.out.println(time + "," + timestep + "," + i + "," + value + "," + x);
