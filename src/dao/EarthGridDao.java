@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import common.EarthGridProperties;
 import common.Grid;
 import common.EarthGridProperties.EarthGridProperty;
+import common.IGrid;
 import dao.interfaces.IEarthGridDao;
 import database.SimulationDatabase;
 
@@ -495,7 +496,7 @@ public class EarthGridDao implements IEarthGridDao {
 	    return (Grid) is.readObject();
 	}
 	
-	private Blob Grid2Blob(Grid g) throws IOException, SQLException{
+	private Blob Grid2Blob(IGrid g) throws IOException, SQLException{
 		//Create empty BLOB for the Grid object
 		Blob b = sdb.getConnection().createBlob();
 		//Convert the Grid into a Byte Array

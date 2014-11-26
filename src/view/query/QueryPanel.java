@@ -13,6 +13,11 @@ public class QueryPanel extends javax.swing.JPanel
 {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4660409921116331481L;
+
+	/**
      * Creates new form QueryPanel
      */
     public QueryPanel()

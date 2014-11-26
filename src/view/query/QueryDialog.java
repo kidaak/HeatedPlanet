@@ -13,6 +13,11 @@ public class QueryDialog extends javax.swing.JDialog
 {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4961796121859584333L;
+
+	/**
      * Creates new form QueryDialog
      */
     public QueryDialog(java.awt.Frame parent, boolean modal)

@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import common.EarthGridProperties;
-import common.Grid;
 import common.EarthGridProperties.EarthGridProperty;
+import common.IGrid;
 
 public abstract class EarthGridWrapperAbstract {
 	private EarthGridProperties props;
 	private ArrayList<Calendar> gridDate;
-	private ArrayList<Grid> grid;
+	private ArrayList<IGrid> grid;
 	
 	/**
 	 * Constructor without a grid object. Used for query.
@@ -21,7 +21,7 @@ public abstract class EarthGridWrapperAbstract {
 	public EarthGridWrapperAbstract(EarthGridProperties properties) {
 		
 		this.props = properties;
-		this.grid = new ArrayList<Grid>(1);
+		this.grid = new ArrayList<IGrid>(1);
 		this.gridDate = new ArrayList<Calendar>(1);
 		
 		this.setGrid(null);
@@ -36,13 +36,13 @@ public abstract class EarthGridWrapperAbstract {
 	 * @param ga Array of Grid objects associated with the above parameters
 	 * @param gd Array of dates corresponding to the array of grids
 	 */
-	public EarthGridWrapperAbstract(EarthGridProperties properties, Grid[] g, Calendar[] gd) {
+	public EarthGridWrapperAbstract(EarthGridProperties properties, IGrid[] g, Calendar[] gd) {
 		
 		if(g != null && gd != null){
 			if(g.length != gd.length)
 				throw new IllegalArgumentException("Array of Grids must be the same length as the array of Grid Dates. ("+g.length+","+gd.length+")");
 			
-			this.grid = new ArrayList<Grid>(g.length);
+			this.grid = new ArrayList<IGrid>(g.length);
 			this.gridDate = new ArrayList<Calendar>(gd.length);
 			
 			for(int i = 0; i < g.length; i++)
@@ -50,7 +50,7 @@ public abstract class EarthGridWrapperAbstract {
 			for(int i = 0; i < gd.length; i++)
 				this.setGridDateAt(i,gd[i]);
 		}else{
-			this.grid = new ArrayList<Grid>(1);
+			this.grid = new ArrayList<IGrid>(1);
 			this.gridDate = new ArrayList<Calendar>(1);
 			this.setGrid(null);
 			this.setGridDate(null);
@@ -89,24 +89,24 @@ public abstract class EarthGridWrapperAbstract {
 	/*
 	 * Specialized Grid Setters
 	 */
-	protected void setGrid(Grid g) {
+	protected void setGrid(IGrid g) {
 		this.grid.add(0, g);
 	}
-	protected void setGridAt(int index, Grid g){
+	protected void setGridAt(int index, IGrid g){
 		this.grid.add(index, g);
 	}
 	
 	/*
 	 * Specialized Grid Getters
 	 */
-	public Grid getGrid() {
+	public IGrid getGrid() {
 		return getGridAt(0);
 	}
-	public Grid getGridAt(int index){
+	public IGrid getGridAt(int index){
 		return this.grid.get(index);
 	}
-	public Grid[] getAllGrids(){
-		Grid[] g = {};
+	public IGrid[] getAllGrids(){
+		IGrid[] g = {};
 		return this.grid.toArray(g);
 	}
 	

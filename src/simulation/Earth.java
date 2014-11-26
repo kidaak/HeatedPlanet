@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import messaging.Publisher;
-import messaging.events.ProduceContinuousMessage;
 import messaging.events.SimResultMessage;
 import simulation.util.GridCell;
 import common.Buffer;
@@ -95,7 +94,7 @@ public final class Earth {
 
 		// do a reset
 		sunPositionCell = (width / 2) % width;
-		currentStep = 0;
+		currentStep = -1;
 		
 		if (prime != null)
 			prime.setTemp(INITIAL_TEMP);
@@ -293,6 +292,7 @@ public final class Earth {
 		this.distanceFromSun = (float) ( Earth.SEMI_MAJOR_AXIS * (1 - Math.pow(eccentricity,2)) / ( 1 + eccentricity * Math.cos(orbitalAngle) ) );
 	}
 	
+	@SuppressWarnings("unused")
 	private void printGrid(IGrid grid){
 		System.out.println();
 		System.out.println("Grid - " + currentStep + " - "+ timeStep + " - " + distanceFromSun + " - " + orbitalAngle + " - " + sunLatitude);

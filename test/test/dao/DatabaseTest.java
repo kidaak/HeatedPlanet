@@ -1,12 +1,12 @@
 package test.dao;
 
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Calendar;
 
 import common.EarthGridProperties;
 import common.Grid;
 import common.EarthGridProperties.EarthGridProperty;
+import common.IGrid;
 import dao.EarthGridDao;
 import dao.EarthGridInsert;
 import dao.EarthGridQuery;
@@ -47,15 +47,15 @@ public class DatabaseTest
         EGProps.setProperty(EarthGridProperty.END_DATE, cal1);
         
         
-        Grid grid1 = new Grid(1, 1, (int) cal1.getTimeInMillis(), 1, 1, 1, 1, 1, 1);
-        Grid grid2 = new Grid(2, 2, (int) cal2.getTimeInMillis(), 2, 2, 2, 2, 2, 2);
-        Grid grid3 = new Grid(3, 3, (int) cal3.getTimeInMillis(), 3, 3, 3, 3, 3, 3);
-        Grid grid4 = new Grid(4, 4, (int) cal4.getTimeInMillis(), 4, 4, 4, 4, 4, 4);
+        IGrid grid1 = new Grid(1, 1, (int) cal1.getTimeInMillis(), 1, 1, 1, 1, 1, 1);
+        IGrid grid2 = new Grid(2, 2, (int) cal2.getTimeInMillis(), 2, 2, 2, 2, 2, 2);
+        IGrid grid3 = new Grid(3, 3, (int) cal3.getTimeInMillis(), 3, 3, 3, 3, 3, 3);
+        IGrid grid4 = new Grid(4, 4, (int) cal4.getTimeInMillis(), 4, 4, 4, 4, 4, 4);
         
         
-        Grid[] gridArray1 = {grid1};
-        Grid[] gridArray2 = {grid2,grid3};
-        Grid[] gridArray3 = {grid1,grid2,grid3,grid4};
+        IGrid[] gridArray1 = {grid1};
+        IGrid[] gridArray2 = {grid2,grid3};
+        IGrid[] gridArray3 = {grid1,grid2,grid3,grid4};
         
         Calendar[] calArray1 = {cal1};
         Calendar[] calArray2 = {cal2,cal3};
@@ -88,7 +88,7 @@ public class DatabaseTest
 	        
 	        EarthGridResponse response4 = dao.queryEarthGridSimulationByName("InsertedName3");
 	        System.out.println(response4.getResult().name());
-	        Grid[] gridresponse4 = response4.getAllGrids();
+	        IGrid[] gridresponse4 = response4.getAllGrids();
 	        for(int i = 0; i< gridresponse4.length; i++)
 	        	System.out.println(gridresponse4[i].getSunPosition());
 	        
@@ -99,7 +99,7 @@ public class DatabaseTest
 	        EarthGridResponse response5 = dao.queryEarthGridSimulation(egq2);
 	        
 	        System.out.println(response5.getResult().name());
-	        Grid[] gridresponse5 = response5.getAllGrids();
+	        IGrid[] gridresponse5 = response5.getAllGrids();
 	        for(int i = 0; i< gridresponse5.length; i++)
 	        	System.out.println(gridresponse5[i].getSunPosition());
 	        
@@ -108,7 +108,7 @@ public class DatabaseTest
 	        EarthGridQuery egq6 = new EarthGridQuery(egpQuery6);
 	        EarthGridResponse response6 = dao.queryEarthGridSimulation(egq6);
 	        System.out.println(response6.getResult().name());
-	        Grid[] gridresponse6 = response6.getAllGrids();
+	        IGrid[] gridresponse6 = response6.getAllGrids();
 	        Calendar[] calresponse6 = response6.getAllGridDates();
 	        for(int i = 0; i< gridresponse6.length; i++)
 	        	System.out.println(gridresponse6[i].getSunPosition()+"@"+calresponse6[i].getTime());
@@ -118,7 +118,7 @@ public class DatabaseTest
 	        EarthGridQuery egq7 = new EarthGridQuery(egpQuery7);
 	        EarthGridResponse response7 = dao.queryEarthGridSimulation(egq7);
 	        System.out.println(response7.getResult().name());
-	        Grid[] gridresponse7 = response7.getAllGrids();
+	        IGrid[] gridresponse7 = response7.getAllGrids();
 	        Calendar[] calresponse7 = response7.getAllGridDates();
 	        for(int i = 0; i< gridresponse7.length; i++)
 	        	System.out.println(gridresponse7[i].getSunPosition()+"@"+calresponse7[i].getTime());
@@ -128,7 +128,7 @@ public class DatabaseTest
 	        EarthGridQuery egq8 = new EarthGridQuery(egpQuery8);
 	        EarthGridResponse response8 = dao.queryEarthGridSimulation(egq8);
 	        System.out.println(response8.getResult().name());
-	        Grid[] gridresponse8 = response8.getAllGrids();
+	        IGrid[] gridresponse8 = response8.getAllGrids();
 	        Calendar[] calresponse8 = response8.getAllGridDates();
 	        for(int i = 0; i< gridresponse8.length; i++)
 	        	System.out.println(gridresponse8[i].getSunPosition()+"@"+calresponse8[i].getTime());
@@ -139,7 +139,7 @@ public class DatabaseTest
 	        EarthGridQuery egq9 = new EarthGridQuery(egpQuery9);
 	        EarthGridResponse response9 = dao.queryEarthGridSimulation(egq9);
 	        System.out.println(response9.getResult().name());
-	        Grid[] gridresponse9 = response9.getAllGrids();
+	        IGrid[] gridresponse9 = response9.getAllGrids();
 	        Calendar[] calresponse9 = response9.getAllGridDates();
 	        for(int i = 0; i< gridresponse9.length; i++)
 	        	System.out.println(gridresponse9[i].getSunPosition()+"@"+calresponse9[i].getTime());

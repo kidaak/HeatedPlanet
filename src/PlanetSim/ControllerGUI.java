@@ -8,6 +8,7 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
@@ -92,6 +93,7 @@ public class ControllerGUI extends JFrame implements ActionListener {
 		settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.PAGE_AXIS));
 		settingsPanel.setAlignmentY(Component.TOP_ALIGNMENT);
 		
+		settingsPanel.add(inputField("Sim Name", Controller.DEFAULT_SIM_NAME));
 		settingsPanel.add(inputField("Grid Spacing", Integer.toString(Controller.DEFAULT_GRID_SPACING)));
 		settingsPanel.add(inputField("Simulation Time Step",Integer.toString(Controller.DEFAULT_TIME_STEP)));
 		settingsPanel.add(inputField("Presentation Rate",Float.toString(Controller.DEFAULT_PRESENTATION_RATE)));
@@ -193,6 +195,7 @@ public class ControllerGUI extends JFrame implements ActionListener {
 		
 		try {
 			
+			final String name = inputs.get("Sim Name").getText();
 			final int gs = Integer.parseInt(inputs.get("Grid Spacing").getText());
 			final int timeStep = Integer.parseInt(inputs.get("Simulation Time Step").getText());
 			final float presentationRate = Float.parseFloat(inputs.get("Presentation Rate").getText());
@@ -201,6 +204,7 @@ public class ControllerGUI extends JFrame implements ActionListener {
 			final int simDuration = Integer.parseInt(inputs.get("Simulation Duration (months)").getText());
 			
 			EarthGridProperties simProp = new EarthGridProperties();
+			simProp.setProperty(EarthGridProperty.NAME, name);
 			simProp.setProperty(EarthGridProperty.GRID_SPACING, gs);
 			simProp.setProperty(EarthGridProperty.SIMULATION_TIME_STEP, timeStep);
 			simProp.setProperty(EarthGridProperty.PRESENTATION_RATE, presentationRate);
@@ -210,6 +214,9 @@ public class ControllerGUI extends JFrame implements ActionListener {
 			simProp.setProperty(EarthGridProperty.PRECISION, precisionDigits);
 			simProp.setProperty(EarthGridProperty.TIME_PRECISION, temporalAccuracy);
 			simProp.setProperty(EarthGridProperty.GEO_PRECISION, geographicAccuracy);
+			//TODO: below is NOT correct.  Need to work out how to set this properly
+			//      given SIMULATION_LENGTH.  Also these properties seem redundant.
+			simProp.setProperty(EarthGridProperty.END_DATE, Calendar.getInstance());
 			
 			controller.start(simProp);
 			

@@ -3,13 +3,9 @@ package test.dao;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-
-import dao.EarthGridDao;
-import dao.EarthGridQuery;
 
 public class SerializeAndMD5 {
 

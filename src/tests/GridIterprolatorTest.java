@@ -53,7 +53,7 @@ public class GridIterprolatorTest {
 		ep.setProperty(EarthGridProperty.GEO_PRECISION, 40);
 		ep.setProperty(EarthGridProperty.PRECISION, 3);
 		GI = new GridInterprolator(ep);
-		Grid newGrid = GI.interpolateSpace(grid2);
+		IGrid newGrid = GI.interpolateSpace(grid2);
 		assertEquals(newGrid.getTemperature(0,0),100,0.1);
 		assertEquals(newGrid.getTemperature(9,0),200,0.1);
 		assertEquals(newGrid.getTemperature(0,4),200,0.1);

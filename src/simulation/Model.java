@@ -3,7 +3,6 @@ package simulation;
 import common.ComponentBase;
 import common.EarthGridProperties;
 import messaging.Message;
-import messaging.Publisher;
 import messaging.events.ProduceContinuousMessage;
 import messaging.events.ViewPauseSimMessage;
 import messaging.events.ViewResumeSimMessage;

@@ -20,10 +20,10 @@ public class GridInterprolator {
 		return decimateSpace(decimateTime(grid));
 	}
 	
-	public ArrayList<Grid> interpolateAll(Grid[] daoGrid) {
-		ArrayList<Grid> gridList = new ArrayList<Grid>();
+	public ArrayList<IGrid> interpolateAll(IGrid[] daoGrid) {
+		ArrayList<IGrid> gridList = new ArrayList<IGrid>();
 		// First interpolate space for each result grid
-		for(Grid grid : daoGrid) {
+		for(IGrid grid : daoGrid) {
 			gridList.add(interpolateSpace(grid));
 		}
 		// Now interpolate across time
@@ -73,7 +73,7 @@ public class GridInterprolator {
 		return newGrid;
 	}
 	
-	public Grid interpolateSpace(Grid grid){
+	public IGrid interpolateSpace(IGrid grid){
 		//System.out.println("Called InterpolateSpace - " + grid.getGridHeight()*100.0/Percentage);
 		int Percentage = properties.getPropertyInt(EarthGridProperties.EarthGridProperty.GEO_PRECISION);
 		int newHeight = (int) Math.floor(grid.getGridHeight()*100./Percentage);
@@ -83,7 +83,9 @@ public class GridInterprolator {
 		if(newWidth > 2*newHeight)
 			newWidth = 2*newHeight;
 		//System.out.println(newHeight + ',' + newWidth);
-		Grid newGrid = new Grid(grid.getSunPosition(),grid.getSunPositionDeg(),grid.getTime(),grid.getTimeStep(),newWidth,newHeight,grid.getSunLatitudeDeg(),grid.getDistanceFromSun(),grid.getOrbitalAngle());
+		//NOTE: here we break the interface abstraction :(
+		//      If time allows find a way to update this...
+		IGrid newGrid = new Grid(grid.getSunPosition(),grid.getSunPositionDeg(),grid.getTime(),grid.getTimeStep(),newWidth,newHeight,grid.getSunLatitudeDeg(),grid.getDistanceFromSun(),grid.getOrbitalAngle());
 		for(int j = 0; j < newGrid.getGridHeight(); j++){
 			for(int i = 0; i < newGrid.getGridWidth(); i++){
 				
@@ -131,11 +133,11 @@ public class GridInterprolator {
 		return null;
 	}
 	
-	public ArrayList<Grid> interpolateTime(ArrayList<Grid> gridList){
-		ArrayList<Grid> newGridList = new ArrayList<Grid>();
-		Grid lastGrid = null;
+	public ArrayList<IGrid> interpolateTime(ArrayList<IGrid> gridList){
+		ArrayList<IGrid> newGridList = new ArrayList<IGrid>();
+		IGrid lastGrid = null;
 		
-		for(Grid grid : gridList){
+		for(IGrid grid : gridList){
 			
 			if(lastGrid != null){
 				int timestep = lastGrid.getTimeStep();

@@ -12,6 +12,7 @@ import common.EarthGridProperties;
 
 public class Controller extends ComponentBase {
 	
+	public static final String DEFAULT_SIM_NAME = new String("defaultName");
 	public static final int DEFAULT_GRID_SPACING = 15;
 	public static final int DEFAULT_TIME_STEP = 1;
 	public static final float DEFAULT_PRESENTATION_RATE = 0.01f;
