@@ -13,6 +13,7 @@ public class QueryCalculator {
 	private boolean doAvgAcrossTime;
 	private boolean doAvgAcrossGrid;
 	private boolean doAllData;
+	private float minlat, maxlat, minlon, maxlon;
 	
 	public void setDoAvgAcrossTime(boolean doAvgAcrossTime) {
 		this.doAvgAcrossTime = doAvgAcrossTime;
@@ -41,7 +42,14 @@ public class QueryCalculator {
 	public void setDoMax(boolean doMax) {
 		this.doMax = doMax;
 	}
-
+	
+	public void setLocation(float minlat, float maxlat, float minlon, float maxlon) {
+		this.minlat = minlat;
+		this.maxlat = maxlat;
+		this.minlon = minlon;
+		this.maxlon = maxlon;
+	}
+	
 	public String getOutputText() {
 		return new String("SAMPLE OUTPUT TEXT");
 	}
