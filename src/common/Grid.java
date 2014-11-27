@@ -15,6 +15,12 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 	private final double distanceFromSun;
 	private final double orbitalAngle;
 	
+	//Variables for Fitting Grids
+	private final double[] coef;
+	private final double[] dCoef;
+	private double stepRate = 0.01;
+	private double numberOfIterations = 100;
+	
 	// We use a TreeMap to not consume a contiguous amount of memory. It's
 	// backed by a Red/Black Tree, so we get pretty decent access times
 	private final Map<Integer, Double> grid;
@@ -29,7 +35,8 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 		this.sunLatitudeDeg = sunLatitudeDeg;
 		this.distanceFromSun = distanceFromSun;
 		this.orbitalAngle = orbitalAngle;
-
+		this.coef = new double[13];
+		this.dCoef = new double[13];
 		grid = new TreeMap<Integer, Double>();
 	}
 	
@@ -45,6 +52,8 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 		this.orbitalAngle = toCopy.orbitalAngle;
 		this.timestep = toCopy.timestep;
 		this.grid = new TreeMap<Integer, Double>(toCopy.grid);
+		this.coef = new double[13];
+		this.dCoef = new double[13];
 	}
 
 	@Override
@@ -117,5 +126,89 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 	public int compareTo(Grid g) {
 		return this.time-g.getTime();
 	}
+	
+	public double getRSquared(){
+		fitCoef();
+		double sv = getSquaredVariation();
+		double rv = 0.0;
+		for(int i = 0; i < width; i++){
+			for( int j = 0; j < height; j++){
+				rv += Math.pow(getTemperature(i, j)-pred(i,j), 2);
+			}
+		}
+		return 1 - rv/sv;
+	}
+	
+	private void fitCoef(){
+		
+		for(int k = 0; k <= numberOfIterations; k++){
+			
+			for(int n = 0; n < dCoef.length; n++){
+				dCoef[n] = 0.0;
+			}
+			
+			for(int i = 0; i < width; i++){
+				for( int j = 0; j < height; j++){
+					double dy = pred(i,j)-getTemperature(i, j);
+					double[] x = getVars(i, j);
+					for(int n = 0; n < dCoef.length; n++){
+						dCoef[n] += dy*x[n];
+					}
+				}
+			}
+			
+			for(int n = 0; n < dCoef.length; n++){
+				coef[n] -= stepRate*dCoef[n]/(height*width);
+			}
+			
+		}
+	}
+	
+	private double pred(int i, int j){
+		double prediction = 0;
+		double[] x = getVars(i,j);
+		for(int k = 0; k <= coef.length; k++){
+			prediction += coef[k]*x[k];
+		}
+		return prediction;
+	}
+	
+	private double[] getVars(int i, int j){
+		double[] x = new double[13];
+		x[0] = 1;
+		double theta = (i-sunPosition)+(180.0/height)/2.0;
+		double phi = j+180.0/height/2.0;		
+		for(int k = 1; k < 5; k++){
+			x[k] = Math.cos(k*theta);
+			x[k+4] = Math.cos(k*theta)*Math.sin(phi);
+			x[k+8] = Math.cos(k*theta)*Math.sin(2*phi);
+		}
+		return x;
+	}
+	
+	private double getAverageTemperature(){
+		double temp = 0.0;
+		
+		for(int i = 0; i < width; i++){
+			for( int j = 0; j < height; j++){
+				temp += getTemperature(i, j);
+			}
+		}
+		temp = temp/(height*width);
+		return temp;
+	}
+	
+	private double getSquaredVariation(){
+		double averageTemperature = getAverageTemperature();
+		double sqrVar = 0.0;
+		
+		for(int i = 0; i < width; i++){
+			for( int j = 0; j < height; j++){
+				sqrVar += Math.pow(getTemperature(i, j)-averageTemperature,2);
+			}
+		}
+		return sqrVar;
+	}
+	
 
 }
