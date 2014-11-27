@@ -67,7 +67,7 @@ public class PersistenceManager extends ComponentBase {
 			e.printStackTrace();
 		}
 		
-		if(response.getResult() != ResponseType.NOTFOUND) {
+		if(response.getResult() == ResponseType.FOUND_ONE || response.getResult() == ResponseType.FOUND_MANY) {
 			EarthGridProperties simProp = response.getProperties();
 			IGrid[] grids = response.getAllGrids();
 			
