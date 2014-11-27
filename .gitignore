@@ -4,3 +4,4 @@ sources.txt
 /project*
 
 /nbproject/private/
+/build/
