@@ -11,6 +11,7 @@ import view.util.ThermalVisualizer;
 import view.widgets.EarthImage;
 import view.widgets.GridDisplay;
 import view.widgets.SimulationStatus;
+import common.Grid;
 import common.IGrid;
 
 public class EarthDisplay extends JFrame {
@@ -84,6 +85,8 @@ public class EarthDisplay extends JFrame {
 	}
 	
 	public void update(IGrid grid) {
+		//if (grid != null)
+		//	System.out.println(((Grid)grid).getRSquared());
 		if (grid != null)
 			simStatus.update(grid.getSunPositionDeg(), grid.getCurrentTime(), this.gs, this.timeStep);
 		else
