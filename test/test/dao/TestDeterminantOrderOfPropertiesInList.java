@@ -1,6 +1,7 @@
 package test.dao;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import common.EarthGridProperties;
 import common.EarthGridProperties.EarthGridProperty;
@@ -9,8 +10,8 @@ public class TestDeterminantOrderOfPropertiesInList {
 
 	public static void main(String[] args) {
 		
-		Calendar start = Calendar.getInstance();
-		Calendar end = Calendar.getInstance();
+		Calendar start = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		Calendar end = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		
 		EarthGridProperties EGProps1 = new EarthGridProperties();
         EGProps1.setProperty(EarthGridProperty.NAME, "InsertedName1");

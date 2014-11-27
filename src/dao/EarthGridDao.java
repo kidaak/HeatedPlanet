@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -512,7 +513,7 @@ public class EarthGridDao implements IEarthGridDao {
 	}
 	
 	private Calendar Timestamp2Calendar(Timestamp t){
-		Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTimeInMillis(t.getTime());
 		return c;
 	}

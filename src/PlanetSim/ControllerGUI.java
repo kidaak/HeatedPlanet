@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -214,9 +215,12 @@ public class ControllerGUI extends JFrame implements ActionListener {
 			simProp.setProperty(EarthGridProperty.PRECISION, precisionDigits);
 			simProp.setProperty(EarthGridProperty.TIME_PRECISION, temporalAccuracy);
 			simProp.setProperty(EarthGridProperty.GEO_PRECISION, geographicAccuracy);
-			//TODO: below is NOT correct.  Need to work out how to set this properly
-			//      given SIMULATION_LENGTH.  Also these properties seem redundant.
-			simProp.setProperty(EarthGridProperty.END_DATE, Calendar.getInstance());
+			
+			Calendar endDate = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+			endDate.clear();
+			endDate.set(2014, 1, 4);
+			endDate.add(Calendar.MONTH, simDuration);
+			simProp.setProperty(EarthGridProperty.END_DATE, endDate);
 			
 			controller.start(simProp);
 			

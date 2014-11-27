@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.NoSuchElementException;
+import java.util.TimeZone;
 
 public class EarthGridProperties implements Serializable{
 
@@ -183,7 +184,7 @@ public class EarthGridProperties implements Serializable{
 	public Calendar getPropertyCalendar(EarthGridProperty prop){			
 		if(!arrayContains(EarthGridCalendarProperties,prop))
 			throw new IllegalArgumentException(prop.name()+" is not a Calendar property");
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.setTimeInMillis(Long.valueOf(getPropertyString(prop)) );
 		return cal;
 	}

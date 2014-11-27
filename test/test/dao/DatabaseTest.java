@@ -2,6 +2,7 @@ package test.dao;
 
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import common.EarthGridProperties;
 import common.Grid;
@@ -20,10 +21,10 @@ public class DatabaseTest
 {
     public static void main(String[] args) throws Exception
     {
-    	 Calendar cal1 = Calendar.getInstance();
-         Calendar cal2 = Calendar.getInstance();
-         Calendar cal3 = Calendar.getInstance();
-         Calendar cal4 = Calendar.getInstance();
+    	 Calendar cal1 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+         Calendar cal2 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+         Calendar cal3 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+         Calendar cal4 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
          
          cal2.add(Calendar.HOUR_OF_DAY, 1);
          cal3.add(Calendar.HOUR_OF_DAY, 2);
