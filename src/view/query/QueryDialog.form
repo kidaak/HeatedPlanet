@@ -50,26 +50,26 @@
                               </Group>
                               <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jSpinner1" min="-2" pref="65" max="-2" attributes="0"/>
+                                  <Component id="startLongitudeSpinner" min="-2" pref="65" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jSpinner2" min="-2" pref="65" max="-2" attributes="0"/>
+                                  <Component id="endLongitudeSpinner" min="-2" pref="65" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jSpinner4" min="-2" pref="65" max="-2" attributes="0"/>
+                                  <Component id="startLatitudeSpinner" min="-2" pref="65" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jSpinner3" min="-2" pref="65" max="-2" attributes="0"/>
+                                  <Component id="endLatitudeSpinner" min="-2" pref="65" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
                                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jSpinner5" min="-2" max="-2" attributes="0"/>
+                                  <Component id="axialTiltSpinner" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -77,17 +77,17 @@
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                               <Component id="eccentricitySpinner" min="-2" pref="77" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jCheckBox1" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jCheckBox2" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jCheckBox3" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jCheckBox4" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="jCheckBox5" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="minTempCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="maxTempCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="meanTempOverRegionCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="meanTempOverTimesCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="actualValuesCheckBox" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="81" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                      <Component id="queryButton" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -107,7 +107,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jSpinner5" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="axialTiltSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -132,16 +132,16 @@
               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jSpinner1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jSpinner2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="startLongitudeSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="endLongitudeSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jSpinner4" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jSpinner3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="startLatitudeSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="endLatitudeSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -149,17 +149,17 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
+              <Component id="minTempCheckBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jCheckBox2" min="-2" max="-2" attributes="0"/>
+              <Component id="maxTempCheckBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jCheckBox3" min="-2" max="-2" attributes="0"/>
+              <Component id="meanTempOverRegionCheckBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jCheckBox4" min="-2" max="-2" attributes="0"/>
+              <Component id="meanTempOverTimesCheckBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jCheckBox5" min="-2" max="-2" attributes="0"/>
+              <Component id="actualValuesCheckBox" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
-              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+              <Component id="queryButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -174,17 +174,11 @@
     <Component class="javax.swing.JComboBox" name="simulationNameComboBox">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
+          <StringArray count="1">
+            <StringItem index="0" value="Any"/>
           </StringArray>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="simulationNameComboBoxActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator1">
     </Component>
@@ -237,14 +231,14 @@
         <Property name="text" type="java.lang.String" value="Longitude"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JSpinner" name="jSpinner1">
+    <Component class="javax.swing.JSpinner" name="startLongitudeSpinner">
       <Properties>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
           <SpinnerModel initial="-180" maximum="180" minimum="-180" numberType="java.lang.Integer" stepSize="1" type="number"/>
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JSpinner" name="jSpinner2">
+    <Component class="javax.swing.JSpinner" name="endLongitudeSpinner">
       <Properties>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
           <SpinnerModel initial="180" maximum="180" minimum="-180" numberType="java.lang.Integer" stepSize="1" type="number"/>
@@ -266,14 +260,14 @@
         <Property name="text" type="java.lang.String" value="to"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JSpinner" name="jSpinner3">
+    <Component class="javax.swing.JSpinner" name="endLatitudeSpinner">
       <Properties>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
           <SpinnerModel initial="90" maximum="90" minimum="-90" numberType="java.lang.Integer" stepSize="1" type="number"/>
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JSpinner" name="jSpinner4">
+    <Component class="javax.swing.JSpinner" name="startLatitudeSpinner">
       <Properties>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
           <SpinnerModel initial="-90" maximum="90" minimum="-90" numberType="java.lang.Integer" stepSize="1" type="number"/>
@@ -290,40 +284,43 @@
         <Property name="text" type="java.lang.String" value="Results to Show:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JCheckBox" name="jCheckBox1">
+    <Component class="javax.swing.JCheckBox" name="minTempCheckBox">
       <Properties>
         <Property name="text" type="java.lang.String" value="Minimum temperature"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JCheckBox" name="jCheckBox2">
+    <Component class="javax.swing.JCheckBox" name="maxTempCheckBox">
       <Properties>
         <Property name="text" type="java.lang.String" value="Maximum temperature"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JCheckBox" name="jCheckBox3">
+    <Component class="javax.swing.JCheckBox" name="meanTempOverRegionCheckBox">
       <Properties>
         <Property name="text" type="java.lang.String" value="Mean temperature over the region for the requested times"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JCheckBox" name="jCheckBox4">
+    <Component class="javax.swing.JCheckBox" name="meanTempOverTimesCheckBox">
       <Properties>
         <Property name="text" type="java.lang.String" value="Mean temperature over the times for the requested region"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JCheckBox" name="jCheckBox5">
+    <Component class="javax.swing.JCheckBox" name="actualValuesCheckBox">
       <Properties>
         <Property name="text" type="java.lang.String" value="Actual values"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCheckBox5ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actualValuesCheckBoxActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="queryButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Query"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="queryButtonActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JSpinner" name="jSpinner5">
+    <Component class="javax.swing.JSpinner" name="axialTiltSpinner">
       <Properties>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
           <SpinnerModel initial="22.4" maximum="180.0" minimum="-180.0" numberType="java.lang.Double" stepSize="0.1" type="number"/>

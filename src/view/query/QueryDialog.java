@@ -5,6 +5,16 @@
  */
 package view.query;
 
+import common.EarthGridProperties;
+import common.EarthGridProperties.EarthGridProperty;
+import common.IGrid;
+import persistenceManager.PersistenceManager;
+import simulation.Earth;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  *
  * @author dwelker
@@ -48,36 +58,29 @@ public class QueryDialog extends javax.swing.JDialog
         endDateSpinner = new javax.swing.JSpinner();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
-        jSpinner2 = new javax.swing.JSpinner();
+        startLongitudeSpinner = new javax.swing.JSpinner();
+        endLongitudeSpinner = new javax.swing.JSpinner();
         jLabel10 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jSpinner3 = new javax.swing.JSpinner();
-        jSpinner4 = new javax.swing.JSpinner();
+        endLatitudeSpinner = new javax.swing.JSpinner();
+        startLatitudeSpinner = new javax.swing.JSpinner();
         jSeparator4 = new javax.swing.JSeparator();
         jLabel8 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jCheckBox5 = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
-        jSpinner5 = new javax.swing.JSpinner();
+        minTempCheckBox = new javax.swing.JCheckBox();
+        maxTempCheckBox = new javax.swing.JCheckBox();
+        meanTempOverRegionCheckBox = new javax.swing.JCheckBox();
+        meanTempOverTimesCheckBox = new javax.swing.JCheckBox();
+        actualValuesCheckBox = new javax.swing.JCheckBox();
+        queryButton = new javax.swing.JButton();
+        axialTiltSpinner = new javax.swing.JSpinner();
         eccentricitySpinner = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Simulation Name:");
 
-        simulationNameComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        simulationNameComboBox.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                simulationNameComboBoxActionPerformed(evt);
-            }
-        });
+        simulationNameComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Any" }));
 
         jLabel2.setText("Axial Tilt");
 
@@ -95,9 +98,9 @@ public class QueryDialog extends javax.swing.JDialog
 
         jLabel6.setText("Longitude");
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(-180, -180, 180, 1));
+        startLongitudeSpinner.setModel(new javax.swing.SpinnerNumberModel(-180, -180, 180, 1));
 
-        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(180, -180, 180, 1));
+        endLongitudeSpinner.setModel(new javax.swing.SpinnerNumberModel(180, -180, 180, 1));
 
         jLabel10.setText("to");
 
@@ -105,33 +108,40 @@ public class QueryDialog extends javax.swing.JDialog
 
         jLabel11.setText("to");
 
-        jSpinner3.setModel(new javax.swing.SpinnerNumberModel(90, -90, 90, 1));
+        endLatitudeSpinner.setModel(new javax.swing.SpinnerNumberModel(90, -90, 90, 1));
 
-        jSpinner4.setModel(new javax.swing.SpinnerNumberModel(-90, -90, 90, 1));
+        startLatitudeSpinner.setModel(new javax.swing.SpinnerNumberModel(-90, -90, 90, 1));
 
         jLabel8.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
         jLabel8.setText("Results to Show:");
 
-        jCheckBox1.setText("Minimum temperature");
+        minTempCheckBox.setText("Minimum temperature");
 
-        jCheckBox2.setText("Maximum temperature");
+        maxTempCheckBox.setText("Maximum temperature");
 
-        jCheckBox3.setText("Mean temperature over the region for the requested times");
+        meanTempOverRegionCheckBox.setText("Mean temperature over the region for the requested times");
 
-        jCheckBox4.setText("Mean temperature over the times for the requested region");
+        meanTempOverTimesCheckBox.setText("Mean temperature over the times for the requested region");
 
-        jCheckBox5.setText("Actual values");
-        jCheckBox5.addActionListener(new java.awt.event.ActionListener()
+        actualValuesCheckBox.setText("Actual values");
+        actualValuesCheckBox.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                jCheckBox5ActionPerformed(evt);
+                actualValuesCheckBoxActionPerformed(evt);
             }
         });
 
-        jButton1.setText("Query");
+        queryButton.setText("Query");
+        queryButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                queryButtonActionPerformed(evt);
+            }
+        });
 
-        jSpinner5.setModel(new javax.swing.SpinnerNumberModel(22.4d, -180.0d, 180.0d, 0.1d));
+        axialTiltSpinner.setModel(new javax.swing.SpinnerNumberModel(22.4d, -180.0d, 180.0d, 0.1d));
 
         eccentricitySpinner.setModel(new javax.swing.SpinnerNumberModel(0.0167, //initial value
             0.0, //min
@@ -167,37 +177,37 @@ public class QueryDialog extends javax.swing.JDialog
                                 .addComponent(endDateSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
                             .addComponent(jLabel6)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(startLongitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(endLongitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel7)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(startLatitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel11)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(endLatitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel8)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(63, 63, 63)
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
-                                .addComponent(jSpinner5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(axialTiltSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel3)
                             .addGap(18, 18, 18)
                             .addComponent(eccentricitySpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jCheckBox1)
-                        .addComponent(jCheckBox2)
-                        .addComponent(jCheckBox3)
-                        .addComponent(jCheckBox4)
-                        .addComponent(jCheckBox5))
+                        .addComponent(minTempCheckBox)
+                        .addComponent(maxTempCheckBox)
+                        .addComponent(meanTempOverRegionCheckBox)
+                        .addComponent(meanTempOverTimesCheckBox)
+                        .addComponent(actualValuesCheckBox))
                     .addGap(0, 81, Short.MAX_VALUE))
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jButton1)))
+                    .addComponent(queryButton)))
             .addContainerGap())
     );
     layout.setVerticalGroup(
@@ -212,7 +222,7 @@ public class QueryDialog extends javax.swing.JDialog
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel2)
-                .addComponent(jSpinner5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(axialTiltSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel3)
@@ -233,47 +243,71 @@ public class QueryDialog extends javax.swing.JDialog
             .addComponent(jLabel6)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(startLongitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(endLongitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(jLabel10))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel7)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(startLatitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(endLatitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(jLabel11))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(jLabel8)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jCheckBox1)
+            .addComponent(minTempCheckBox)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jCheckBox2)
+            .addComponent(maxTempCheckBox)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jCheckBox3)
+            .addComponent(meanTempOverRegionCheckBox)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jCheckBox4)
+            .addComponent(meanTempOverTimesCheckBox)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jCheckBox5)
+            .addComponent(actualValuesCheckBox)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton1)
+            .addComponent(queryButton)
             .addContainerGap())
     );
 
     pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void simulationNameComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_simulationNameComboBoxActionPerformed
-    {//GEN-HEADEREND:event_simulationNameComboBoxActionPerformed
+    private void actualValuesCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_actualValuesCheckBoxActionPerformed
+    {//GEN-HEADEREND:event_actualValuesCheckBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_simulationNameComboBoxActionPerformed
+    }//GEN-LAST:event_actualValuesCheckBoxActionPerformed
 
-    private void jCheckBox5ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jCheckBox5ActionPerformed
-    {//GEN-HEADEREND:event_jCheckBox5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox5ActionPerformed
+    private void queryButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_queryButtonActionPerformed
+    {//GEN-HEADEREND:event_queryButtonActionPerformed
+        EarthGridProperties egp = new EarthGridProperties();
+        String name = simulationNameComboBox.getSelectedItem().toString();
+        if( !name.equals("Any") )
+            egp.setProperty(EarthGridProperties.EarthGridProperty.NAME, name);
+        Number axialTilt = (Number) axialTiltSpinner.getValue();
+        Number eccentricity = (Number) eccentricitySpinner.getValue();
+        Date startDate = (Date) startDateSpinner.getValue();
+        Date endDate = (Date) endDateSpinner.getValue();
+        Number startLatitude = (Number) startLatitudeSpinner.getValue();
+        Number endLatitude = (Number) startLatitudeSpinner.getValue();
+        Number startLongitude = (Number) startLongitudeSpinner.getValue();
+        Number endLongitude = (Number) endLongitudeSpinner.getValue();
+
+        egp.setProperty(EarthGridProperty.AXIAL_TILT, axialTilt.doubleValue());
+        egp.setProperty(EarthGridProperty.ECCENTRICITY, eccentricity.doubleValue());
+        Calendar start = Calendar.getInstance();
+        start.setTime(startDate);
+        egp.setProperty(EarthGridProperty.START_DATE, start);
+        Calendar end = Calendar.getInstance();
+        end.setTime(endDate);
+        egp.setProperty(EarthGridProperty.END_DATE, end);
+
+        ArrayList<IGrid> queryData = PersistenceManager.getQueryData(egp);
+        
+        
+    }//GEN-LAST:event_queryButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -334,14 +368,12 @@ public class QueryDialog extends javax.swing.JDialog
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox actualValuesCheckBox;
+    private javax.swing.JSpinner axialTiltSpinner;
     private javax.swing.JSpinner eccentricitySpinner;
     private javax.swing.JSpinner endDateSpinner;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
+    private javax.swing.JSpinner endLatitudeSpinner;
+    private javax.swing.JSpinner endLongitudeSpinner;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -356,12 +388,14 @@ public class QueryDialog extends javax.swing.JDialog
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JSpinner jSpinner3;
-    private javax.swing.JSpinner jSpinner4;
-    private javax.swing.JSpinner jSpinner5;
+    private javax.swing.JCheckBox maxTempCheckBox;
+    private javax.swing.JCheckBox meanTempOverRegionCheckBox;
+    private javax.swing.JCheckBox meanTempOverTimesCheckBox;
+    private javax.swing.JCheckBox minTempCheckBox;
+    private javax.swing.JButton queryButton;
     private javax.swing.JComboBox simulationNameComboBox;
     private javax.swing.JSpinner startDateSpinner;
+    private javax.swing.JSpinner startLatitudeSpinner;
+    private javax.swing.JSpinner startLongitudeSpinner;
     // End of variables declaration//GEN-END:variables
 }
