@@ -1,6 +1,8 @@
 package interpolator;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import common.EarthGridProperties;
 import common.EarthGridProperties.EarthGridProperty;
@@ -109,6 +111,12 @@ public class GridInterprolator {
 	}
 	
 	public IGrid decimateTime(IGrid grid){
+		if(grid.getTime() == 0)
+			return grid;
+		
+		int endtime = 43800*properties.getPropertyInt(EarthGridProperty.SIMULATION_LENGTH);
+		if(grid.getTime() == endtime)
+			return grid;
 		int Percentage = properties.getPropertyInt(EarthGridProperties.EarthGridProperty.TIME_PRECISION);
 		int time = grid.getTime();
 		int timestep = grid.getTimeStep();
@@ -136,7 +144,10 @@ public class GridInterprolator {
 	public ArrayList<IGrid> interpolateTime(ArrayList<IGrid> gridList){
 		ArrayList<IGrid> newGridList = new ArrayList<IGrid>();
 		IGrid lastGrid = null;
-		
+		double T1 = 0;
+		double T2 = 0;
+		double slope = 0;
+		double temp = 0;
 		for(IGrid grid : gridList){
 			
 			if(lastGrid != null){
@@ -148,10 +159,10 @@ public class GridInterprolator {
 					Grid newGrid = new Grid(lastGrid.getSunPosition(),lastGrid.getSunPositionDeg(),lastGrid.getTime()+lastGrid.getTimeStep(),lastGrid.getTimeStep(),lastGrid.getGridWidth(),lastGrid.getGridHeight(),lastGrid.getSunLatitudeDeg(),lastGrid.getDistanceFromSun(),lastGrid.getOrbitalAngle());
 					for(int i = 0; i < lastGrid.getGridWidth(); i++){
 						for(int j = 0; j < lastGrid.getGridHeight(); j++){
-							double T1 = lastGrid.getTemperature(i, j);
-							double T2 = grid.getTemperature(i, j);
-							double slope = (T2-T1)/(t2-t1);
-							double temp = slope*(currentTime-t1)+T1;
+							T1 = lastGrid.getTemperature(i, j);
+							T2 = grid.getTemperature(i, j);
+							slope = (T2-T1)/(t2-t1);
+							temp = slope*(currentTime-t1)+T1;
 							int precision = properties.getPropertyInt(EarthGridProperty.PRECISION);
 							newGrid.setTemperature(i, j, roundTemp(temp,precision));
 						}
@@ -162,6 +173,7 @@ public class GridInterprolator {
 			}
 			
 			lastGrid = grid;
+			
 			newGridList.add(lastGrid);
 		}
 		
