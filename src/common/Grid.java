@@ -167,7 +167,7 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 	private double pred(int i, int j){
 		double prediction = 0;
 		double[] x = getVars(i,j);
-		for(int k = 0; k <= coef.length; k++){
+		for(int k = 0; k < coef.length; k++){
 			prediction += coef[k]*x[k];
 		}
 		return prediction;
