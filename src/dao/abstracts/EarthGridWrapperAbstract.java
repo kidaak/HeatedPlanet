@@ -114,9 +114,12 @@ public abstract class EarthGridWrapperAbstract {
 	 * Specialized Grid Date Setters
 	 */
 	protected void setGridDate(Calendar c){
-		this.gridDate.add(0, c);
+		this.setGridDateAt(0, c);
 	}
 	protected void setGridDateAt(int index, Calendar c){
+		//TODO Remove after testing
+		if(c != null)
+			System.out.println("setGridDateAt: "+c.getTimeZone().getDisplayName());
 		this.gridDate.add(index, c);
 	}
 	
@@ -127,6 +130,8 @@ public abstract class EarthGridWrapperAbstract {
 		return getGridDateAt(0);
 	}
 	public Calendar getGridDateAt(int index){
+		if(this.gridDate.get(index) != null)
+			System.out.println("getGridDateAt: "+this.gridDate.get(index).getTimeZone().getDisplayName());
 		return this.gridDate.get(index);
 	}
 	public Calendar[] getAllGridDates(){

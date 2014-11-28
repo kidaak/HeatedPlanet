@@ -21,15 +21,21 @@ public class DatabaseTest
 {
     public static void main(String[] args) throws Exception
     {
-    	 Calendar cal1 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-         Calendar cal2 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-         Calendar cal3 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-         Calendar cal4 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    	 Calendar cal1 = getBaseCalendar();
+         Calendar cal2 = getBaseCalendar();
+         Calendar cal3 = getBaseCalendar();
+         Calendar cal4 = getBaseCalendar();
          
          cal2.add(Calendar.HOUR_OF_DAY, 1);
          cal3.add(Calendar.HOUR_OF_DAY, 2);
          cal4.add(Calendar.HOUR_OF_DAY, 3);
          
+         System.out.println("#Print Calendar Values");
+         System.out.println("Cal1 = "+printCalendar(cal1));
+         System.out.println("Cal2 = "+printCalendar(cal2));
+         System.out.println("Cal3 = "+printCalendar(cal3));
+         System.out.println("Cal4 = "+printCalendar(cal4));
+         System.out.println("----------------------------");
     	
         EarthGridDao dao = EarthGridDao.getEarthGridDao();
                 
@@ -61,21 +67,30 @@ public class DatabaseTest
         Calendar[] calArray3 = {cal1,cal2,cal3,cal4};
         
         try{
-        	EarthGridInsert insert1 = new EarthGridInsert(EGProps, gridArray1, calArray1);
+        	System.out.println("#Insert First Record");
+            EarthGridInsert insert1 = new EarthGridInsert(EGProps, gridArray1, calArray1);
         	ResponseType response1 = dao.insertEarthGridSimulation(insert1);
         	System.out.println(response1.name());
+        	System.out.println("----------------------------");
         	
+        	System.out.println("#Insert Second Record");
             EGProps.setProperty(EarthGridProperty.NAME, "InsertedName2");
+            EGProps.setProperty(EarthGridProperty.END_DATE, cal3);
             EarthGridInsert insert2 = new EarthGridInsert(EGProps, gridArray2, calArray2);
             ResponseType response2 = dao.insertEarthGridSimulation(insert2);
             System.out.println(response2.name());
+            System.out.println("----------------------------");
         	
+            System.out.println("#Insert Third Record");
             EGProps.setProperty(EarthGridProperty.NAME, "InsertedName3");
+            EGProps.setProperty(EarthGridProperty.END_DATE, cal4);
             EarthGridInsert insert3 = new EarthGridInsert(EGProps, gridArray3, calArray3);
             ResponseType response3 = dao.insertEarthGridSimulation(insert3);
             System.out.println(response3.name());
+            System.out.println("----------------------------");
         	
-	        System.out.println(dao.isNameUnique("InsertedName2"));
+            System.out.println("#Test simple queries");
+            System.out.println(dao.isNameUnique("InsertedName2"));
 	        System.out.println(dao.isNameUnique("name"));
 	        System.out.println(dao.getAllNames().length);
 	        String[] names = dao.getAllNames();
@@ -83,14 +98,17 @@ public class DatabaseTest
 	        	System.out.println("Name = "+names[i]);
 	        	System.out.println("ID = "+dao.getSimulationIdFromName(names[i]));
 	        }
-	        
-	        EarthGridResponse response4 = dao.queryEarthGridSimulationByName("InsertedName3");
+	        System.out.println("----------------------------");
+        	
+	        System.out.println("#Query for 'InsertedName3' by name");
+	         EarthGridResponse response4 = dao.queryEarthGridSimulationByName("InsertedName3");
 	        System.out.println(response4.getResult().name());
 	        IGrid[] gridresponse4 = response4.getAllGrids();
 	        for(int i = 0; i< gridresponse4.length; i++)
 	        	System.out.println(gridresponse4[i].getSunPosition());
-	        
-	        
+	        System.out.println("----------------------------");
+        	
+	        System.out.println("#Query for 'InsertedName2' using EarthGridQuery");
 	        EarthGridProperties egpQuery2 = new EarthGridProperties();
 	        egpQuery2.setProperty(EarthGridProperty.NAME, "InsertedName2");
 	        EarthGridQuery egq2 = new EarthGridQuery(egpQuery2);
@@ -100,7 +118,9 @@ public class DatabaseTest
 	        IGrid[] gridresponse5 = response5.getAllGrids();
 	        for(int i = 0; i< gridresponse5.length; i++)
 	        	System.out.println(gridresponse5[i].getSunPosition());
-	        
+	        System.out.println("----------------------------");
+        	
+	        System.out.println("#Query for Axial Tilt = 1.0");
 	        EarthGridProperties egpQuery6 = new EarthGridProperties();
 	        egpQuery6.setProperty(EarthGridProperty.AXIAL_TILT,1.0);
 	        EarthGridQuery egq6 = new EarthGridQuery(egpQuery6);
@@ -109,8 +129,10 @@ public class DatabaseTest
 	        IGrid[] gridresponse6 = response6.getAllGrids();
 	        Calendar[] calresponse6 = response6.getAllGridDates();
 	        for(int i = 0; i< gridresponse6.length; i++)
-	        	System.out.println(gridresponse6[i].getSunPosition()+"@"+calresponse6[i].getTime());
-	        
+	        	System.out.println(gridresponse6[i].getSunPosition()+"@"+calresponse6[i].getTime().toString());
+	        System.out.println("----------------------------");
+        	
+	        System.out.println("#Query for StartDate >= Cal3");
 	        EarthGridProperties egpQuery7 = new EarthGridProperties();
 	        egpQuery7.setProperty(EarthGridProperty.START_DATE,cal3);
 	        EarthGridQuery egq7 = new EarthGridQuery(egpQuery7);
@@ -120,28 +142,35 @@ public class DatabaseTest
 	        Calendar[] calresponse7 = response7.getAllGridDates();
 	        for(int i = 0; i< gridresponse7.length; i++)
 	        	System.out.println(gridresponse7[i].getSunPosition()+"@"+calresponse7[i].getTime());
-	        
+	        System.out.println("----------------------------");
+        	
+	        System.out.println("#Query for EndDate <= Cal3");
 	        EarthGridProperties egpQuery8 = new EarthGridProperties();
 	        egpQuery8.setProperty(EarthGridProperty.END_DATE,cal3);
 	        EarthGridQuery egq8 = new EarthGridQuery(egpQuery8);
 	        EarthGridResponse response8 = dao.queryEarthGridSimulation(egq8);
 	        System.out.println(response8.getResult().name());
-	        IGrid[] gridresponse8 = response8.getAllGrids();
-	        Calendar[] calresponse8 = response8.getAllGridDates();
-	        for(int i = 0; i< gridresponse8.length; i++)
-	        	System.out.println(gridresponse8[i].getSunPosition()+"@"+calresponse8[i].getTime());
-	        
+	        if(response8.getResult() == ResponseType.FOUND_MANY || response8.getResult() == ResponseType.FOUND_ONE){
+	        	IGrid[] gridresponse8 = response8.getAllGrids();
+	        	Calendar[] calresponse8 = response8.getAllGridDates();
+	        	for(int i = 0; i< gridresponse8.length; i++)
+	        		System.out.println(gridresponse8[i].getSunPosition()+"@"+calresponse8[i].getTime());
+	        }
+	        System.out.println("----------------------------");
+        	
+	        System.out.println("#Query for EndDate <= Cal3 and StartDate >= Cal2");
 	        EarthGridProperties egpQuery9 = new EarthGridProperties();
 	        egpQuery9.setProperty(EarthGridProperty.END_DATE,cal3);
 	        egpQuery9.setProperty(EarthGridProperty.START_DATE,cal2);
 	        EarthGridQuery egq9 = new EarthGridQuery(egpQuery9);
 	        EarthGridResponse response9 = dao.queryEarthGridSimulation(egq9);
 	        System.out.println(response9.getResult().name());
-	        IGrid[] gridresponse9 = response9.getAllGrids();
-	        Calendar[] calresponse9 = response9.getAllGridDates();
-	        for(int i = 0; i< gridresponse9.length; i++)
-	        	System.out.println(gridresponse9[i].getSunPosition()+"@"+calresponse9[i].getTime());
-	        
+	        if(response9.getResult() == ResponseType.FOUND_MANY || response9.getResult() == ResponseType.FOUND_ONE){
+		        IGrid[] gridresponse9 = response9.getAllGrids();
+		        Calendar[] calresponse9 = response9.getAllGridDates();
+		        for(int i = 0; i< gridresponse9.length; i++)
+		        	System.out.println(gridresponse9[i].getSunPosition()+"@"+calresponse9[i].getTime());
+	        }   
         }catch(SQLException ex){
         	for (Throwable e : ex)
             {
@@ -164,9 +193,31 @@ public class DatabaseTest
                 }
             }
         }finally{
-        	//dao.resetDatabase("42");
+        	dao.resetDatabase("42");
         }
 
         System.out.println("Done with test!");
     }
+    
+    
+    public static String printCalendar(Calendar c){
+		StringBuilder sb = new StringBuilder();
+		sb.append(c.get(Calendar.YEAR)+"-");
+		sb.append((c.get(Calendar.MONTH)+1)+"-");
+		sb.append(c.get(Calendar.DAY_OF_MONTH)+" ");
+		sb.append(c.get(Calendar.HOUR_OF_DAY)+":");
+		sb.append(c.get(Calendar.MINUTE)+":");
+		sb.append(c.get(Calendar.SECOND)+".");
+		sb.append(c.get(Calendar.MILLISECOND)+" ");
+		
+		return sb.toString();
+	}
+	
+	public static Calendar getBaseCalendar(){
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		c.set(2014, 0, 1, 12, 30, 45);
+		c.set(Calendar.MILLISECOND, 542);
+		
+		return c;
+	}
 }

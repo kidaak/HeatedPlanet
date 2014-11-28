@@ -284,9 +284,12 @@ public class EarthGridDao implements IEarthGridDao {
 	}
 
 	@Override
-	public ResponseType insertEarthGridSimulation(EarthGridInsert insert) throws NumberFormatException, SQLException, IOException {
+	public ResponseType insertEarthGridSimulation(EarthGridInsert insert) 
+			throws NumberFormatException, SQLException, IOException, IllegalArgumentException {
 		// Insert Simulation
-		
+		int numGrids = insert.getAllGrids().length;
+		if(numGrids == 0)
+			throw new IllegalArgumentException("EarthGridInsert does not contain any Grids to insert.");
 		//Set Statement values based on the EarthGridProperties object
 		EarthGridProperties props = insert.getProperties();
 		PreparedStatement simStmt = sdb.getConnection().prepareStatement(InsertSimulationSql);
@@ -305,16 +308,16 @@ public class EarthGridDao implements IEarthGridDao {
 			simStmt.execute();
 		}catch(SQLException e){
 			String sqlState = e.getSQLState();
-			if(sqlState.equalsIgnoreCase("23505"))
-				return ResponseType.ERROR_DUPLICATE;
-			throw new SQLException(e);
+			if(!sqlState.equalsIgnoreCase("23505"))
+				//return ResponseType.ERROR_DUPLICATE;
+				throw new SQLException(e);
 		}
 		
 		//Get the ID of the newly inserted Simulation
 		int newSimId = getSimulationIdFromName(props.getPropertyString(EarthGridProperty.NAME));
 		
 		//Insert Each Grid using Simulation ID
-		int numGrids = insert.getAllGrids().length;
+		
 		PreparedStatement gridStmt = sdb.getConnection().prepareStatement(InsertGridSql);
 		for(int i = 0; i < numGrids; i++){
 			//Set Statement Values
@@ -515,10 +518,15 @@ public class EarthGridDao implements IEarthGridDao {
 	private Calendar Timestamp2Calendar(Timestamp t){
 		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTimeInMillis(t.getTime());
+		//TODO Remove after testing
+		System.out.println("T2C: "+c.getTimeZone().getDisplayName());
 		return c;
 	}
 	
 	private Timestamp Calendar2Timestamp(Calendar c){
-		return new Timestamp(c.getTimeInMillis());
+		//TODO Remove after testing
+		System.out.println("C2T: "+c.getTimeZone().getDisplayName());
+		Timestamp t = new Timestamp(c.getTimeInMillis());
+		return t;
 	}
 }
