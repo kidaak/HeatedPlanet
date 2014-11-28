@@ -16,6 +16,7 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 	private final double orbitalAngle;
 	
 	//Variables for Fitting Grids
+	private final int size;
 	private final double[] coef;
 	private final double[] dCoef;
 	private double stepRate = 0.01;
@@ -35,8 +36,9 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 		this.sunLatitudeDeg = sunLatitudeDeg;
 		this.distanceFromSun = distanceFromSun;
 		this.orbitalAngle = orbitalAngle;
-		this.coef = new double[13];
-		this.dCoef = new double[13];
+		this.size = 16;
+		this.coef = new double[size];
+		this.dCoef = new double[size];
 		grid = new TreeMap<Integer, Double>();
 	}
 	
@@ -52,8 +54,9 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 		this.orbitalAngle = toCopy.orbitalAngle;
 		this.timestep = toCopy.timestep;
 		this.grid = new TreeMap<Integer, Double>(toCopy.grid);
-		this.coef = new double[13];
-		this.dCoef = new double[13];
+		this.size = 16;
+		this.coef = new double[size];
+		this.dCoef = new double[size];
 	}
 
 	@Override
@@ -174,16 +177,41 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 	}
 	
 	private double[] getVars(int i, int j){
-		double[] x = new double[13];
-		x[0] = 1;
+		
+
 		double theta = (i-sunPosition)+(180.0/height)/2.0;
-		double phi = j+180.0/height/2.0;		
-		for(int k = 1; k < 5; k++){
-			x[k] = Math.cos(k*theta);
-			x[k+4] = Math.cos(k*theta)*Math.sin(phi);
-			x[k+8] = Math.cos(k*theta)*Math.sin(2*phi);
-		}
-		return x;
+		double phi = j+180.0/height/2.0;
+		double z = Math.sin(phi); //z
+		double x = Math.cos(phi)*Math.cos(theta); 
+		double y = Math.cos(phi)*Math.sin(theta);
+		
+		//l = 0
+		double[] var = new double[16];
+		
+		//l = 1
+		var[1] = y;
+		var[2] = x;
+		var[3] = z;
+		
+		//l = 2
+		var[4] = x*y;
+		var[5] = y*z;
+		var[6] = z*x;
+		var[7] = 2*z*z-x*x-y*y;
+		var[8] = x*x-y*y;
+		
+		
+		//l = 3
+		var[9] = (3*x*x-y*y)*y;
+		var[10] = x*y*z;
+		var[11] = y*(4*z*z-x*x-y*y);
+		var[12] = z*(2*z*z-3*x*x-3*y*y);
+		var[13] = x*(4*z*z-x*x-y*y);
+		var[14] = z*(x*x-y*y);
+		var[15] = x*(x*x-3*y*y);
+		
+		
+		return var;
 	}
 	
 	private double getAverageTemperature(){

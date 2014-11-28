@@ -44,7 +44,9 @@ public class GridInterprolator {
 			newHeight = 180;
 		if(newWidth > 2*newHeight)
 			newWidth = 2*newHeight;
-			
+		
+		int newGs = 180/newHeight;
+		int oldGs = 180/grid.getGridHeight();
 		//NOTE: here we break the interface abstraction :(
 		//      If time allows find a way to update this...
 		IGrid newGrid = new Grid(grid.getSunPosition(),grid.getSunPositionDeg(),grid.getTime(),grid.getTimeStep(),newWidth,newHeight,grid.getSunLatitudeDeg(),grid.getDistanceFromSun(),grid.getOrbitalAngle());
@@ -54,8 +56,10 @@ public class GridInterprolator {
 				float tempSum = 0.0f;
 				float weight = 0.0f;
 				CellCorners newCell = new CellCorners(i,j,newGrid.getGridWidth(),newGrid.getGridHeight());
-				for(int m = 0; m < grid.getGridHeight(); m++){
-					for(int n = 0; n < grid.getGridWidth(); n++){
+				
+				for(int m = Math.max(newGs*(j-1)/oldGs,0); m <= Math.min(newGs*(j+1)/oldGs,grid.getGridHeight()-1); m++){
+					//System.out.println("Values: " + newGs + ", " + oldGs + ", " + i*newGs/oldGs + ", " + (i+1)*newGs/oldGs);
+					for(int n = Math.max(newGs*(i-1)/oldGs,0); n < Math.min(newGs*(i+1)/oldGs,grid.getGridWidth()); n++){
 						CellCorners oldCell = new CellCorners(n,m,grid.getGridWidth(),grid.getGridHeight());
 						float w = newCell.percentOverLap(oldCell); 
 						weight += w;
