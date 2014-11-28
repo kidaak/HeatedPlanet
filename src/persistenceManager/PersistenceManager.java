@@ -1,6 +1,9 @@
 package persistenceManager;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import interpolator.GridInterprolator;
 import messaging.Message;
@@ -78,5 +81,16 @@ public class PersistenceManager extends ComponentBase {
 		return gridList;
 	}
 	
+	public static ArrayList<String> getAllSimNames() {
+		ArrayList<String> ret = new ArrayList<String>();
+		try {
+			Collections.addAll(ret, dao.getAllNames());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+//			e.printStackTrace();
+		}
+		Collections.sort(ret); // put in sorted order
+		return ret;
+	}
 }
  

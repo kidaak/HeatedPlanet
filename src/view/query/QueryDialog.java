@@ -89,7 +89,9 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
 
         jLabel1.setText("Simulation Name:");
 
-        simulationNameComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Any" }));
+        ArrayList<String> simNames = PersistenceManager.getAllSimNames();
+        simNames.add(0, "Any");
+        simulationNameComboBox.setModel(new javax.swing.DefaultComboBoxModel(simNames.toArray()));
 
         jLabel2.setText("Axial Tilt");
 
