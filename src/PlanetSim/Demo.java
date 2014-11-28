@@ -120,6 +120,7 @@ public class Demo {
 		// call to make queryGUI main control area
 		ui.setVisible(false);
 		queryui.setEnabled(true);
+		queryui.updateSimList();
 		queryui.setVisible(true);
 	}
 	

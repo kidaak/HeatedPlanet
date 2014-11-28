@@ -94,9 +94,7 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
 
         jLabel1.setText("Simulation Name:");
 
-        ArrayList<String> simNames = PersistenceManager.getAllSimNames();
-        simNames.add(0, "Any");
-        simulationNameComboBox.setModel(new javax.swing.DefaultComboBoxModel(simNames.toArray()));
+        updateSimList();
 
         jLabel2.setText("Axial Tilt");
 
@@ -291,6 +289,12 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
     pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void updateSimList() {
+        ArrayList<String> simNames = PersistenceManager.getAllSimNames();
+        simNames.add(0, "Any");
+        simulationNameComboBox.setModel(new javax.swing.DefaultComboBoxModel(simNames.toArray()));
+    }
+    
     private void actualValuesCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_actualValuesCheckBoxActionPerformed
     {//GEN-HEADEREND:event_actualValuesCheckBoxActionPerformed
         // TODO add your handling code here:
@@ -358,8 +362,9 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
         	
         	// now get QueryCalculator result and display
         	String resultStr = qc.getOutputText();
+        	
             // create a JTextArea
-            JTextArea textArea = new JTextArea(6, 25);
+            JTextArea textArea = new JTextArea();
             textArea.setText(resultStr);
             textArea.setEditable(false);
              
@@ -367,9 +372,13 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
             JScrollPane scrollPane = new JScrollPane(textArea);
              
             // display them in a message dialog
-            JOptionPane.showMessageDialog(this, scrollPane, "Results", JOptionPane.PLAIN_MESSAGE);
-            //TODO: make this maximize and resizeable.  Perhaps it cannot be a 
-            //      dialog like this and needs to be a proper jframe
+        	JFrame frame = new JFrame();
+        	frame.add(scrollPane);
+            //Display the window.
+            frame.pack();
+            frame.setTitle("Query Results");
+    		frame.setSize(800, 600);
+            frame.setVisible(true);
         }
         
     }//GEN-LAST:event_queryButtonActionPerformed

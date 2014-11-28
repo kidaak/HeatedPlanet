@@ -14,7 +14,7 @@ public class Controller extends ComponentBase {
 	
 	public static final String DEFAULT_SIM_NAME = new String("defaultName");
 	public static final int DEFAULT_GRID_SPACING = 15;
-	public static final int DEFAULT_TIME_STEP = 1;
+	public static final int DEFAULT_TIME_STEP = 1440;
 	public static final float DEFAULT_PRESENTATION_RATE = 0.01f;
 	public static final float DEFAULT_AXIAL_TILT = 23.44f;
 	public static final float DEFAULT_ECCENTRICITY = 0.0167f;
