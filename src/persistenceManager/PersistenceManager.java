@@ -75,7 +75,12 @@ public class PersistenceManager extends ComponentBase {
 			IGrid[] grids = response.getAllGrids();
 			
 			GridInterprolator gridInterpolator = new GridInterprolator(simProp);
-			gridList = gridInterpolator.interpolateAll(grids);
+			//FIXME: this is a hack to skip the interpolator for now since simProps
+			//       doesn't currently contain GEO_PRECISION (and probably others)
+			gridList = new ArrayList<IGrid>();
+			Collections.addAll(gridList, grids);
+			// end hack!
+//			gridList = gridInterpolator.interpolateAll(grids);
 		}
 		
 		return gridList;

@@ -11,6 +11,7 @@ import common.EarthGridProperties;
 import common.EarthGridProperties.EarthGridProperty;
 import common.IGrid;
 import persistenceManager.PersistenceManager;
+import persistenceManager.QueryCalculator;
 import simulation.Earth;
 
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 /**
@@ -33,6 +36,7 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
 	 */
 	private static final long serialVersionUID = 4961796121859584333L;
 	private Demo pcontrol;
+	private QueryCalculator qc;
 	
 	/**
      * Creates new form QueryDialog
@@ -43,6 +47,7 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
         initComponents();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pcontrol = pcontrol; // used to change viewable window
+    	qc = new QueryCalculator();
     }
 
     /**
@@ -301,10 +306,10 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
         Number eccentricity = (Number) eccentricitySpinner.getValue();
         Date startDate = (Date) startDateSpinner.getValue();
         Date endDate = (Date) endDateSpinner.getValue();
-        Number startLatitude = (Number) startLatitudeSpinner.getValue();
-        Number endLatitude = (Number) startLatitudeSpinner.getValue();
-        Number startLongitude = (Number) startLongitudeSpinner.getValue();
-        Number endLongitude = (Number) endLongitudeSpinner.getValue();
+        Float startLatitude = (float)(Integer) startLatitudeSpinner.getValue();
+        Float endLatitude = (float)(Integer) startLatitudeSpinner.getValue();
+        Float startLongitude = (float)(Integer) startLongitudeSpinner.getValue();
+        Float endLongitude = (float)(Integer) endLongitudeSpinner.getValue();
 
         egp.setProperty(EarthGridProperty.AXIAL_TILT, axialTilt.doubleValue());
         egp.setProperty(EarthGridProperty.ECCENTRICITY, eccentricity.doubleValue());
@@ -338,6 +343,33 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
             	// User clicked NO.
             	System.out.printf("no sim...\n");
             }
+        }
+        else {
+        	// Query successful, return results in text window
+        	qc.setSimProp(egp); //FIXME: eqp should actually be from result...
+        	qc.setGrid(queryData);
+        	startLatitudeSpinner.getValue();
+        	qc.setLocation(startLatitude, endLatitude, startLongitude, endLongitude);
+        	qc.setDoMin(minTempCheckBox.isSelected());
+        	qc.setDoMax(maxTempCheckBox.isSelected());
+        	qc.setDoAvgAcrossGrid(meanTempOverRegionCheckBox.isSelected());
+        	qc.setDoAvgAcrossTime(meanTempOverTimesCheckBox.isSelected());
+        	qc.setDoAllData(actualValuesCheckBox.isSelected());
+        	
+        	// now get QueryCalculator result and display
+        	String resultStr = qc.getOutputText();
+            // create a JTextArea
+            JTextArea textArea = new JTextArea(6, 25);
+            textArea.setText(resultStr);
+            textArea.setEditable(false);
+             
+            // wrap a scrollpane around it
+            JScrollPane scrollPane = new JScrollPane(textArea);
+             
+            // display them in a message dialog
+            JOptionPane.showMessageDialog(this, scrollPane, "Results", JOptionPane.PLAIN_MESSAGE);
+            //TODO: make this maximize and resizeable.  Perhaps it cannot be a 
+            //      dialog like this and needs to be a proper jframe
         }
         
     }//GEN-LAST:event_queryButtonActionPerformed
