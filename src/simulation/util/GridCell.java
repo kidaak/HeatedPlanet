@@ -201,24 +201,26 @@ public final class GridCell implements EarthCell<GridCell> {
 	public double calTsun(int sunPosition,double sunLatitude, double distanceFromSun) {
 		
 		int   sunLongitude      = getSunLocationOnEarth(sunPosition);
-		double attenuation_lat   = (double) Math.cos(Math.toRadians(sunLatitude + this.latitude  + 1.0 * this.gs / 2));
+		double attenuation_lat   = (double) Math.cos(Math.toRadians(sunLatitude + (this.latitude  + 1.0 * this.gs/2) ));
 		//double attenuation_longi = (double) (( (Math.abs(sunLongitude - this.longitude) % 360 ) < 90 ) ? Math.cos(Math.toRadians(sunLongitude - this.longitude)) : 0);
-		double attenuation_longi = (double) Math.cos(Math.toRadians(sunLongitude - (this.longitude + 1.0 * this.gs/2) ));
+		double attenuation_longi = (double) Math.cos(Math.toRadians(sunLongitude - this.longitude*1.0 ));
+		//attenuation_longi = attenuation_longi > 0 ? attenuation_longi : 0;
+		attenuation_lat = attenuation_lat > 0 ? attenuation_lat : 0;
 		
 		double cosSunLat = Math.cos(Math.toRadians(sunLatitude));
 		double cosGridLat = Math.cos(Math.toRadians(this.latitude  + 1.0 * this.gs / 2));
 		double sinSunLat = Math.sin(Math.toRadians(sunLatitude));
 		double sinGridLat = Math.sin(Math.toRadians(this.latitude  + 1.0 * this.gs / 2));
-		double cosLong = Math.cos(Math.toRadians(sunLongitude - (this.longitude + 1.0 * this.gs/2)));
-		double dAngle = Math.acos(sinSunLat*sinGridLat+cosSunLat*cosGridLat*cosLong);
+		double cosLong = Math.cos(Math.toRadians(sunLongitude - (this.longitude*1.0))+Math.PI);
+		double dAngle = Math.acos(-sinSunLat*sinGridLat-cosSunLat*cosGridLat*cosLong);
 		//System.out.println(dAngle);
 		if(dAngle > Math.PI/2)
+			return 0;
+		else if(Math.abs(sunLatitude+this.latitude) >= 90)
 			return 0;
 		else
 			return (double) Math.pow(Earth.SEMI_MAJOR_AXIS/distanceFromSun, 2) * 278 * Math.abs(attenuation_lat * attenuation_longi);
 		
-		//attenuation_longi = attenuation_longi > 0 ? attenuation_longi : 0;
-		//attenuation_lat = attenuation_lat > 0 ? attenuation_lat : 0;
 		}
 	
 	private void calSurfaceArea(int latitude, int gs) {
@@ -246,8 +248,8 @@ public final class GridCell implements EarthCell<GridCell> {
 
 	public double calTcool(double distanceFromSun) {
 		double beta = (double) (this.surfarea / avgArea);  // actual grid area / average cell area
-		//return -1 * beta * avgsuntemp;
-		return (double) ( -1 * beta * this.currTemp / 288 * avgsuntemp / Math.pow(Earth.SEMI_MAJOR_AXIS/distanceFromSun, 2) );
+		//return -1 * beta * avgsuntemp removed beta;
+		return (double) ( -1 * this.currTemp / 288 * avgsuntemp / Math.pow(Earth.SEMI_MAJOR_AXIS/distanceFromSun, 2) );
 	}
 	
 	public static void setAvgSuntemp(double avg){
