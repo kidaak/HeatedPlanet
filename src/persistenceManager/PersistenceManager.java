@@ -86,7 +86,6 @@ public class PersistenceManager extends ComponentBase {
 		try {
 			Collections.addAll(ret, dao.getAllNames());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 //			e.printStackTrace();
 		}
 		Collections.sort(ret); // put in sorted order

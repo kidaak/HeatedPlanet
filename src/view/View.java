@@ -72,7 +72,6 @@ public class View extends ComponentBase {
 				pub.send(new ViewPauseSimMessage());
 			}
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 //			e.printStackTrace();
 		}
 	}
