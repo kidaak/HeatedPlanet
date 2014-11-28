@@ -2,9 +2,13 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 
 import simulation.Earth;
 import view.util.ThermalVisualizer;
@@ -14,7 +18,7 @@ import view.widgets.SimulationStatus;
 import common.Grid;
 import common.IGrid;
 
-public class EarthDisplay extends JFrame {
+public class EarthDisplay extends JFrame implements WindowListener {
 
 	/**
 	 * 
@@ -43,7 +47,8 @@ public class EarthDisplay extends JFrame {
 		
 		EarthDisplay.setDefaultLookAndFeelDecorated(true);
 		
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(this); // for window close actions
 		this.setLayout(new BorderLayout());
 		this.setResizable(true);
 		
@@ -92,5 +97,46 @@ public class EarthDisplay extends JFrame {
 		else
 			simStatus.update(0, 0, this.gs, this.timeStep);
 		gridDisplay.update(grid);
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		JOptionPane.showMessageDialog(this, "Please terminate simulation using control GUI.");
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

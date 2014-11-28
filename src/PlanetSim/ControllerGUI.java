@@ -8,6 +8,8 @@ import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.TimeZone;
@@ -24,7 +26,7 @@ import javax.swing.JTextField;
 import common.EarthGridProperties;
 import common.EarthGridProperties.EarthGridProperty;
 
-public class ControllerGUI extends JFrame implements ActionListener {
+public class ControllerGUI extends JFrame implements ActionListener, WindowListener {
 
 	/**
 	 * 
@@ -36,14 +38,16 @@ public class ControllerGUI extends JFrame implements ActionListener {
 	private int precisionDigits;
 	private int geographicAccuracy;
 	private int temporalAccuracy;
+	private Demo pcontrol; // for handling view between query and control gui
 	
 	private HashMap<String, JTextField> inputs = new HashMap<String, JTextField>();
 	private HashMap<String, JButton> buttons = new HashMap<String, JButton>();
 
-	public ControllerGUI(int precisionDigits, int geographicAccuracy, int temporalAccuracy) {
+	public ControllerGUI(int precisionDigits, int geographicAccuracy, int temporalAccuracy, Demo pcontrol) {
 		this.precisionDigits = precisionDigits;
 		this.geographicAccuracy = geographicAccuracy;
 		this.temporalAccuracy = temporalAccuracy;
+		this.pcontrol = pcontrol;
 		
 		controller = new Controller();
 
@@ -57,11 +61,11 @@ public class ControllerGUI extends JFrame implements ActionListener {
 		setTitle("Heated Earth Diffusion Simulation");
 		
 		setSize(300, 300);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		setLayout(new BorderLayout());
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(HIDE_ON_CLOSE);
+		addWindowListener(this);
 		lowerRightWindow(); // Set window location to lower right (so we don't hide dialogs)
 		setAlwaysOnTop(true);
 		
@@ -234,5 +238,56 @@ public class ControllerGUI extends JFrame implements ActionListener {
 		}
 				
 		return false;
+	}
+	
+	@Override
+    public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
+    }
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+        // Simulate stop button press
+		JButton stop = buttons.get("Stop");
+		ActionEvent pseudoStop = new ActionEvent(stop, ActionEvent.ACTION_FIRST, stop.getActionCommand());
+		actionPerformed(pseudoStop);
+		// switch control back to GUI
+        System.out.printf("Closing sim window\n");
+        if(pcontrol != null) {
+            pcontrol.viewQueryGUI();
+        }
+        else {
+        	System.out.printf("No pcontrol available to swith back to query!  Start with Demo...\n");
+        }
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

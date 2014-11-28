@@ -3,12 +3,16 @@ package PlanetSim;
 
 import javax.swing.SwingUtilities;
 
+import view.query.QueryDialog;
+
 public class Demo {
 	final private int FLOAT_DECIMAL_DIGITS = 6;
 	final private int DOUBLE_DECIMAL_DIGITS = 15;
 	private int precisionDigits = FLOAT_DECIMAL_DIGITS; // digits stored after decimal
 	private int geographicAccuracy = 100; // integer percentage
 	private int temporalAccuracy = 100; // integer percentage
+	private QueryDialog queryui;
+	private ControllerGUI ui;
 
 	public static void main(String[] args) {
 		Demo demo = new Demo();
@@ -107,16 +111,26 @@ public class Demo {
 	}
 
 	private void createAndShowUI() {
-		
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				ControllerGUI ui = new ControllerGUI(precisionDigits, geographicAccuracy, temporalAccuracy);
-				ui.setVisible(true);
-			}
-		});
+		queryui = new QueryDialog(null, false, this);
+		ui = new ControllerGUI(precisionDigits, geographicAccuracy, temporalAccuracy, this);
+		viewQueryGUI();
 	}
 
+	public void viewQueryGUI() {
+		// call to make queryGUI main control area
+		ui.setVisible(false);
+		queryui.setEnabled(true);
+		queryui.setVisible(true);
+	}
+	
+	public void viewSimGUI() {
+		// disable input on query
+		queryui.setEnabled(false);
+		
+		// activate sim
+		ui.setVisible(true);
+	}
+	
 	private void printSettings() {
 		
 		debug("Precision Digits\t:" + precisionDigits);

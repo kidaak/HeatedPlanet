@@ -5,6 +5,8 @@
  */
 package view.query;
 
+import PlanetSim.ControllerGUI;
+import PlanetSim.Demo;
 import common.EarthGridProperties;
 import common.EarthGridProperties.EarthGridProperty;
 import common.IGrid;
@@ -15,25 +17,32 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author dwelker
  */
-public class QueryDialog extends javax.swing.JDialog
+public class QueryDialog extends JFrame//extends javax.swing.JDialog
 {
 
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 4961796121859584333L;
-
+	private Demo pcontrol;
+	
 	/**
      * Creates new form QueryDialog
      */
-    public QueryDialog(java.awt.Frame parent, boolean modal)
+    public QueryDialog(java.awt.Frame parent, boolean modal, Demo pcontrol)
     {
-        super(parent, modal);
+//        super(parent, modal);
         initComponents();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.pcontrol = pcontrol; // used to change viewable window
     }
 
     /**
@@ -305,7 +314,29 @@ public class QueryDialog extends javax.swing.JDialog
         egp.setProperty(EarthGridProperty.END_DATE, end);
 
         ArrayList<IGrid> queryData = PersistenceManager.getQueryData(egp);
-        
+
+        // Check query result
+        if(queryData == null) {
+            // If no data available for query, ask user if they'd like to perform
+            // simulation.
+        	JFrame frame = new JFrame();
+            String message = "No matching sim found.  Would you like to perform a simulation?";
+            int answer = JOptionPane.showOptionDialog(frame, message, "Run Simulation?", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+            if (answer == JOptionPane.YES_OPTION) {
+            	// User clicked YES.
+            	System.out.printf("perform sim!\n");
+            	if(pcontrol != null) {
+            		pcontrol.viewSimGUI();
+            	}
+            	else {
+            		System.out.printf("no control available to start sim.  Start with Demo.java...\n");
+            	}
+            	
+            } else {
+            	// User clicked NO.
+            	System.out.printf("no sim...\n");
+            }
+        }
         
     }//GEN-LAST:event_queryButtonActionPerformed
 
@@ -353,7 +384,7 @@ public class QueryDialog extends javax.swing.JDialog
         {
             public void run()
             {
-                QueryDialog dialog = new QueryDialog(new javax.swing.JFrame(), true);
+                QueryDialog dialog = new QueryDialog(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter()
                 {
                     @Override
