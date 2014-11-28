@@ -30,6 +30,7 @@ public class Controller extends ComponentBase {
 	private Thread viewThread;
 	private Thread persistenceThread;
 	private Thread t;
+	private boolean started=false;
 	
 	public Controller() {
 	}
@@ -66,10 +67,18 @@ public class Controller extends ComponentBase {
 			t = new Thread(this,"controller");
 			t.start();
 		}
+		started = true;
 	}
 	
 	public void stop() throws InterruptedException {
+		
+		// Nothing to do if never started
+		if(!started) {
+			return;
+		}
+		
 		// End run loop
+		started = false;
 		stopThread = true;
 		paused = false;
 		

@@ -126,6 +126,7 @@ public class Demo {
 	public void viewSimGUI() {
 		// disable input on query
 		queryui.setEnabled(false);
+		queryui.setVisible(false);
 		
 		// activate sim
 		ui.setVisible(true);
