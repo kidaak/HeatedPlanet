@@ -3,6 +3,7 @@ package common;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -195,8 +196,16 @@ public class EarthGridProperties implements Serializable{
 		StringWriter buf = new StringWriter();
 		PrintWriter output = new PrintWriter(buf);
 		
+		SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		dateFmt.setTimeZone(TimeZone.getTimeZone("UTC"));
+		
 		for(EarthGridProperty prop : definedProperties()) {
-			output.printf("%s: %s\n", prop.name(), getPropertyString(prop));
+			if(arrayContains(EarthGridCalendarProperties,prop)) {
+				output.printf("%s: %s\n", prop.name(), dateFmt.format(getPropertyCalendar(prop).getTime()));
+			}
+			else {
+				output.printf("%s: %s\n", prop.name(), getPropertyString(prop));
+			}
 		}
 		
 		return buf.toString();
