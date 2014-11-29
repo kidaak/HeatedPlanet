@@ -10,7 +10,6 @@ import messaging.events.SimResultMessage;
 import common.ComponentBase;
 import common.EarthGridProperties;
 import common.IGrid;
-import common.EarthGridProperties.EarthGridProperty;
 import dao.EarthGridDao;
 import dao.EarthGridInsert;
 import dao.EarthGridQuery;

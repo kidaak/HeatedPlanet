@@ -55,7 +55,6 @@ public class ControllerGUI extends JFrame implements ActionListener, WindowListe
 		controller = new Controller();
 
 		setupWindow();
-		pack();
 	}
 
 	private void setupWindow() {
@@ -69,10 +68,11 @@ public class ControllerGUI extends JFrame implements ActionListener, WindowListe
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
 		addWindowListener(this);
-		lowerRightWindow(); // Set window location to lower right (so we don't hide dialogs)
 		setAlwaysOnTop(true);
 		
 		add(settingsAndControls(), BorderLayout.CENTER);
+		pack();
+		lowerRightWindow(); // Set window location to lower right (so we don't hide dialogs)
 	}
 	
 	private void lowerRightWindow() {
@@ -108,6 +108,9 @@ public class ControllerGUI extends JFrame implements ActionListener, WindowListe
 		settingsPanel.add(inputField("Axial Tilt",Float.toString(Controller.DEFAULT_AXIAL_TILT)));
 		settingsPanel.add(inputField("Orbital Eccentricity",Float.toString(Controller.DEFAULT_ECCENTRICITY)));		
 		settingsPanel.add(inputField("Simulation Duration (months)",Integer.toString(Controller.DEFAULT_DURATION)));
+		settingsPanel.add(inputField("Precision Digits After Decimal",Integer.toString(precisionDigits)));
+		settingsPanel.add(inputField("Geographic Precision (0-100)",Integer.toString(geographicAccuracy)));
+		settingsPanel.add(inputField("Temporal Precision (0-100)",Integer.toString(temporalAccuracy)));
 		settingsPanel.add(inputCheckbox("Show Animation?", true));
 		return settingsPanel;
 	}
@@ -224,6 +227,9 @@ public class ControllerGUI extends JFrame implements ActionListener, WindowListe
 			final float axialTilt = Float.parseFloat(inputs.get("Axial Tilt").getText());
 			final float eccentricity = Float.parseFloat(inputs.get("Orbital Eccentricity").getText());
 			final int simDuration = Integer.parseInt(inputs.get("Simulation Duration (months)").getText());
+			final int runPrecision = Integer.parseInt(inputs.get("Precision Digits After Decimal").getText());
+			final int runGeoPrecision = Integer.parseInt(inputs.get("Geographic Precision (0-100)").getText());
+			final int runTimePrecision = Integer.parseInt(inputs.get("Temporal Precision (0-100)").getText());
 			
 			// Insure sim name is not already used
 			if(PersistenceManager.getAllSimNames().contains(name)) {
@@ -238,9 +244,9 @@ public class ControllerGUI extends JFrame implements ActionListener, WindowListe
 			simProp.setProperty(EarthGridProperty.AXIAL_TILT, axialTilt);
 			simProp.setProperty(EarthGridProperty.ECCENTRICITY, eccentricity);
 			simProp.setProperty(EarthGridProperty.SIMULATION_LENGTH, simDuration);
-			simProp.setProperty(EarthGridProperty.PRECISION, precisionDigits);
-			simProp.setProperty(EarthGridProperty.TIME_PRECISION, temporalAccuracy);
-			simProp.setProperty(EarthGridProperty.GEO_PRECISION, geographicAccuracy);
+			simProp.setProperty(EarthGridProperty.PRECISION, runPrecision);
+			simProp.setProperty(EarthGridProperty.TIME_PRECISION, runTimePrecision);
+			simProp.setProperty(EarthGridProperty.GEO_PRECISION, runGeoPrecision);
 			
 			Calendar endDate = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 			endDate.clear();

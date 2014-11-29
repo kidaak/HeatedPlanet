@@ -247,7 +247,7 @@ public final class GridCell implements EarthCell<GridCell> {
 	}
 
 	public double calTcool(double distanceFromSun) {
-		double beta = (double) (this.surfarea / avgArea);  // actual grid area / average cell area
+//		double beta = (double) (this.surfarea / avgArea);  // actual grid area / average cell area
 		//return -1 * beta * avgsuntemp removed beta;
 		return (double) ( -1 * this.currTemp / 288 * avgsuntemp / Math.pow(Earth.SEMI_MAJOR_AXIS/distanceFromSun, 2) );
 	}
