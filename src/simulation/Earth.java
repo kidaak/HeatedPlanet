@@ -18,9 +18,9 @@ public final class Earth {
 	public static final double CIRCUMFERENCE = 4.003014 * Math.pow(10, 7);
 	public static final double SURFACE_AREA = 5.10072 * Math.pow(10, 14);
 	public static final double SEMI_MAJOR_AXIS = 1.4960 * Math.pow(10,11);
-	public static final double ORBITAL_PERIOD = 365.256*24*60; //in minutes
+	public static final double ORBITAL_PERIOD = 525600; // 365.256*24*60; //in minutes
 
-	public static final int MAX_TEMP = 550; // shot in the dark here...
+	public static final int MAX_TEMP = 550; // shot in the dark he 525600re...
 	public static final int INITIAL_TEMP = 288;
 	public static final int MIN_TEMP = 0;
 	public static int EarthTimeStep = 1;
@@ -170,9 +170,12 @@ public final class Earth {
 		Queue<GridCell> calcd = new LinkedList<GridCell>();
 
 		currentStep++;
-		updateOrbitalAngle();
-		updateDistanceFromSun();
-		updateSunLatitude();
+		//updateOrbitalPositions();
+		if( currentStep > 0){
+			updateOrbitalAngle();
+			updateDistanceFromSun();
+			updateSunLatitude();
+		}
 
 		int t = timeStep * currentStep;
 		int rotationalAngle = 360 - ((t % MAX_SPEED) * 360 / MAX_SPEED);
@@ -278,6 +281,21 @@ public final class Earth {
 
 	private int getLongitude(int x) {
 		return x < (width / 2) ? -(x + 1) * this.gs : (360) - (x + 1) * this.gs;
+	}
+	
+	private void updateOrbitalPositions(){
+		int time = timeStep/144;
+		int remain = timeStep%144;
+		
+		for(int i = 0; i < time; i++ ){
+			this.orbitalAngle += (float) ( 2 * Math.PI * Math.pow(Earth.SEMI_MAJOR_AXIS, 2) * Math.sqrt( 1 - Math.pow(eccentricity,2) ) * 144 / ( Earth.ORBITAL_PERIOD * Math.pow(distanceFromSun, 2) ) );
+			this.distanceFromSun = (float) ( Earth.SEMI_MAJOR_AXIS * (1 - Math.pow(eccentricity,2)) / ( 1 + eccentricity * Math.cos(orbitalAngle) ) );
+		}
+		
+		for(int i = 0; i < remain; i++){
+			this.orbitalAngle += (float) ( 2 * Math.PI * Math.pow(Earth.SEMI_MAJOR_AXIS, 2) * Math.sqrt( 1 - Math.pow(eccentricity,2) ) * 1 / ( Earth.ORBITAL_PERIOD * Math.pow(distanceFromSun, 2) ) );
+			this.distanceFromSun = (float) ( Earth.SEMI_MAJOR_AXIS * (1 - Math.pow(eccentricity,2)) / ( 1 + eccentricity * Math.cos(orbitalAngle) ) );
+		}
 	}
 	
 	private void updateOrbitalAngle(){
