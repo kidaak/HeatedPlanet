@@ -19,8 +19,8 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 	private final int size;
 	private final double[] coef;
 	private final double[] dCoef;
-	private double stepRate = 0.01;
-	private double numberOfIterations = 100;
+	private double stepRate = 1;
+	private double numberOfIterations = 50;
 	
 	// We use a TreeMap to not consume a contiguous amount of memory. It's
 	// backed by a Red/Black Tree, so we get pretty decent access times
@@ -143,7 +143,7 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 	}
 	
 	private void fitCoef(){
-		
+		double averageTemp = getAverageTemperature();
 		for(int k = 0; k <= numberOfIterations; k++){
 			
 			for(int n = 0; n < dCoef.length; n++){
@@ -152,7 +152,7 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 			
 			for(int i = 0; i < width; i++){
 				for( int j = 0; j < height; j++){
-					double dy = pred(i,j)-getTemperature(i, j);
+					double dy = pred(i,j)-(getTemperature(i, j)-averageTemp);
 					double[] x = getVars(i, j);
 					for(int n = 0; n < dCoef.length; n++){
 						dCoef[n] += dy*x[n];
@@ -162,7 +162,9 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 			
 			for(int n = 0; n < dCoef.length; n++){
 				coef[n] -= stepRate*dCoef[n]/(height*width);
+				//System.out.print(coef[n]+", ");
 			}
+			//System.out.println("");
 			
 		}
 	}
@@ -187,8 +189,9 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 		
 		//l = 0
 		double[] var = new double[16];
+		var[0] = 0;
 		
-		//l = 1
+		//l = 1\
 		var[1] = y;
 		var[2] = x;
 		var[3] = z;

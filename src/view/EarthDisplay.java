@@ -14,6 +14,7 @@ import view.util.ThermalVisualizer;
 import view.widgets.EarthImage;
 import view.widgets.GridDisplay;
 import view.widgets.SimulationStatus;
+import common.Grid;
 import common.IGrid;
 
 public class EarthDisplay extends JFrame implements WindowListener {
