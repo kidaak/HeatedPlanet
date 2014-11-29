@@ -6,7 +6,6 @@ import java.util.TimeZone;
 
 import common.EarthGridProperties;
 import common.IGrid;
-import common.EarthGridProperties.EarthGridProperty;
 import dao.abstracts.EarthGridWrapperAbstract;
 
 public class EarthGridInsert extends EarthGridWrapperAbstract {
