@@ -105,7 +105,7 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
     {
 
         jLabel1 = new javax.swing.JLabel();
-        simulationNameComboBox = new javax.swing.JComboBox<String>();
+        simulationNameComboBox = new javax.swing.JComboBox();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -341,7 +341,7 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
     public void updateSimList() {
         ArrayList<String> simNames = PersistenceManager.getAllSimNames();
         simNames.add(0, "Any");
-        simulationNameComboBox.setModel(new javax.swing.DefaultComboBoxModel<String>(simNames.toArray(new String[simNames.size()])));
+        simulationNameComboBox.setModel(new javax.swing.DefaultComboBoxModel(simNames.toArray(new String[simNames.size()])));
     }
     
     private void actualValuesCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_actualValuesCheckBoxActionPerformed
@@ -525,7 +525,7 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
     private javax.swing.JCheckBox meanTempOverTimesCheckBox;
     private javax.swing.JCheckBox minTempCheckBox;
     private javax.swing.JButton queryButton;
-    private javax.swing.JComboBox<String> simulationNameComboBox;
+    private javax.swing.JComboBox simulationNameComboBox;
     private javax.swing.JSpinner startDateSpinner;
     private javax.swing.JSpinner startLatitudeSpinner;
     private javax.swing.JSpinner startLongitudeSpinner;

@@ -6,10 +6,10 @@ To build the code, run the following commands in bash:
 
 	./build.sh
 
-To run the code, run the command expected in the instructions from bin dir, ie,
+To run the code, either use ./run.sh or run from bin dir, ie,
    
 	cd bin
-	java PlanetSim.Demo [-p #] [-g #] [-t #]
+	java -cp .:lib/h2-1.4.182.jar PlanetSim.Demo [-p #] [-g #] [-t #]
 
 where:
   -p #: The precision of the data to be stored, in decimal digits after the 
