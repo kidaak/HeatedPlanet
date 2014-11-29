@@ -93,9 +93,15 @@ public class EarthDisplay extends JFrame implements WindowListener {
 			
 		if (grid != null){
 			//System.out.println(((Grid)grid).getRSquared());
-			simStatus.update(grid.getSunPositionDeg(), grid.getCurrentTime(), this.gs, this.timeStep);
+			simStatus.update(
+                                grid.getSunPositionDeg(), 
+                                grid.getOrbitalAngle(), 
+                                grid.getDistanceFromSun(), 
+                                grid.getCurrentTime(), 
+                                this.gs, 
+                                this.timeStep);
 		} else
-			simStatus.update(0, 0, this.gs, this.timeStep);
+			simStatus.update(0, 0, 0, 0, this.gs, this.timeStep);
 		gridDisplay.update(grid);
 	}
 
