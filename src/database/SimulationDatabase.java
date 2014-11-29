@@ -24,8 +24,8 @@ public class SimulationDatabase
     private static final String GRID_GRIDDATE_INDEX_SQL = "CREATE INDEX gridDate_INDEX ON Grid(gridDate)";
     private static final String GRID_SIMULATIONFID_INDEX_SQL = "CREATE INDEX simulationFid_INDEX ON Grid(simulationFid)";
     private static final String GRID_SIMULATIONFID_FOREIGNKEY_SQL = "CONSTRAINT Grid2Simulation FOREIGN KEY (simulationFid) "+
-    																"REFERENCES Simulation(simulationId) "+
-    																"ON DELETE RESTRICT ON UPDATE CASCADE";
+    																"REFERENCES Simulation(simulationId) ";//+
+    																//"ON DELETE RESTRICT ON UPDATE CASCADE";
     
     
     static{
@@ -63,7 +63,7 @@ public class SimulationDatabase
     	return connection;
     }
     
-    private void createSimulationTable() throws SQLException
+    public void createSimulationTable() throws SQLException
     {
         String createSimulationTableString =
                 "CREATE TABLE Simulation " +
@@ -92,7 +92,7 @@ public class SimulationDatabase
 	    executeSqlGeneral(SIM_ENDDATE_INDEX_SQL);
     }
     
-    private void createGridTable() throws SQLException
+    public void createGridTable() throws SQLException
     {
         String createGridTableString =
                 "CREATE TABLE Grid " +

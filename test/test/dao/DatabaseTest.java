@@ -215,7 +215,7 @@ public class DatabaseTest
 	
 	public static Calendar getBaseCalendar(){
 		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		c.set(2014, 0, 1, 12, 30, 45);
+		c.set(2014, 6, 11, 0, 0, 0);
 		c.set(Calendar.MILLISECOND, 542);
 		
 		return c;
