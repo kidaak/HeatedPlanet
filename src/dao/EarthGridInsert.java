@@ -24,7 +24,7 @@ public class EarthGridInsert extends EarthGridWrapperAbstract {
 		// EarthGridInsert Constructor...
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.clear();
-		cal.set(2014, 0, 4);
+		cal.set(2014, 0, 4, 12, 0);
 		cal.add(Calendar.MINUTE, g.getCurrentTime());
 
 		SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
