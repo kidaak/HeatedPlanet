@@ -35,6 +35,7 @@ public class EarthGridDao implements IEarthGridDao {
 	
 	//Canned SQL Statements
 	private static final String GetSimulationIdFromNameSql = "SELECT simulationId FROM Simulation WHERE name = ?";
+	private static final String GetSimulationFieldsFromIdSql = "SELECT * FROM Simulation WHERE simulationId = ?";
 	private static final String InsertSimulationSql = "INSERT INTO Simulation "+
 							"(name,axialTilt,eccentricity,gridSpacing,simTimeStep,simLength,precision,geoPrecision,timePrecision,simEndDate) "+
 							"VALUES (?,?,?,?,?,?,?,?,?,?)";
@@ -74,8 +75,6 @@ public class EarthGridDao implements IEarthGridDao {
 		
 		//StringBuilder for WHERE statement
 		StringBuilder sb = new StringBuilder("WHERE ");
-		//Ordered list of arguments
-		ArrayList<String> args = new ArrayList<String>(definedProps.length);
 		
 		//Loop through all the defined properties and build the WHERE clause
 		for(int i = 0; i<definedProps.length; i++){
@@ -91,87 +90,61 @@ public class EarthGridDao implements IEarthGridDao {
 							throw new IllegalArgumentException("Simulation name is empty");
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("Name = ? AND ");
-						//Add the argument to the list to be used later in the PreparedStatement
-						args.add(value);
 						break;
 					default:
 						throw new IllegalArgumentException(propType.name()+" is not expecting a string.");
 				}
 			}else if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridIntProperties, propType)){
-
-				int value = props.getPropertyInt(propType);
 				switch(propType){
 					case GRID_SPACING:
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("gridSpacing = ? AND ");
-						//Add the argument to the list to be used later in the PreparedStatement
-						args.add(Integer.toString(value));
 						break;
 					case SIMULATION_TIME_STEP:
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("simTimeStep = ? AND ");
-						//Add the argument to the list to be used later in the PreparedStatement
-						args.add(Integer.toString(value));
 						break;
 					case SIMULATION_LENGTH:
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("simLength = ? AND ");
-						//Add the argument to the list to be used later in the PreparedStatement
-						args.add(Integer.toString(value));
 						break;
 					case PRECISION:
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("precision = ? AND ");
-						//Add the argument to the list to be used later in the PreparedStatement
-						args.add(Integer.toString(value));
 						break;
 					case GEO_PRECISION:
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("geoPrecision = ? AND ");
-						//Add the argument to the list to be used later in the PreparedStatement
-						args.add(Integer.toString(value));
 						break;
 					case TIME_PRECISION:
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("timePrecision = ? AND ");
-						//Add the argument to the list to be used later in the PreparedStatement
-						args.add(Integer.toString(value));
 						break;
 					default:
 						throw new IllegalArgumentException(propType.name()+" is not expecting an integer.");
 				}
 			}else if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridFloatProperties, propType)){
-				float value = props.getPropertyFloat(propType);
 				switch(propType){
 					case AXIAL_TILT:
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("axialTilt = ? AND ");
-						//Add the argument to the list to be used later in the PreparedStatement
-						args.add(Float.toString(value));
 						break;
 					case ECCENTRICITY:
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("eccentricity = ? AND ");
-						//Add the argument to the list to be used later in the PreparedStatement
-						args.add(Float.toString(value));
 						break;
 					default:
 						throw new IllegalArgumentException(propType.name()+" is not expecting a double.");
 				}
 			}else if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridCalendarProperties, propType)){
-				Calendar value = props.getPropertyCalendar(propType);
 				switch(propType){
 					case START_DATE:
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("G.gridDate >= ? AND ");
-						//Add the argument to the list to be used later in the PreparedStatement
-						args.add(String.valueOf(value.getTimeInMillis()));
 						break;
 					case END_DATE:
 						//Add to the WHERE Clause using StringBuilder
 						sb.append("G.gridDate <= ? AND ");
-						//Add the argument to the list to be used later in the PreparedStatement
-						args.add(String.valueOf(value.getTimeInMillis()));
 						break;
 					default:
 						throw new IllegalArgumentException(propType.name()+" is not expecting a Calendar.");
@@ -252,13 +225,16 @@ public class EarthGridDao implements IEarthGridDao {
 			}else 
 				//Check if the property is a Calendar Property
 				if(EarthGridProperties.arrayContains(EarthGridProperties.EarthGridCalendarProperties, propType)){
+					//Handle Calendar/Timestamp Time Zones
 					Calendar value = props.getPropertyCalendar(propType);
+					Calendar calConvert = convertToLocal(value);
+					Timestamp tsInsert = Calendar2Timestamp(calConvert);
 					switch(propType){
 						case START_DATE:
-							simStmt.setTimestamp(i+1, Calendar2Timestamp(value));
+							simStmt.setTimestamp(i+1, tsInsert);
 							break;
 						case END_DATE:
-							simStmt.setTimestamp(i+1, Calendar2Timestamp(value));
+							simStmt.setTimestamp(i+1, tsInsert);
 							break;
 						default:
 							throw new IllegalArgumentException(propType.name()+" is not expecting a Calendar.");	
@@ -302,7 +278,11 @@ public class EarthGridDao implements IEarthGridDao {
 		simStmt.setInt(7, Integer.valueOf(props.getPropertyString(EarthGridProperty.PRECISION)));
 		simStmt.setInt(8, Integer.valueOf(props.getPropertyString(EarthGridProperty.GEO_PRECISION)));
 		simStmt.setInt(9, Integer.valueOf(props.getPropertyString(EarthGridProperty.TIME_PRECISION)));
-		simStmt.setTimestamp(10, Calendar2Timestamp(insert.getEndDate()), insert.getEndDate());
+		//Insert Calendar as Timestamp, converting Time Zone along the way
+		Calendar calInsert = insert.getEndDate();
+		Calendar calConvert = convertToLocal(calInsert);
+		Timestamp tsInsert = Calendar2Timestamp(calConvert);
+		simStmt.setTimestamp(10, tsInsert, calConvert);
 		
 		try{
 			simStmt.execute();
@@ -322,7 +302,13 @@ public class EarthGridDao implements IEarthGridDao {
 		for(int i = 0; i < numGrids; i++){
 			//Set Statement Values
 			gridStmt.setBlob(1, Grid2Blob(insert.getGridAt(i)));
-			gridStmt.setTimestamp(2, Calendar2Timestamp(insert.getGridDateAt(i)),insert.getGridDateAt(i));
+			
+			//Handle Calendar/Timestamps with Time Zones
+			Calendar calGridInsert = insert.getGridDateAt(i);
+			Calendar calGridConvert = convertToLocal(calGridInsert);
+			Timestamp tsGridInsert = Calendar2Timestamp(calGridConvert);
+			gridStmt.setTimestamp(2, tsGridInsert,calGridConvert);
+			
 			gridStmt.setInt(3, newSimId);
 			//For performance, insert in batches
 			gridStmt.addBatch();
@@ -380,8 +366,10 @@ public class EarthGridDao implements IEarthGridDao {
 	@Override
 	public void resetDatabase(String secretCode) throws SQLException {
 		if(secretCode.equals("42") ){
-			sdb.executeSqlGeneral("DROP TABLE IF EXISTS Grid");
-	        sdb.executeSqlGeneral("DROP TABLE IF EXISTS Simulation");
+			sdb.executeSqlGeneral("DROP TABLE Grid");
+	        sdb.executeSqlGeneral("DROP TABLE Simulation");
+	        sdb.createSimulationTable();
+	        sdb.createGridTable();
 		}
 	}
 
@@ -477,17 +465,39 @@ public class EarthGridDao implements IEarthGridDao {
 			Calendar[] finalGridDates = gridDates.toArray(new Calendar[gridDates.size()]);
 			Arrays.sort(finalGridDates);
 			
+			//Get the Simulation Properties
+			EarthGridProperties props = new EarthGridProperties();
+			PreparedStatement ps = sdb.getConnection().prepareStatement(GetSimulationFieldsFromIdSql);
+			ps.setInt(1, maxId);
+			ResultSet simResults = ps.executeQuery();
+			if(simResults.next()){
+				props.setProperty(EarthGridProperty.NAME, simResults.getString("name"));
+				props.setProperty(EarthGridProperty.AXIAL_TILT, simResults.getDouble("axialTilt"));
+				props.setProperty(EarthGridProperty.ECCENTRICITY, simResults.getDouble("eccentricity"));
+				props.setProperty(EarthGridProperty.GRID_SPACING, simResults.getInt("gridSpacing"));
+				props.setProperty(EarthGridProperty.SIMULATION_TIME_STEP, simResults.getInt("simTimeStep"));
+				props.setProperty(EarthGridProperty.SIMULATION_LENGTH, simResults.getInt("simLength"));
+				props.setProperty(EarthGridProperty.PRECISION, simResults.getInt("precision"));
+				props.setProperty(EarthGridProperty.GEO_PRECISION, simResults.getInt("geoPrecision"));
+				props.setProperty(EarthGridProperty.TIME_PRECISION, simResults.getInt("timePrecision"));
+				props.setProperty(EarthGridProperty.END_DATE, convertToUTC(Timestamp2Calendar(simResults.getTimestamp("simEndDate"))) );
+				
+			}else{
+				throw new SQLException("Really F'ed up here. Couldn't find the Simulation ID after finding the Simulation ID.");
+			}
+			
 			if(count > 1){
 				egr = EarthGridResponse.EarthGridResponseFactory(
-						ResponseType.FOUND_MANY, finalGrids, finalGridDates, query);
+						ResponseType.FOUND_MANY, finalGrids, finalGridDates, props);
 			}else if(count == 1){
 				egr = EarthGridResponse.EarthGridResponseFactory(
-						ResponseType.FOUND_ONE, finalGrids, finalGridDates, query);
+						ResponseType.FOUND_ONE, finalGrids, finalGridDates, props);
 			}else{
-				egr = EarthGridResponse.EarthGridResponseFactory(ResponseType.NOTFOUND, null, null, query);
+				//Should not get here...
+				egr = EarthGridResponse.EarthGridResponseFactory(ResponseType.NOTFOUND, null, null, props);
 			}
 		}else{
-			egr = EarthGridResponse.EarthGridResponseFactory(ResponseType.NOTFOUND, null, null, query);
+			egr = EarthGridResponse.EarthGridResponseFactory(ResponseType.NOTFOUND, null, null, null);
 		}
 		
 		return egr;
@@ -518,15 +528,25 @@ public class EarthGridDao implements IEarthGridDao {
 	private Calendar Timestamp2Calendar(Timestamp t){
 		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTimeInMillis(t.getTime());
-		//TODO Remove after testing
-		System.out.println("T2C: "+c.getTimeZone().getDisplayName());
 		return c;
 	}
 	
 	private Timestamp Calendar2Timestamp(Calendar c){
-		//TODO Remove after testing
-		System.out.println("C2T: "+c.getTimeZone().getDisplayName());
 		Timestamp t = new Timestamp(c.getTimeInMillis());
 		return t;
+	}
+	
+	private Calendar convertToUTC(Calendar c){
+		if(c.get(Calendar.ZONE_OFFSET) != 0){
+			c.setTimeZone(TimeZone.getTimeZone("UTC"));
+		}
+		return c;
+	}
+	
+	private Calendar convertToLocal(Calendar c){
+		if(c.get(Calendar.ZONE_OFFSET) == 0){
+			c.setTimeZone(TimeZone.getDefault());
+		}
+		return c;
 	}
 }

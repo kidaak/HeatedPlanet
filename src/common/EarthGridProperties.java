@@ -200,5 +200,7 @@ public class EarthGridProperties implements Serializable{
 		}
 		
 		return buf.toString();
+//	public String toString(){
+//		return ht.toString();
 	}
 }
