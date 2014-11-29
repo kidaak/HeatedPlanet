@@ -206,7 +206,6 @@ public class QueryCalculator {
 		Calendar searchStart = simProp.getPropertyCalendar(EarthGridProperty.START_DATE);
 		int simTimeStep = simProp.getPropertyInt(EarthGridProperty.SIMULATION_TIME_STEP);
 		while(date.getTimeInMillis() < searchStart.getTimeInMillis()) {
-			System.out.printf("adding: %d minutes\n", simTimeStep);
 			date.add(Calendar.MINUTE, simTimeStep);
 		}
 		SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
