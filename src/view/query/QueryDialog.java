@@ -160,7 +160,7 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
             }
         });
 
-        axialTiltSpinner.setModel(new javax.swing.SpinnerNumberModel(22.4d, -180.0d, 180.0d, 0.1d));
+        axialTiltSpinner.setModel(new javax.swing.SpinnerNumberModel(23.44d, -90.0d, 90.0d, 0.01d));
 
         eccentricitySpinner.setModel(new javax.swing.SpinnerNumberModel(0.0167, //initial value
             0.0, //min
