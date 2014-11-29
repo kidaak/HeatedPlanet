@@ -35,6 +35,7 @@ public class EarthGridDao implements IEarthGridDao {
 	
 	//Canned SQL Statements
 	private static final String GetSimulationIdFromNameSql = "SELECT simulationId FROM Simulation WHERE name = ?";
+	private static final String GetSimulationFieldsFromIdSql = "SELECT * FROM Simulation WHERE simulationId = ?";
 	private static final String InsertSimulationSql = "INSERT INTO Simulation "+
 							"(name,axialTilt,eccentricity,gridSpacing,simTimeStep,simLength,precision,geoPrecision,timePrecision,simEndDate) "+
 							"VALUES (?,?,?,?,?,?,?,?,?,?)";
@@ -464,17 +465,39 @@ public class EarthGridDao implements IEarthGridDao {
 			Calendar[] finalGridDates = gridDates.toArray(new Calendar[gridDates.size()]);
 			Arrays.sort(finalGridDates);
 			
+			//Get the Simulation Properties
+			EarthGridProperties props = new EarthGridProperties();
+			PreparedStatement ps = sdb.getConnection().prepareStatement(GetSimulationFieldsFromIdSql);
+			ps.setInt(1, maxId);
+			ResultSet simResults = ps.executeQuery();
+			if(simResults.next()){
+				props.setProperty(EarthGridProperty.NAME, simResults.getString("name"));
+				props.setProperty(EarthGridProperty.AXIAL_TILT, simResults.getDouble("axialTilt"));
+				props.setProperty(EarthGridProperty.ECCENTRICITY, simResults.getDouble("eccentricity"));
+				props.setProperty(EarthGridProperty.GRID_SPACING, simResults.getInt("gridSpacing"));
+				props.setProperty(EarthGridProperty.SIMULATION_TIME_STEP, simResults.getInt("simTimeStep"));
+				props.setProperty(EarthGridProperty.SIMULATION_LENGTH, simResults.getInt("simLength"));
+				props.setProperty(EarthGridProperty.PRECISION, simResults.getInt("precision"));
+				props.setProperty(EarthGridProperty.GEO_PRECISION, simResults.getInt("geoPrecision"));
+				props.setProperty(EarthGridProperty.TIME_PRECISION, simResults.getInt("timePrecision"));
+				props.setProperty(EarthGridProperty.END_DATE, convertToUTC(Timestamp2Calendar(simResults.getTimestamp("simEndDate"))) );
+				
+			}else{
+				throw new SQLException("Really F'ed up here. Couldn't find the Simulation ID after finding the Simulation ID.");
+			}
+			
 			if(count > 1){
 				egr = EarthGridResponse.EarthGridResponseFactory(
-						ResponseType.FOUND_MANY, finalGrids, finalGridDates, query);
+						ResponseType.FOUND_MANY, finalGrids, finalGridDates, props);
 			}else if(count == 1){
 				egr = EarthGridResponse.EarthGridResponseFactory(
-						ResponseType.FOUND_ONE, finalGrids, finalGridDates, query);
+						ResponseType.FOUND_ONE, finalGrids, finalGridDates, props);
 			}else{
-				egr = EarthGridResponse.EarthGridResponseFactory(ResponseType.NOTFOUND, null, null, query);
+				//Should not get here...
+				egr = EarthGridResponse.EarthGridResponseFactory(ResponseType.NOTFOUND, null, null, props);
 			}
 		}else{
-			egr = EarthGridResponse.EarthGridResponseFactory(ResponseType.NOTFOUND, null, null, query);
+			egr = EarthGridResponse.EarthGridResponseFactory(ResponseType.NOTFOUND, null, null, null);
 		}
 		
 		return egr;

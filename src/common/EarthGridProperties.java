@@ -188,4 +188,8 @@ public class EarthGridProperties implements Serializable{
 		cal.setTimeInMillis(Long.valueOf(getPropertyString(prop)) );
 		return cal;
 	}
+	
+	public String toString(){
+		return ht.toString();
+	}
 }
