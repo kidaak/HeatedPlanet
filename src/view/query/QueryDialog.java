@@ -296,7 +296,7 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
     public void updateSimList() {
         ArrayList<String> simNames = PersistenceManager.getAllSimNames();
         simNames.add(0, "Any");
-        simulationNameComboBox.setModel(new javax.swing.DefaultComboBoxModel<String>((String[]) simNames.toArray()));
+        simulationNameComboBox.setModel(new javax.swing.DefaultComboBoxModel<String>(simNames.toArray(new String[simNames.size()])));
     }
     
     private void actualValuesCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_actualValuesCheckBoxActionPerformed
@@ -357,7 +357,6 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
             }
         }
         else {
-//        	System.out.println(queryResult.gridProps); //TODO: remove this debug print once functional
         	// Update times in returned sim data to match query (really the DAO should probably
         	// do this, but it works for now).
         	queryResult.gridProps.setProperty(EarthGridProperty.START_DATE, egp.getPropertyCalendar(EarthGridProperty.START_DATE));
