@@ -222,7 +222,7 @@ public class ControllerGUI extends JFrame implements ActionListener, WindowListe
 			
 			Calendar endDate = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 			endDate.clear();
-			endDate.set(2014, 1, 4);
+			endDate.set(2014, 0, 4);
 			endDate.add(Calendar.MONTH, simDuration);
 			simProp.setProperty(EarthGridProperty.END_DATE, endDate);
 			

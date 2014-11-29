@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import common.EarthGridProperties;
 import common.IGrid;
@@ -125,29 +126,29 @@ public class QueryCalculator {
 			regionAvg[tIdx] = regionAvg[tIdx] / (numLonStep*numLatStep); //normalize
 		}
 		
+		SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		dateFmt.setTimeZone(TimeZone.getTimeZone("UTC"));
+
 		// Do actual printing of results
 		if(doMin) {
 			double latVal = minTlat * latPerGrid - 90;
 			double lonVal = minTlon * lonPerGrid - 180;
-			Calendar date = simProp.getPropertyCalendar(EarthGridProperty.START_DATE);
+			Calendar date = getFirstGridDate();
 			date.add(Calendar.MINUTE, Math.round(minTimeIdx * simProp.getPropertyInt(EarthGridProperty.SIMULATION_TIME_STEP)));
-			SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			output.printf("Minimum Temperature: %.1f at (%.1f,%.1f) on %s\n", minTemp, latVal, lonVal, dateFmt.format(date.getTime()));
 		}
 		
 		if(doMax) {
 			double latVal = maxTlat * latPerGrid - 90;
 			double lonVal = maxTlon * lonPerGrid - 180;
-			Calendar date = simProp.getPropertyCalendar(EarthGridProperty.START_DATE);
+			Calendar date = getFirstGridDate();
 			date.add(Calendar.MINUTE, Math.round(maxTimeIdx * simProp.getPropertyInt(EarthGridProperty.SIMULATION_TIME_STEP)));
-			SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			output.printf("Maximum Temperature: %.1f at (%.1f,%.1f) on %s\n", maxTemp, latVal, lonVal, dateFmt.format(date.getTime()));
 		}
 
 		if(doAvgAcrossGrid) {
 			// Print avg temp at each time
-			Calendar date = simProp.getPropertyCalendar(EarthGridProperty.START_DATE);
-			SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			Calendar date = getFirstGridDate();
 			output.printf("===================================\n");
 			output.printf(" Average Region Temps at Each Time \n");
 			output.printf("===================================\n");
@@ -175,8 +176,7 @@ public class QueryCalculator {
 			output.printf("==================================\n");
 			output.printf(" Grid Temperatures for Every Grid \n");
 			output.printf("==================================\n");
-			Calendar date = simProp.getPropertyCalendar(EarthGridProperty.START_DATE);
-			SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			Calendar date = getFirstGridDate();
 			for(int tIdx=0; tIdx < regionAvg.length; tIdx++) {
 				output.printf("------------------\n");
 				output.printf(" %s\n", dateFmt.format(date.getTime()));
@@ -194,4 +194,25 @@ public class QueryCalculator {
 		return buf.toString();
 	}
 
+	Calendar getFirstGridDate() {
+		// Returns a the date/time of the first valid grid provided.
+		// It is assumed that all simulations start at the same time and given
+		// a fixed simulation step, one can determine the first grid date as
+		// the first grid beyond the provided START_DATE
+		Calendar date = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		date.clear();
+		date.set(2014, 0, 4, 12, 0);
+		
+		Calendar searchStart = simProp.getPropertyCalendar(EarthGridProperty.START_DATE);
+		int simTimeStep = simProp.getPropertyInt(EarthGridProperty.SIMULATION_TIME_STEP);
+		while(date.getTimeInMillis() < searchStart.getTimeInMillis()) {
+			System.out.printf("adding: %d minutes\n", simTimeStep);
+			date.add(Calendar.MINUTE, simTimeStep);
+		}
+		SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		dateFmt.setTimeZone(TimeZone.getTimeZone("UTC"));
+		System.out.println(dateFmt.format(searchStart.getTime()));
+		System.out.println(dateFmt.format(date.getTime()));
+		return date;
+	}
 }

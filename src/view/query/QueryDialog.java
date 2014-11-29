@@ -34,6 +34,7 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
 	 * 
 	 */
 	private static final long serialVersionUID = 4961796121859584333L;
+    final long UTC_TO_LOCAL_MILLIS = TimeZone.getDefault().getOffset(System.currentTimeMillis());
 	private Demo pcontrol;
 	private QueryCalculator qc;
 	
@@ -100,10 +101,12 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
         jLabel3.setText("Orbital Eccentricity");
 
         jLabel4.setText("Start Date");
-        TimeZone zoneOffset = TimeZone.getDefault();
         
-        final long UTC_TO_LOCAL_MILLIS = zoneOffset.getOffset(System.currentTimeMillis());
-        
+        // It seems that these spinners will always show times in local timezone
+        // yet we want internals to all use UTC.  So here we offset UTC times
+        // so that they show up properly when displayed as local times.
+        // On output we'll offset back to UTC frame and then internals can all
+        // assume UTC time.
         startDateSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(1388836800000L-UTC_TO_LOCAL_MILLIS), new java.util.Date(1388836800000L-UTC_TO_LOCAL_MILLIS), new java.util.Date(4544510400000L-UTC_TO_LOCAL_MILLIS), java.util.Calendar.YEAR));
         startDateSpinner.setEditor(new javax.swing.JSpinner.DateEditor(startDateSpinner, "MM/dd/yyyy hh:mm a"));
 
@@ -312,6 +315,10 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
         Number eccentricity = (Number) eccentricitySpinner.getValue();
         Date startDate = (Date) startDateSpinner.getValue();
         Date endDate = (Date) endDateSpinner.getValue();
+        // Offset times so that they are UTC
+        startDate.setTime(startDate.getTime()+UTC_TO_LOCAL_MILLIS);
+        endDate.setTime(endDate.getTime()+UTC_TO_LOCAL_MILLIS);
+        
         Float startLatitude = (float)(Integer) startLatitudeSpinner.getValue();
         Float endLatitude = (float)(Integer) endLatitudeSpinner.getValue();
         Float startLongitude = (float)(Integer) startLongitudeSpinner.getValue();

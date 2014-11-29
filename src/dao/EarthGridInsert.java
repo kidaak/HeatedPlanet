@@ -1,5 +1,6 @@
 package dao;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -24,8 +25,12 @@ public class EarthGridInsert extends EarthGridWrapperAbstract {
 		// EarthGridInsert Constructor...
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.clear();
-		cal.set(2014, 1, 4);
+		cal.set(2014, 0, 4);
 		cal.add(Calendar.MINUTE, g.getCurrentTime());
+
+		SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		dateFmt.setTimeZone(TimeZone.getTimeZone("UTC"));
+		System.out.printf("inserting %s %d\n", dateFmt.format(cal.getTime()), g.getCurrentTime());
 		return cal;
 	}
 }
