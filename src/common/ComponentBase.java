@@ -2,6 +2,10 @@ package common;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import javax.swing.JOptionPane;
+
+import org.h2.jdbc.JdbcSQLException;
+
 import messaging.Message;
 import messaging.MessageListener;
 import messaging.Publisher;
@@ -67,6 +71,8 @@ public abstract class ComponentBase implements MessageListener, Runnable {
 			}
 		} catch (InterruptedException e) {
 			// OK
+		} catch (JdbcSQLException e){
+			JOptionPane.showMessageDialog(null, "The Database connection has been unexpectedly closed. Please restart the application.");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

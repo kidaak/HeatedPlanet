@@ -1,6 +1,8 @@
 // Demo.java
 package PlanetSim;
 
+import javax.swing.JOptionPane;
+
 import view.query.QueryDialog;
 
 public class Demo {
@@ -15,7 +17,12 @@ public class Demo {
 	public static void main(String[] args) {
 		Demo demo = new Demo();
 		demo.processArgs(args);
-		demo.run();
+		try{
+			demo.run();
+		}catch(ExceptionInInitializerError e){
+			//JOptionPane.showMessageDialog(null, "The Database is in use by another application. Please close that application and restart PlanetSim.Demo.");
+			return;
+		}
 	}
 
 	private Demo() {

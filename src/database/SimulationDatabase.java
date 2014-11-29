@@ -6,6 +6,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+import javax.swing.JOptionPane;
+
+import org.h2.jdbc.JdbcSQLException;
+
 /**
  * Created by David Welker on 11/20/14.
  */
@@ -38,9 +42,13 @@ public class SimulationDatabase
 			conn = DriverManager.getConnection(DB_CONNECTION, connectionProps);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+		}catch (JdbcSQLException e){
+			if(e.getErrorCode() == 90020)
+				JOptionPane.showMessageDialog(null, "The Database is in use by another application. Please close that application and restart PlanetSim.Demo.");
+				conn = null;
 		} catch (SQLException e) {
 			printSQLException(e);
-		}
+		} 
         sdb = new SimulationDatabase(conn);
     	try {
     		sdb.createSimulationTable();
