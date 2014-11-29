@@ -13,12 +13,17 @@ import persistenceManager.PersistenceManagerQueryResult;
 import persistenceManager.QueryCalculator;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -45,11 +50,51 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
     {
 //        super(parent, modal);
         initComponents();
+        addMenu();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pcontrol = pcontrol; // used to change viewable window
     	qc = new QueryCalculator();
     }
 
+    public void addMenu() {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu newMenu;
+        JMenuItem newMenuItem;
+        
+        newMenu = new JMenu("Simulation");
+        menuBar.add(newMenu);
+        newMenuItem = new JMenuItem("Enter Simulation Mode");
+        newMenuItem.addActionListener(new SimModeListener());
+        newMenu.add(newMenuItem);
+        
+        newMenu = new JMenu("Database");
+        menuBar.add(newMenu);
+        newMenuItem = new JMenuItem("Clear Database Entries");
+        newMenuItem.addActionListener(new ClearListener());
+        newMenu.add(newMenuItem);
+        
+        this.setJMenuBar(menuBar);
+        pack();
+    }
+    
+    private class SimModeListener implements ActionListener {
+    	public void actionPerformed(ActionEvent e) {
+        	if(pcontrol != null) {
+        		pcontrol.viewSimGUI();
+        	}
+        	else {
+        		System.out.printf("no control available to start sim.  Start with Demo.java...\n");
+        	}
+    	}
+    };
+    
+    private class ClearListener implements ActionListener {
+    	public void actionPerformed(ActionEvent e) {
+    		PersistenceManager.clearDb();
+    		updateSimList();
+    	}
+    };
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

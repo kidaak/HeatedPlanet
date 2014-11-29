@@ -59,12 +59,7 @@ public class PersistenceManager extends ComponentBase {
 		EarthGridResponse response = null;
 		ArrayList<IGrid> gridList = null;
 		try {
-			if(querySpec.isPropertyDefined(EarthGridProperty.NAME)) {
-				response = dao.queryEarthGridSimulationByName(querySpec.getPropertyString(EarthGridProperty.NAME));
-			}
-			else {
-				response = dao.queryEarthGridSimulation(new EarthGridQuery(querySpec));
-			}
+			response = dao.queryEarthGridSimulation(new EarthGridQuery(querySpec));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -90,6 +85,16 @@ public class PersistenceManager extends ComponentBase {
 		}
 		Collections.sort(ret); // put in sorted order
 		return ret;
+	}
+
+	public static void clearDb() {
+		System.out.printf("CLEARING DATABASE...");
+		try {
+			dao.resetDatabase("42");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.printf("DONE\n");
 	}
 }
  
