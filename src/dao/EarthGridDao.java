@@ -263,45 +263,49 @@ public class EarthGridDao implements IEarthGridDao {
 	public ResponseType insertEarthGridSimulation(EarthGridInsert insert) 
 			throws NumberFormatException, SQLException, IOException, IllegalArgumentException {
 		// Insert Simulation
-		int numGrids = insert.getAllGrids().length;
+		IGrid[] allGrids = insert.getAllGrids();
+		int numGrids = allGrids.length;
+		EarthGridProperties simProps = insert.getProperties();
+		String simName = simProps.getPropertyString(EarthGridProperty.NAME);
 		if(numGrids == 0)
 			throw new IllegalArgumentException("EarthGridInsert does not contain any Grids to insert.");
-		//Set Statement values based on the EarthGridProperties object
-		EarthGridProperties props = insert.getProperties();
-		PreparedStatement simStmt = sdb.getConnection().prepareStatement(InsertSimulationSql);
-		simStmt.setString(1, props.getPropertyString(EarthGridProperty.NAME));
-		simStmt.setDouble(2, Double.valueOf(props.getPropertyString(EarthGridProperty.AXIAL_TILT)));
-		simStmt.setDouble(3, Double.valueOf(props.getPropertyString(EarthGridProperty.ECCENTRICITY)));
-		simStmt.setInt(4, Integer.valueOf(props.getPropertyString(EarthGridProperty.GRID_SPACING)));
-		simStmt.setInt(5, Integer.valueOf(props.getPropertyString(EarthGridProperty.SIMULATION_TIME_STEP)));
-		simStmt.setInt(6, Integer.valueOf(props.getPropertyString(EarthGridProperty.SIMULATION_LENGTH)));
-		simStmt.setInt(7, Integer.valueOf(props.getPropertyString(EarthGridProperty.PRECISION)));
-		simStmt.setInt(8, Integer.valueOf(props.getPropertyString(EarthGridProperty.GEO_PRECISION)));
-		simStmt.setInt(9, Integer.valueOf(props.getPropertyString(EarthGridProperty.TIME_PRECISION)));
-		//Insert Calendar as Timestamp, converting Time Zone along the way
-		Calendar calInsert = insert.getEndDate();
-		Calendar calConvert = convertToLocal(calInsert);
-		Timestamp tsInsert = Calendar2Timestamp(calConvert);
-		simStmt.setTimestamp(10, tsInsert, calConvert);
-		
-		try{
-			simStmt.execute();
-		}catch(SQLException e){
-			String sqlState = e.getSQLState();
-			if(!sqlState.equalsIgnoreCase("23505"))
-				//return ResponseType.ERROR_DUPLICATE;
+		if(isNameUnique(simName)){
+			//Set Statement values based on the EarthGridProperties object
+			
+			PreparedStatement simStmt = sdb.getConnection().prepareStatement(InsertSimulationSql);
+			simStmt.setString(1, simName);
+			simStmt.setDouble(2, Double.valueOf(simProps.getPropertyString(EarthGridProperty.AXIAL_TILT)));
+			simStmt.setDouble(3, Double.valueOf(simProps.getPropertyString(EarthGridProperty.ECCENTRICITY)));
+			simStmt.setInt(4, Integer.valueOf(simProps.getPropertyString(EarthGridProperty.GRID_SPACING)));
+			simStmt.setInt(5, Integer.valueOf(simProps.getPropertyString(EarthGridProperty.SIMULATION_TIME_STEP)));
+			simStmt.setInt(6, Integer.valueOf(simProps.getPropertyString(EarthGridProperty.SIMULATION_LENGTH)));
+			simStmt.setInt(7, Integer.valueOf(simProps.getPropertyString(EarthGridProperty.PRECISION)));
+			simStmt.setInt(8, Integer.valueOf(simProps.getPropertyString(EarthGridProperty.GEO_PRECISION)));
+			simStmt.setInt(9, Integer.valueOf(simProps.getPropertyString(EarthGridProperty.TIME_PRECISION)));
+			//Insert Calendar as Timestamp, converting Time Zone along the way
+			Calendar calInsert = insert.getEndDate();
+			Calendar calConvert = convertToLocal(calInsert);
+			Timestamp tsInsert = Calendar2Timestamp(calConvert);
+			simStmt.setTimestamp(10, tsInsert, calConvert);
+			
+			try{
+				simStmt.execute();
+			}catch(SQLException e){
+				String sqlState = e.getSQLState();
+				if(!sqlState.equalsIgnoreCase("23505"))
+					return ResponseType.ERROR_DUPLICATE;
 				throw new SQLException(e);
+			}
 		}
-		
 		//Get the ID of the newly inserted Simulation
-		int newSimId = getSimulationIdFromName(props.getPropertyString(EarthGridProperty.NAME));
+		int newSimId = getSimulationIdFromName(simName);
 		
 		//Insert Each Grid using Simulation ID
 		
 		PreparedStatement gridStmt = sdb.getConnection().prepareStatement(InsertGridSql);
 		for(int i = 0; i < numGrids; i++){
 			//Set Statement Values
-			gridStmt.setBlob(1, Grid2Blob(insert.getGridAt(i)));
+			gridStmt.setBlob(1, Grid2Blob(allGrids[i]));
 			
 			//Handle Calendar/Timestamps with Time Zones
 			Calendar calGridInsert = insert.getGridDateAt(i);
