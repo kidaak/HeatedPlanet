@@ -156,6 +156,10 @@ public class EarthGridDao implements IEarthGridDao {
 		//Get rid of trailing " AND "
 		sb.replace(sb.length()-5, sb.length(), "");
 		
+		if(props.isPropertyDefined(EarthGridProperty.END_DATE)){
+			sb.append(" AND S.simEndDate >= ?");
+		}
+		
 		//TODO Remove after testing
 		System.out.println(QueryGridSqlStart+sb.toString());
 		PreparedStatement simStmt = sdb.getConnection().prepareStatement(QueryGridSqlStart+sb.toString());
@@ -243,6 +247,15 @@ public class EarthGridDao implements IEarthGridDao {
 				throw new IllegalArgumentException("Somehow EarthGridProperty "+propType.name()+" is not in the list for types");
 			}
 		}
+		
+		if(props.isPropertyDefined(EarthGridProperty.END_DATE)){
+			//Handle Calendar/Timestamp Time Zones
+			Calendar value = props.getPropertyCalendar(EarthGridProperty.END_DATE);
+			Calendar calConvert = convertToLocal(value);
+			Timestamp tsInsert = Calendar2Timestamp(calConvert);
+			simStmt.setTimestamp(definedProps.length+1, tsInsert);
+		}
+		
 		ResultSet rs = simStmt.executeQuery();
 		
 		return ResultSet2EarthGridResponse(rs, query);
