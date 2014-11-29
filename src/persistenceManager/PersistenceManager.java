@@ -2,7 +2,6 @@ package persistenceManager;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import interpolator.GridInterprolator;
@@ -75,12 +74,7 @@ public class PersistenceManager extends ComponentBase {
 			IGrid[] grids = response.getAllGrids();
 			
 			GridInterprolator gridInterpolator = new GridInterprolator(simProp);
-			//FIXME: this is a hack to skip the interpolator for now since simProps
-			//       doesn't currently contain GEO_PRECISION (and probably others)
-			gridList = new ArrayList<IGrid>();
-			Collections.addAll(gridList, grids);
-			// end hack!
-//			gridList = gridInterpolator.interpolateAll(grids);
+			gridList = gridInterpolator.interpolateAll(grids);
 			return new PersistenceManagerQueryResult(gridList,querySpec,simProp);
 		}
 		

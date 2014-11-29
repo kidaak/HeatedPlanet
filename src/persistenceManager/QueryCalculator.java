@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import view.widgets.GridDisplay;
 import common.EarthGridProperties;
 import common.IGrid;
 import common.EarthGridProperties.EarthGridProperty;
@@ -40,7 +39,7 @@ public class QueryCalculator {
 	public void setSimProp(EarthGridProperties simProp) {
 		this.simProp = simProp;
 	}
-
+	
 	public void setDoMin(boolean doMin) {
 		this.doMin = doMin;
 	}

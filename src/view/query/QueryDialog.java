@@ -5,26 +5,23 @@
  */
 package view.query;
 
-import PlanetSim.ControllerGUI;
 import PlanetSim.Demo;
 import common.EarthGridProperties;
 import common.EarthGridProperties.EarthGridProperty;
-import common.IGrid;
 import persistenceManager.PersistenceManager;
 import persistenceManager.PersistenceManagerQueryResult;
 import persistenceManager.QueryCalculator;
-import simulation.Earth;
 
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 
 /**
  *
@@ -103,13 +100,16 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
         jLabel3.setText("Orbital Eccentricity");
 
         jLabel4.setText("Start Date");
-
-        startDateSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(1388865600000L), new java.util.Date(1388865600000L), new java.util.Date(4544539200000L), java.util.Calendar.YEAR));
+        TimeZone zoneOffset = TimeZone.getDefault();
+        
+        final long UTC_TO_LOCAL_MILLIS = zoneOffset.getOffset(System.currentTimeMillis());
+        
+        startDateSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(1388836800000L-UTC_TO_LOCAL_MILLIS), new java.util.Date(1388836800000L-UTC_TO_LOCAL_MILLIS), new java.util.Date(4544510400000L-UTC_TO_LOCAL_MILLIS), java.util.Calendar.YEAR));
         startDateSpinner.setEditor(new javax.swing.JSpinner.DateEditor(startDateSpinner, "MM/dd/yyyy hh:mm a"));
 
         jLabel5.setText("End Date");
 
-        endDateSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(4544539200000L), new java.util.Date(1388865600000L), new java.util.Date(4544539200000L), java.util.Calendar.YEAR));
+        endDateSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(4544510400000L-UTC_TO_LOCAL_MILLIS), new java.util.Date(1388836800000L-UTC_TO_LOCAL_MILLIS), new java.util.Date(4544510400000L-UTC_TO_LOCAL_MILLIS), java.util.Calendar.YEAR));
         endDateSpinner.setEditor(new javax.swing.JSpinner.DateEditor(endDateSpinner, "MM/dd/yyyy hh:mm a"));
 
         jLabel6.setText("Longitude");
@@ -299,7 +299,7 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
     
     private void actualValuesCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_actualValuesCheckBoxActionPerformed
     {//GEN-HEADEREND:event_actualValuesCheckBoxActionPerformed
-        // TODO add your handling code here:
+        // add your handling code here:
     }//GEN-LAST:event_actualValuesCheckBoxActionPerformed
 
     private void queryButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_queryButtonActionPerformed
@@ -319,10 +319,10 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
 
         egp.setProperty(EarthGridProperty.AXIAL_TILT, axialTilt.doubleValue());
         egp.setProperty(EarthGridProperty.ECCENTRICITY, eccentricity.doubleValue());
-        Calendar start = Calendar.getInstance();
+        Calendar start = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         start.setTime(startDate);
         egp.setProperty(EarthGridProperty.START_DATE, start);
-        Calendar end = Calendar.getInstance();
+        Calendar end = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         end.setTime(endDate);
         egp.setProperty(EarthGridProperty.END_DATE, end);
 
@@ -351,10 +351,13 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
             }
         }
         else {
+//        	System.out.println(queryResult.gridProps); //TODO: remove this debug print once functional
+        	// Update times in returned sim data to match query (really the DAO should probably
+        	// do this, but it works for now).
+        	queryResult.gridProps.setProperty(EarthGridProperty.START_DATE, egp.getPropertyCalendar(EarthGridProperty.START_DATE));
+        	queryResult.gridProps.setProperty(EarthGridProperty.END_DATE, egp.getPropertyCalendar(EarthGridProperty.END_DATE));
         	// Query successful, return results in text window
-//        	qc.setSimProp(queryResult.gridProps); //FIXME: eqp should actually be from result...
-        	egp.setProperty(EarthGridProperty.SIMULATION_TIME_STEP, 1440); //FIXME: REMOVE THIS ONCE ABOVE WORKING
-        	qc.setSimProp(egp); //FIXME: eqp should actually be from result...
+        	qc.setSimProp(queryResult.gridProps);
         	qc.setGrid(queryResult.grids);
         	startLatitudeSpinner.getValue();
         	qc.setLocation(startLatitude, endLatitude, startLongitude, endLongitude);

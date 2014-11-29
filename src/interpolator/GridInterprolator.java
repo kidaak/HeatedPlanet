@@ -1,8 +1,6 @@
 package interpolator;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import common.EarthGridProperties;
 import common.EarthGridProperties.EarthGridProperty;

@@ -1,8 +1,6 @@
 // Demo.java
 package PlanetSim;
 
-import javax.swing.SwingUtilities;
-
 import view.query.QueryDialog;
 
 public class Demo {
