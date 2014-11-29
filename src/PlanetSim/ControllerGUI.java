@@ -17,6 +17,7 @@ import java.util.TimeZone;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -43,6 +44,7 @@ public class ControllerGUI extends JFrame implements ActionListener, WindowListe
 	
 	private HashMap<String, JTextField> inputs = new HashMap<String, JTextField>();
 	private HashMap<String, JButton> buttons = new HashMap<String, JButton>();
+	private HashMap<String, JCheckBox> checkboxes = new HashMap<String, JCheckBox>();
 
 	public ControllerGUI(int precisionDigits, int geographicAccuracy, int temporalAccuracy, Demo pcontrol) {
 		this.precisionDigits = precisionDigits;
@@ -61,7 +63,7 @@ public class ControllerGUI extends JFrame implements ActionListener, WindowListe
 		// setup overall app ui
 		setTitle("Heated Earth Diffusion Simulation");
 		
-		setSize(300, 300);
+		setSize(300, 400);
 		
 		setLayout(new BorderLayout());
 		setLocationRelativeTo(null);
@@ -104,9 +106,9 @@ public class ControllerGUI extends JFrame implements ActionListener, WindowListe
 		settingsPanel.add(inputField("Simulation Time Step",Integer.toString(Controller.DEFAULT_TIME_STEP)));
 		settingsPanel.add(inputField("Presentation Rate",Float.toString(Controller.DEFAULT_PRESENTATION_RATE)));
 		settingsPanel.add(inputField("Axial Tilt",Float.toString(Controller.DEFAULT_AXIAL_TILT)));
-		settingsPanel.add(inputField("Orbital Eccentricity",Float.toString(Controller.DEFAULT_ECCENTRICITY)));
+		settingsPanel.add(inputField("Orbital Eccentricity",Float.toString(Controller.DEFAULT_ECCENTRICITY)));		
 		settingsPanel.add(inputField("Simulation Duration (months)",Integer.toString(Controller.DEFAULT_DURATION)));
-
+		settingsPanel.add(inputCheckbox("Show Animation?", true));
 		return settingsPanel;
 	}
 
@@ -144,6 +146,20 @@ public class ControllerGUI extends JFrame implements ActionListener, WindowListe
 		inputPanel.add(t);
 
 		inputs.put(name, t);
+		return inputPanel;
+	}
+
+	private JPanel inputCheckbox(String name, boolean setting) {
+		
+		JPanel inputPanel = new JPanel();
+		inputPanel.setLayout(new FlowLayout());
+		inputPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
+		JCheckBox t = new JCheckBox(name, setting);
+		t.setAlignmentX(Component.CENTER_ALIGNMENT);
+		inputPanel.add(t);
+
+		checkboxes.put(name, t);
 		return inputPanel;
 	}
 
@@ -232,7 +248,7 @@ public class ControllerGUI extends JFrame implements ActionListener, WindowListe
 			endDate.add(Calendar.MONTH, simDuration);
 			simProp.setProperty(EarthGridProperty.END_DATE, endDate);
 			
-			controller.start(simProp);
+			controller.start(simProp, checkboxes.get("Show Animation?").isSelected());
 			
 			return true;
 

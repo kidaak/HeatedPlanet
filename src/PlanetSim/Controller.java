@@ -21,7 +21,7 @@ public class Controller extends ComponentBase {
 	public static final int DEFAULT_DURATION = 12;
 	
 	private Model model;
-	private View view;
+	private View view = null;
 	private PersistenceManager persistenceManager;
 	
 	private int bufferSize = 1000;
@@ -35,13 +35,15 @@ public class Controller extends ComponentBase {
 	public Controller() {
 	}
 	
-	public void start(EarthGridProperties simProp) {
+	public void start(EarthGridProperties simProp, boolean showAnimation) {
 		
 		Buffer.getBuffer().create(this.bufferSize);
 		
 		// Instance model/view
 		model = new Model(simProp);
-		view = new View(simProp);
+		if(showAnimation) {
+			view = new View(simProp);
+		}
 		persistenceManager = new PersistenceManager();
 		
 		// Setup model initiative
@@ -54,8 +56,10 @@ public class Controller extends ComponentBase {
 		modelThread = new Thread(model,"model");
 		modelThread.start();
 
-		viewThread = new Thread(view,"view");
-		viewThread.start();
+		if(view != null) {
+			viewThread = new Thread(view,"view");
+			viewThread.start();
+		}
 		
 		persistenceThread = new Thread(persistenceManager,"persistenceMgr");
 		persistenceThread.start();
@@ -88,8 +92,10 @@ public class Controller extends ComponentBase {
 		modelThread.interrupt();
 		modelThread.join();
 
-		viewThread.interrupt();
-		viewThread.join();
+		if(view != null) {
+			viewThread.interrupt();
+			viewThread.join();
+		}
 		
 		persistenceThread.interrupt();
 		persistenceThread.join();
@@ -100,9 +106,10 @@ public class Controller extends ComponentBase {
 		// destroy model/view
 		model.close();
 		model = null;
-		view.close();
-		view = null;
-//		persistenceManager.close();
+		if(view != null) {
+			view.close();
+			view = null;
+		}
 		persistenceManager = null;
 		
 		t = null;
@@ -114,7 +121,9 @@ public class Controller extends ComponentBase {
 		// set variable to skip run loop contents
 		paused = true;
 		model.pause(paused);
-		view.pause(paused);
+		if(view != null) {
+			view.pause(paused);
+		}
 	}
 	
 	public void resume() {
@@ -123,7 +132,9 @@ public class Controller extends ComponentBase {
 		// set variable to NOT skip run loop contents
 		paused = false;
 		model.pause(paused);
-		view.pause(paused);
+		if(view != null) {
+			view.pause(paused);
+		}
 	}
 	
 	@Override
