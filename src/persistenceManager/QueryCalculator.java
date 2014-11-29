@@ -65,6 +65,8 @@ public class QueryCalculator {
 		output.println(" Query Returned Simulation Info ");
 		output.println("================================");
 		output.println(simProp);
+		output.printf("Lat Limits: %.0f, %.0f\n", minlat, maxlat);
+		output.printf("Lon Limits: %.0f, %.0f\n", minlon, maxlon);
 				
 		// Calculate params for region restriction
 		int gridH = grid.get(0).getGridHeight();
