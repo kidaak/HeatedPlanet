@@ -54,7 +54,7 @@ public class PersistenceManager extends ComponentBase {
 		}
 	}
 
-	public static ArrayList<IGrid> getQueryData(EarthGridProperties querySpec) {
+	public static PersistenceManagerQueryResult getQueryData(EarthGridProperties querySpec) {
 		// Get raw data for query from persistence layer and passes it through
 		// the interpolator to reconstruct full grid results from query.
 		EarthGridResponse response = null;
@@ -81,9 +81,10 @@ public class PersistenceManager extends ComponentBase {
 			Collections.addAll(gridList, grids);
 			// end hack!
 //			gridList = gridInterpolator.interpolateAll(grids);
+			return new PersistenceManagerQueryResult(gridList,querySpec,simProp);
 		}
 		
-		return gridList;
+		return null;
 	}
 	
 	public static ArrayList<String> getAllSimNames() {

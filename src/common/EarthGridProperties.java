@@ -1,6 +1,8 @@
 package common;
 
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -187,5 +189,16 @@ public class EarthGridProperties implements Serializable{
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		cal.setTimeInMillis(Long.valueOf(getPropertyString(prop)) );
 		return cal;
+	}
+	
+	public String toString() {
+		StringWriter buf = new StringWriter();
+		PrintWriter output = new PrintWriter(buf);
+		
+		for(EarthGridProperty prop : definedProperties()) {
+			output.printf("%s: %s\n", prop.name(), getPropertyString(prop));
+		}
+		
+		return buf.toString();
 	}
 }

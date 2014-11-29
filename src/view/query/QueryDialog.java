@@ -11,9 +11,11 @@ import common.EarthGridProperties;
 import common.EarthGridProperties.EarthGridProperty;
 import common.IGrid;
 import persistenceManager.PersistenceManager;
+import persistenceManager.PersistenceManagerQueryResult;
 import persistenceManager.QueryCalculator;
 import simulation.Earth;
 
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -311,7 +313,7 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
         Date startDate = (Date) startDateSpinner.getValue();
         Date endDate = (Date) endDateSpinner.getValue();
         Float startLatitude = (float)(Integer) startLatitudeSpinner.getValue();
-        Float endLatitude = (float)(Integer) startLatitudeSpinner.getValue();
+        Float endLatitude = (float)(Integer) endLatitudeSpinner.getValue();
         Float startLongitude = (float)(Integer) startLongitudeSpinner.getValue();
         Float endLongitude = (float)(Integer) endLongitudeSpinner.getValue();
 
@@ -324,10 +326,10 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
         end.setTime(endDate);
         egp.setProperty(EarthGridProperty.END_DATE, end);
 
-        ArrayList<IGrid> queryData = PersistenceManager.getQueryData(egp);
+        PersistenceManagerQueryResult queryResult = PersistenceManager.getQueryData(egp);
 
         // Check query result
-        if(queryData == null) {
+        if(queryResult == null) {
             // If no data available for query, ask user if they'd like to perform
             // simulation.
         	JFrame frame = new JFrame();
@@ -350,8 +352,10 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
         }
         else {
         	// Query successful, return results in text window
+//        	qc.setSimProp(queryResult.gridProps); //FIXME: eqp should actually be from result...
+        	egp.setProperty(EarthGridProperty.SIMULATION_TIME_STEP, 1440); //FIXME: REMOVE THIS ONCE ABOVE WORKING
         	qc.setSimProp(egp); //FIXME: eqp should actually be from result...
-        	qc.setGrid(queryData);
+        	qc.setGrid(queryResult.grids);
         	startLatitudeSpinner.getValue();
         	qc.setLocation(startLatitude, endLatitude, startLongitude, endLongitude);
         	qc.setDoMin(minTempCheckBox.isSelected());
@@ -365,6 +369,7 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
         	
             // create a JTextArea
             JTextArea textArea = new JTextArea();
+            textArea.setFont(new Font("monospaced", Font.PLAIN, 12));
             textArea.setText(resultStr);
             textArea.setEditable(false);
              
