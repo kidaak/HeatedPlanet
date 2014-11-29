@@ -94,20 +94,25 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
 
         jLabel1.setText("Simulation Name:");
 
-        simulationNameComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Any" }));
+        updateSimList();
 
         jLabel2.setText("Axial Tilt");
 
         jLabel3.setText("Orbital Eccentricity");
 
         jLabel4.setText("Start Date");
-
-        startDateSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(1388865600000L), new java.util.Date(1388865600000L), new java.util.Date(4544539200000L), java.util.Calendar.YEAR));
+        
+        // It seems that these spinners will always show times in local timezone
+        // yet we want internals to all use UTC.  So here we offset UTC times
+        // so that they show up properly when displayed as local times.
+        // On output we'll offset back to UTC frame and then internals can all
+        // assume UTC time.
+        startDateSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(1388836800000L-UTC_TO_LOCAL_MILLIS), new java.util.Date(1388836800000L-UTC_TO_LOCAL_MILLIS), new java.util.Date(4544510400000L-UTC_TO_LOCAL_MILLIS), java.util.Calendar.YEAR));
         startDateSpinner.setEditor(new javax.swing.JSpinner.DateEditor(startDateSpinner, "MM/dd/yyyy hh:mm a"));
 
         jLabel5.setText("End Date");
 
-        endDateSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(4544539200000L), new java.util.Date(1388865600000L), new java.util.Date(4544539200000L), java.util.Calendar.YEAR));
+        endDateSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(4544510400000L-UTC_TO_LOCAL_MILLIS), new java.util.Date(1388836800000L-UTC_TO_LOCAL_MILLIS), new java.util.Date(4544510400000L-UTC_TO_LOCAL_MILLIS), java.util.Calendar.YEAR));
         endDateSpinner.setEditor(new javax.swing.JSpinner.DateEditor(endDateSpinner, "MM/dd/yyyy hh:mm a"));
 
         jLabel6.setText("Longitude");
