@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import persistenceManager.PersistenceManager;
 import common.EarthGridProperties;
 import common.EarthGridProperties.EarthGridProperty;
 
@@ -208,6 +209,11 @@ public class ControllerGUI extends JFrame implements ActionListener, WindowListe
 			final float eccentricity = Float.parseFloat(inputs.get("Orbital Eccentricity").getText());
 			final int simDuration = Integer.parseInt(inputs.get("Simulation Duration (months)").getText());
 			
+			// Insure sim name is not already used
+			if(PersistenceManager.getAllSimNames().contains(name)) {
+				throw new IllegalArgumentException("Simulation by that name already exists!");
+			}
+			
 			EarthGridProperties simProp = new EarthGridProperties();
 			simProp.setProperty(EarthGridProperty.NAME, name);
 			simProp.setProperty(EarthGridProperty.GRID_SPACING, gs);
@@ -230,9 +236,6 @@ public class ControllerGUI extends JFrame implements ActionListener, WindowListe
 			
 			return true;
 
-		} catch (NumberFormatException nfe) {
-			JOptionPane.showMessageDialog(null,
-					"Please correct input. All fields need numbers");
 		} catch (IllegalArgumentException ex) {
 			JOptionPane.showMessageDialog(null, "Please correct input: "+ex.getMessage());
 		}

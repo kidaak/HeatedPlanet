@@ -30,7 +30,7 @@ public class EarthGridInsert extends EarthGridWrapperAbstract {
 
 		SimpleDateFormat dateFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		dateFmt.setTimeZone(TimeZone.getTimeZone("UTC"));
-		System.out.printf("inserting %s %d\n", dateFmt.format(cal.getTime()), g.getCurrentTime());
+//		System.out.printf("inserting %s %d\n", dateFmt.format(cal.getTime()), g.getCurrentTime());
 		return cal;
 	}
 }
