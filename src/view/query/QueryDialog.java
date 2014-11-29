@@ -94,25 +94,20 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
 
         jLabel1.setText("Simulation Name:");
 
-        updateSimList();
+        simulationNameComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Any" }));
 
         jLabel2.setText("Axial Tilt");
 
         jLabel3.setText("Orbital Eccentricity");
 
         jLabel4.setText("Start Date");
-        
-        // It seems that these spinners will always show times in local timezone
-        // yet we want internals to all use UTC.  So here we offset UTC times
-        // so that they show up properly when displayed as local times.
-        // On output we'll offset back to UTC frame and then internals can all
-        // assume UTC time.
-        startDateSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(1388836800000L-UTC_TO_LOCAL_MILLIS), new java.util.Date(1388836800000L-UTC_TO_LOCAL_MILLIS), new java.util.Date(4544510400000L-UTC_TO_LOCAL_MILLIS), java.util.Calendar.YEAR));
+
+        startDateSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(1388865600000L), new java.util.Date(1388865600000L), new java.util.Date(4544539200000L), java.util.Calendar.YEAR));
         startDateSpinner.setEditor(new javax.swing.JSpinner.DateEditor(startDateSpinner, "MM/dd/yyyy hh:mm a"));
 
         jLabel5.setText("End Date");
 
-        endDateSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(4544510400000L-UTC_TO_LOCAL_MILLIS), new java.util.Date(1388836800000L-UTC_TO_LOCAL_MILLIS), new java.util.Date(4544510400000L-UTC_TO_LOCAL_MILLIS), java.util.Calendar.YEAR));
+        endDateSpinner.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(4544539200000L), new java.util.Date(1388865600000L), new java.util.Date(4544539200000L), java.util.Calendar.YEAR));
         endDateSpinner.setEditor(new javax.swing.JSpinner.DateEditor(endDateSpinner, "MM/dd/yyyy hh:mm a"));
 
         jLabel6.setText("Longitude");
@@ -179,41 +174,35 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
                 .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
                 .addComponent(jSeparator3)
                 .addComponent(jSeparator4)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(queryButton))
                 .addGroup(layout.createSequentialGroup()
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(simulationNameComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(startDateSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(endDateSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
-                            .addComponent(jLabel6)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(startLongitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(endLongitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel7)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(startLatitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel11)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(endLatitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel8)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(63, 63, 63)
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(axialTiltSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(simulationNameComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel6)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(startLongitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel10)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(endLongitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel7)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(startLatitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel11)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(endLatitudeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel8)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(63, 63, 63)
+                            .addComponent(jLabel2)
+                            .addGap(18, 18, 18)
+                            .addComponent(axialTiltSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel3)
                             .addGap(18, 18, 18)
@@ -222,11 +211,17 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
                         .addComponent(maxTempCheckBox)
                         .addComponent(meanTempOverRegionCheckBox)
                         .addComponent(meanTempOverTimesCheckBox)
-                        .addComponent(actualValuesCheckBox))
-                    .addGap(0, 81, Short.MAX_VALUE))
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(queryButton)))
+                        .addComponent(actualValuesCheckBox)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(endDateSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(startDateSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGap(0, 81, Short.MAX_VALUE)))
             .addContainerGap())
     );
     layout.setVerticalGroup(
