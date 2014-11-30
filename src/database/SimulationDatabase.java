@@ -41,7 +41,7 @@ public class SimulationDatabase
         connectionProps.put("password", DB_PASSWORD);
         Connection conn = null;
         
-        JdbcConnectionPool cp = JdbcConnectionPool.create(DB_CONNECTION, DB_USER, DB_PASSWORD);
+        cp = JdbcConnectionPool.create(DB_CONNECTION, DB_USER, DB_PASSWORD);
         
         try {
 			Class.forName(DB_DRIVER);
