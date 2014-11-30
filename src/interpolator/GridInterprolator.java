@@ -85,6 +85,11 @@ public class GridInterprolator {
 	public IGrid interpolateSpace(IGrid grid){
 		//System.out.println("Called InterpolateSpace - " + grid.getGridHeight()*100.0/Percentage);
 		int Percentage = properties.getPropertyInt(EarthGridProperties.EarthGridProperty.GEO_PRECISION);
+		// Don't bother if not decimated in any way
+		if(Percentage == 100) {
+			return grid;
+		}
+		
 		int newHeight = 180;
 		int newWidth = 360;
 		if(Percentage >= 1){
@@ -153,12 +158,20 @@ public class GridInterprolator {
 	}
 	
 	public ArrayList<IGrid> interpolateTime(ArrayList<IGrid> gridList){
+		
+		int Percentage = properties.getPropertyInt(EarthGridProperties.EarthGridProperty.TIME_PRECISION);
+		// Don't bother if not decimated in any way
+		if(Percentage == 100) {
+			return gridList;
+		}
+
 		ArrayList<IGrid> newGridList = new ArrayList<IGrid>();
 		IGrid lastGrid = null;
 		double T1 = 0;
 		double T2 = 0;
 		double slope = 0;
 		double temp = 0;
+		int precision = properties.getPropertyInt(EarthGridProperty.PRECISION);
 		for(IGrid grid : gridList){
 			
 			if(lastGrid != null){
@@ -174,7 +187,6 @@ public class GridInterprolator {
 							T2 = grid.getTemperature(i, j);
 							slope = (T2-T1)/(t2-t1);
 							temp = slope*(currentTime-t1)+T1;
-							int precision = properties.getPropertyInt(EarthGridProperty.PRECISION);
 							newGrid.setTemperature(i, j, roundTemp(temp,precision));
 						}
 					}
