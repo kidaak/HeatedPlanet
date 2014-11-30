@@ -36,6 +36,7 @@ public class GridInterprolator {
 			return null;
 		}
 		int Percentage = properties.getPropertyInt(EarthGridProperties.EarthGridProperty.GEO_PRECISION);
+		
 		int newHeight = grid.getGridHeight()*Percentage/100;
 		int newWidth = grid.getGridWidth()*Percentage/100;
 		if(newHeight > 180)
@@ -43,6 +44,10 @@ public class GridInterprolator {
 		if(newWidth > 2*newHeight)
 			newWidth = 2*newHeight;
 		
+		if(newHeight <= 0){
+			newHeight = 1;
+			newWidth = 2;
+		}
 		int newGs = 180/newHeight;
 		int oldGs = 180/grid.getGridHeight();
 		//NOTE: here we break the interface abstraction :(
@@ -80,8 +85,12 @@ public class GridInterprolator {
 	public IGrid interpolateSpace(IGrid grid){
 		//System.out.println("Called InterpolateSpace - " + grid.getGridHeight()*100.0/Percentage);
 		int Percentage = properties.getPropertyInt(EarthGridProperties.EarthGridProperty.GEO_PRECISION);
-		int newHeight = (int) Math.floor(grid.getGridHeight()*100./Percentage);
-		int newWidth = (int) Math.floor(grid.getGridWidth()*100./Percentage);
+		int newHeight = 180;
+		int newWidth = 360;
+		if(Percentage >= 1){
+			newHeight = (int) Math.floor(grid.getGridHeight()*100./Percentage);
+			newWidth = (int) Math.floor(grid.getGridWidth()*100./Percentage);
+		}
 		if(newHeight > 180)
 			newHeight = 180;
 		if(newWidth > 2*newHeight)
