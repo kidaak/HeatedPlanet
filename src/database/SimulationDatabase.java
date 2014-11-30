@@ -40,9 +40,13 @@ public class SimulationDatabase
         connectionProps.put("user", DB_USER);
         connectionProps.put("password", DB_PASSWORD);
         Connection conn = null;
+        
+        JdbcConnectionPool cp = JdbcConnectionPool.create(DB_CONNECTION, DB_USER, DB_PASSWORD);
+        
         try {
 			Class.forName(DB_DRIVER);
-			conn = DriverManager.getConnection(DB_CONNECTION, connectionProps);
+		//	conn = DriverManager.getConnection(DB_CONNECTION, connectionProps);
+			conn = cp.getConnection();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}catch (JdbcSQLException e){
