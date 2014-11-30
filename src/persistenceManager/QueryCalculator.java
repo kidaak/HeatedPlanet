@@ -73,10 +73,10 @@ public class QueryCalculator {
 		int gridW = grid.get(0).getGridWidth();
 		double latPerGrid = 180.0f / gridH;
 		double lonPerGrid = 360.0f / gridW;
-		int minLatIdx = (int) Math.ceil((minlat+90) / latPerGrid);
-		int maxLatIdx = (int) Math.floor((maxlat+90) / latPerGrid);
-		int minLonIdx = (int) Math.ceil((minlon+180) / lonPerGrid);
-		int maxLonIdx = (int) Math.floor((maxlon+180) / lonPerGrid);
+		int minLatIdx = (int) Math.floor((minlat+90) / latPerGrid);
+		int maxLatIdx = (int) Math.ceil((maxlat+90) / latPerGrid);
+		int minLonIdx = (int) Math.floor((minlon+180) / lonPerGrid);
+		int maxLonIdx = (int) Math.ceil((maxlon+180) / lonPerGrid);
 		int numLatStep = Math.max(0, maxLatIdx-minLatIdx);
 		int numLonStep = Math.max(0, maxLonIdx-minLonIdx);
 		
