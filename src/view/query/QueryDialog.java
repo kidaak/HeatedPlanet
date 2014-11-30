@@ -204,11 +204,11 @@ public class QueryDialog extends JFrame//extends javax.swing.JDialog
             }
         });
 
-        axialTiltSpinner.setModel(new javax.swing.SpinnerNumberModel(23.44d, -90.0d, 90.0d, 0.01d));
+        axialTiltSpinner.setModel(new javax.swing.SpinnerNumberModel(23.44d, -180.0d, 180.0d, 0.01d));
 
         eccentricitySpinner.setModel(new javax.swing.SpinnerNumberModel(0.0167, //initial value
             0.0, //min
-            1.0, //max
+            0.9999, //max
             0.0001));
     eccentricitySpinner.setEditor(new javax.swing.JSpinner.NumberEditor(eccentricitySpinner, "0.0000"));
 
