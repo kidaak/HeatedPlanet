@@ -19,7 +19,7 @@ public class SimulationDatabase
     private static final SimulationDatabase sdb;
     
     private static final String DB_DRIVER = "org.h2.Driver";
-    private static final String DB_CONNECTION = "jdbc:h2:~/test";
+    private static final String DB_CONNECTION = "jdbc:h2:split:~/PlanetSim";
     private static final String DB_USER = "sa";
     private static final String DB_PASSWORD = "";
     
@@ -28,8 +28,9 @@ public class SimulationDatabase
     private static final String GRID_GRIDDATE_INDEX_SQL = "CREATE INDEX gridDate_INDEX ON Grid(gridDate)";
     private static final String GRID_SIMULATIONFID_INDEX_SQL = "CREATE INDEX simulationFid_INDEX ON Grid(simulationFid)";
     private static final String GRID_SIMULATIONFID_FOREIGNKEY_SQL = "CONSTRAINT Grid2Simulation FOREIGN KEY (simulationFid) "+
-    																"REFERENCES Simulation(simulationId) ";//+
-    																//"ON DELETE RESTRICT ON UPDATE CASCADE";
+    																"REFERENCES Simulation(simulationId) "+
+    																"ON DELETE CASCADE ON UPDATE CASCADE";
+    private static final String GRID_SIMFIDGRIDDATE_INDEX_SQL = "CREATE INDEX simulationFidAndGridDate_INDEX ON Grid(simulationFid,gridDate)";
     
     
     static{
@@ -71,7 +72,7 @@ public class SimulationDatabase
     	return connection;
     }
     
-    public void createSimulationTable() throws SQLException
+    private void createSimulationTable() throws SQLException
     {
         String createSimulationTableString =
                 "CREATE TABLE Simulation " +
@@ -100,7 +101,7 @@ public class SimulationDatabase
 	    executeSqlGeneral(SIM_ENDDATE_INDEX_SQL);
     }
     
-    public void createGridTable() throws SQLException
+    private void createGridTable() throws SQLException
     {
         String createGridTableString =
                 "CREATE TABLE Grid " +
@@ -118,9 +119,10 @@ public class SimulationDatabase
         executeSqlGeneral(createGridTableString);
         executeSqlGeneral(GRID_GRIDDATE_INDEX_SQL);
         executeSqlGeneral(GRID_SIMULATIONFID_INDEX_SQL);
+        executeSqlGeneral(GRID_SIMFIDGRIDDATE_INDEX_SQL);
     }
     
-    public void executeSqlGeneral(String SqlStatement) throws SQLException{
+    private void executeSqlGeneral(String SqlStatement) throws SQLException{
     	Statement statement = null;
     	try{
     		statement = connection.createStatement();
@@ -179,5 +181,11 @@ public class SimulationDatabase
         if (sqlState.equalsIgnoreCase("42S11"))
         	return true;
         return false;
+    }
+    
+    public void resetDatabase() throws SQLException{
+    	sdb.executeSqlGeneral("DROP ALL OBJECTS");
+    	sdb.createSimulationTable();
+		sdb.createGridTable();
     }
 }

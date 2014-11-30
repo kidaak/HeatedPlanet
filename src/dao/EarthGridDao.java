@@ -69,7 +69,6 @@ public class EarthGridDao implements IEarthGridDao {
 	public EarthGridResponse queryEarthGridSimulation(EarthGridQuery query) 
 			throws SQLException, NumberFormatException, ClassNotFoundException, IOException {
 		
-		
 		EarthGridProperties props = query.getProperties();
 		EarthGridProperty[] definedProps = props.definedProperties();
 		
@@ -160,8 +159,6 @@ public class EarthGridDao implements IEarthGridDao {
 			sb.append(" AND S.simEndDate >= ?");
 		}
 		
-		//TODO Remove after testing
-		System.out.println(QueryGridSqlStart+sb.toString());
 		PreparedStatement simStmt = sdb.getConnection().prepareStatement(QueryGridSqlStart+sb.toString());
 		
 		for(int i = 0; i<definedProps.length; i++){
@@ -383,10 +380,7 @@ public class EarthGridDao implements IEarthGridDao {
 	@Override
 	public void resetDatabase(String secretCode) throws SQLException {
 		if(secretCode.equals("42") ){
-			sdb.executeSqlGeneral("DROP TABLE Grid");
-	        sdb.executeSqlGeneral("DROP TABLE Simulation");
-	        sdb.createSimulationTable();
-	        sdb.createGridTable();
+	        sdb.resetDatabase();
 		}
 	}
 

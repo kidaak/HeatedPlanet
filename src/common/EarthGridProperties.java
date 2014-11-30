@@ -121,16 +121,16 @@ public class EarthGridProperties implements Serializable{
 					throw new IllegalArgumentException("Simulation Length must be >= 1 and <= 1200 months");
 				break;
 			case PRECISION:
-				if(value <= 0)
-					throw new IllegalArgumentException("Precision must be >= 1");
+				if(value < 0 || value > 15)
+					throw new IllegalArgumentException("Precision must be between 0 and 15");
 				break;
 			case GEO_PRECISION:
-				if(value <= 0)
-					throw new IllegalArgumentException("Geographic Precision must be >= 1");
+				if(value < 0 || value > 100)
+					throw new IllegalArgumentException("Geographic Precision must be between 0 and 100");
 				break;
 			case TIME_PRECISION:
-				if(value <= 0)
-					throw new IllegalArgumentException("Time Precision must be >= 1");
+				if(value < 0 || value > 100)
+					throw new IllegalArgumentException("Time Precision must be between 0 and 100");
 				break;
 			default:
 				throw new IllegalArgumentException(prop.name()+" is not expecting an integer.");

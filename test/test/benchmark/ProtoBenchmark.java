@@ -8,11 +8,15 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.carrotsearch.junitbenchmarks.AbstractBenchmark;
+import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
+
 import common.EarthGridProperties;
-
 import simulation.Earth;
+import test.benchmark.Constants;
 
-public class ProtoBenchmark {
+@BenchmarkOptions(callgc = true, benchmarkRounds = Constants.numberOfBenchmarkRounds, warmupRounds = 5)
+public class ProtoBenchmark  extends AbstractBenchmark{
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -32,8 +36,11 @@ public class ProtoBenchmark {
 
 	@Test
 	public void test() {
+		runTest(Constants.args6PR_100GP_100TP);
+	}
+	
+	private void runTest(EarthGridProperties simProp){
 		Earth model = new Earth();
-		EarthGridProperties simProp = new EarthGridProperties();
 		
 		model.configure(simProp);
 		model.start();
@@ -41,10 +48,10 @@ public class ProtoBenchmark {
 			try {
 				model.generate();
 			} catch (InterruptedException e) {
+				fail("ERROR: "+e.getMessage());
 				break;
 			}		
 		}
-		fail("Not yet implemented");
 	}
-
+	
 }
