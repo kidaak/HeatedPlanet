@@ -22,9 +22,7 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 	private double stepRate = 1;
 	private double numberOfIterations = 50;
 	
-	// We use a TreeMap to not consume a contiguous amount of memory. It's
-	// backed by a Red/Black Tree, so we get pretty decent access times
-	private final Map<Integer, Double> grid;
+	private double[][] grid; 
 
 	public Grid(int sunPosition, double sunPositionDeg, int time, int timestep, int width, int height, double sunLatitudeDeg, double distanceFromSun,double orbitalAngle) {
 		this.timestep = timestep;
@@ -39,7 +37,7 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 		this.size = 16;
 		this.coef = new double[size];
 		this.dCoef = new double[size];
-		grid = new TreeMap<Integer, Double>();
+		grid = new double[width][height];
 	}
 	
 	public Grid(Grid toCopy) {
@@ -53,7 +51,11 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 		this.distanceFromSun = toCopy.distanceFromSun;
 		this.orbitalAngle = toCopy.orbitalAngle;
 		this.timestep = toCopy.timestep;
-		this.grid = new TreeMap<Integer, Double>(toCopy.grid);
+		// copy 2d array
+		this.grid = new double[toCopy.grid.length][];
+		for(int i = 0; i < toCopy.grid.length; i++)
+			this.grid[i] = toCopy.grid[i].clone();
+		
 		this.size = 16;
 		this.coef = new double[size];
 		this.dCoef = new double[size];
@@ -73,7 +75,7 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 		if (y > height || x > width || x < 0 || y < 0)
 			throw new IllegalArgumentException("index (" + x + ", " + y + ") out of bounds");
 		
-		grid.put(y * width + x, temp);
+		grid[x][y] = temp;
 	}
 
 	@Override
@@ -81,7 +83,7 @@ public class Grid implements IGrid, Serializable, Comparable<Grid> {
 		if (y >= height || x >= width || x < 0 || y < 0)
 			throw new IllegalArgumentException("index (" + x + ", " + y + ") out of bounds");
 		
-		return grid.get(y * width + x);
+		return grid[x][y];
 	}
 	
 
