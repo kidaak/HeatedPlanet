@@ -156,11 +156,6 @@ public final class Earth {
 
 	public void generate() throws InterruptedException {
 		
-		// Don't attempt to generate if output queue is full...
-		if(Buffer.getBuffer().getRemainingCapacity() == 0) {
-			return;
-		}
-		
 		if( currentStep >= simDurationStep) {
 			throw new InterruptedException("Simulation Completed!");
 		}
