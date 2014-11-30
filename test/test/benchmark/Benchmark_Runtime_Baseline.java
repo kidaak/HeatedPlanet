@@ -61,20 +61,36 @@ public class Benchmark_Runtime_Baseline extends AbstractBenchmark{
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		SimulationDatabase.getSimulationDatabase().resetDatabase();
+		System.gc();
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 		SimulationDatabase.getSimulationDatabase().resetDatabase();
+		System.gc();
 	}
 
 	@Before
 	public void setUp() throws Exception {
+		disableOutput();
 		SimulationDatabase.getSimulationDatabase().resetDatabase();
+		System.gc();
+		runtime.gc();
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		enableOutput();
 		SimulationDatabase.getSimulationDatabase().resetDatabase();
+		System.gc();
+		runtime.gc();
+	}
+	
+	private void disableOutput(){
+		System.setOut(Constants.outNull);
+	}
+	
+	private void enableOutput(){
+		System.setOut(original);
 	}
 }

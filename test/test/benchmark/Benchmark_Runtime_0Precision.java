@@ -161,11 +161,13 @@ public class Benchmark_Runtime_0Precision extends AbstractBenchmark {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		SimulationDatabase.getSimulationDatabase().resetDatabase();
+		System.gc();
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
 		SimulationDatabase.getSimulationDatabase().resetDatabase();
+		System.gc();
 	}
 
 	@Before
@@ -173,6 +175,8 @@ public class Benchmark_Runtime_0Precision extends AbstractBenchmark {
 		disableOutput();
 		model = new Earth();
 		pm = new PersistenceManager();
+		System.gc();
+		runtime.gc();
 	}
 
 	@After
@@ -183,6 +187,8 @@ public class Benchmark_Runtime_0Precision extends AbstractBenchmark {
 			System.out.println("#DBFILESIZE:"+dbFile.length());
 		model = null;
 		pm = null;
+		runtime.gc();
+		System.gc();
 	}
 	
 	private void disableOutput(){
