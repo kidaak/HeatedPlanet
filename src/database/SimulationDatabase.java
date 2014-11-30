@@ -191,6 +191,8 @@ public class SimulationDatabase
     
     public void resetDatabase() throws SQLException{
     	sdb.executeSqlGeneral("DROP ALL OBJECTS DELETE FILES");
+    	sdb.executeSqlGeneral("COMMIT");    	
+    	sdb.executeSqlGeneral("CHECKPOINT SYNC");
     	sdb.createSimulationTable();
 		sdb.createGridTable();
     }

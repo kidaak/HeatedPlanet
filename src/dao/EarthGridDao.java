@@ -254,8 +254,12 @@ public class EarthGridDao implements IEarthGridDao {
 		}
 		
 		ResultSet rs = simStmt.executeQuery();
+		EarthGridResponse response = ResultSet2EarthGridResponse(rs, query);
 		
-		return ResultSet2EarthGridResponse(rs, query);
+		rs.close();
+		simStmt.close();
+		
+		return response;
 	}
 	
 	@Override
@@ -306,6 +310,9 @@ public class EarthGridDao implements IEarthGridDao {
 				if(!sqlState.equalsIgnoreCase("23505"))
 					return ResponseType.ERROR_DUPLICATE;
 				throw new SQLException(e);
+			}finally{
+				if(simStmt != null)
+					simStmt.close();
 			}
 		}
 		//Get the ID of the newly inserted Simulation
@@ -334,6 +341,7 @@ public class EarthGridDao implements IEarthGridDao {
 		}
 		//Execute final batch
 		gridStmt.executeBatch();
+		gridStmt.close();
 		
 		return ResponseType.INSERTSUCCESS;
 	}
@@ -351,10 +359,14 @@ public class EarthGridDao implements IEarthGridDao {
 		rs = stmt.executeQuery(sqlString);
 		while (rs.next()) {
 			int counter = rs.getInt("count");
-			if (counter == 0) {
+			if (counter == 0){
+				rs.close();
+				stmt.close();
 				return true;
 			}
 		}
+		rs.close();
+		stmt.close();
 		return false;
 	}
 
@@ -374,7 +386,8 @@ public class EarthGridDao implements IEarthGridDao {
 		while(rs.next()){
 			names.add(rs.getString("name"));
 		}
-		
+		rs.close();
+		stmt.close();
 		return names.toArray(stringArray);
 	}
 
@@ -396,7 +409,8 @@ public class EarthGridDao implements IEarthGridDao {
 		while(rs.next()){
 			id = rs.getInt("simulationId");
 		}
-		
+		rs.close();
+		stmt.close();
 		return id;
 	}
 	
