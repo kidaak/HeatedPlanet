@@ -2,6 +2,7 @@ package interpolator;
 
 import java.util.ArrayList;
 
+import common.CrossPlatformSimpleRng;
 import common.EarthGridProperties;
 import common.EarthGridProperties.EarthGridProperty;
 import common.Grid;
@@ -31,51 +32,63 @@ public class GridInterprolator {
 		return gridList;
 	}
 	
+	// This function randomly drops a percentage of the columns given a random
+	// seed.  This uses a deterministic rng that is consistent across platforms
+	// to ensure the same columns are selected at reconstruction.
+	private boolean[] keepColMask(int orignumcols, int keepPcnt) {
+		// keepPcnt is assumed 0-100
+		boolean[] keepMask = new boolean[orignumcols];
+		float[] r = (new CrossPlatformSimpleRng("42")).getVal(orignumcols);
+		float keepThresh = (float)keepPcnt / 100;
+		boolean foundKeep = false;
+		for(int i=0; i < orignumcols; i++) {
+			if(r[i] < keepThresh) {
+				keepMask[i] = true;
+				foundKeep = true;
+			}
+			else {
+				keepMask[i] = false;
+			}
+		}
+		// Make sure we keep atleast one col no matter what
+		if(!foundKeep) {
+			keepMask[0] = true;
+		}
+		return keepMask;
+	}
+	
 	public IGrid decimateSpace(IGrid grid){
 		if(grid == null) {
 			return null;
 		}
 		int Percentage = properties.getPropertyInt(EarthGridProperties.EarthGridProperty.GEO_PRECISION);
-		
-		int newHeight = grid.getGridHeight()*Percentage/100;
-		int newWidth = grid.getGridWidth()*Percentage/100;
-		if(newHeight > 180)
-			newHeight = 180;
-		if(newWidth > 2*newHeight)
-			newWidth = 2*newHeight;
-		
-		if(newHeight <= 0){
-			newHeight = 1;
-			newWidth = 2;
+		int precision = properties.getPropertyInt(EarthGridProperty.PRECISION);
+		// Don't bother if not decimated in any way
+		if(Percentage == 100) {
+			return grid;
 		}
-		int newGs = 180/newHeight;
-		int oldGs = 180/grid.getGridHeight();
+		
+		int newHeight = grid.getGridHeight();
+		
+		// Find new width based on keepMask
+		boolean[] keepMask = keepColMask(grid.getGridWidth(), Percentage);
+		int newWidth = 0;
+		for(boolean keep : keepMask) {
+			if(keep)
+				newWidth++;
+		}
+		
 		//NOTE: here we break the interface abstraction :(
 		//      If time allows find a way to update this...
 		IGrid newGrid = new Grid(grid.getSunPosition(),grid.getSunPositionDeg(),grid.getTime(),grid.getTimeStep(),newWidth,newHeight,grid.getSunLatitudeDeg(),grid.getDistanceFromSun(),grid.getOrbitalAngle());
 		
-		for(int j = 0; j < newGrid.getGridHeight(); j++){
-			for(int i = 0; i < newGrid.getGridWidth(); i++){
-				float tempSum = 0.0f;
-				float weight = 0.0f;
-				CellCorners newCell = new CellCorners(i,j,newGrid.getGridWidth(),newGrid.getGridHeight());
-				
-				for(int m = Math.max(newGs*(j-1)/oldGs,0); m <= Math.min(newGs*(j+1)/oldGs,grid.getGridHeight()-1); m++){
-					//System.out.println("Values: " + newGs + ", " + oldGs + ", " + i*newGs/oldGs + ", " + (i+1)*newGs/oldGs);
-					for(int n = Math.max(newGs*(i-1)/oldGs,0); n < Math.min(newGs*(i+1)/oldGs,grid.getGridWidth()); n++){
-						CellCorners oldCell = new CellCorners(n,m,grid.getGridWidth(),grid.getGridHeight());
-						float w = newCell.percentOverLap(oldCell); 
-						weight += w;
-						if(w>0){
-							//System.out.println(w);
-							//newCell.printCell();
-							//oldCell.printCell();
-						}
-						tempSum += grid.getTemperature(n, m)*w;
-					}
+		int outCol = 0;
+		for(int i = 0; i < grid.getGridWidth(); i++){
+			if(keepMask[i]) {
+				for(int j = 0; j < newGrid.getGridHeight(); j++){
+					newGrid.setTemperature(outCol, j, roundTemp(grid.getTemperature(i, j),precision));
 				}
-				int precision = properties.getPropertyInt(EarthGridProperty.PRECISION);
-				newGrid.setTemperature(i, j, roundTemp(tempSum/weight,precision));
+				outCol++;
 			}
 		}
 		
@@ -84,48 +97,88 @@ public class GridInterprolator {
 	
 	public IGrid interpolateSpace(IGrid grid){
 		//System.out.println("Called InterpolateSpace - " + grid.getGridHeight()*100.0/Percentage);
-		int Percentage = properties.getPropertyInt(EarthGridProperties.EarthGridProperty.GEO_PRECISION);
+		int Percentage = properties.getPropertyInt(EarthGridProperty.GEO_PRECISION);
 		// Don't bother if not decimated in any way
 		if(Percentage == 100) {
 			return grid;
 		}
 		
-		int newHeight = 180;
-		int newWidth = 360;
-		if(Percentage >= 1){
-			newHeight = (int) Math.floor(grid.getGridHeight()*100./Percentage);
-			newWidth = (int) Math.floor(grid.getGridWidth()*100./Percentage);
-		}
-		if(newHeight > 180)
-			newHeight = 180;
-		if(newWidth > 2*newHeight)
-			newWidth = 2*newHeight;
-		//System.out.println(newHeight + ',' + newWidth);
+		int newHeight = grid.getGridHeight();
+		int newWidth = 360 / properties.getPropertyInt(EarthGridProperty.GRID_SPACING); 
+		// Generate keepmask so we know how to redistribute rows
+		boolean[] keepMask = keepColMask(newWidth, Percentage);
+		
 		//NOTE: here we break the interface abstraction :(
 		//      If time allows find a way to update this...
 		IGrid newGrid = new Grid(grid.getSunPosition(),grid.getSunPositionDeg(),grid.getTime(),grid.getTimeStep(),newWidth,newHeight,grid.getSunLatitudeDeg(),grid.getDistanceFromSun(),grid.getOrbitalAngle());
-		for(int j = 0; j < newGrid.getGridHeight(); j++){
-			for(int i = 0; i < newGrid.getGridWidth(); i++){
-				
-				float tempSum = 0.0f;
-				float weight = 0.0f;
-				CellCorners newCell = new CellCorners(i,j,newGrid.getGridWidth(),newGrid.getGridHeight());
-				for(int m = 0; m < grid.getGridHeight(); m++){
-					for(int n = 0; n < grid.getGridWidth(); n++){
-						CellCorners oldCell = new CellCorners(n,m,grid.getGridWidth(),grid.getGridHeight());
-						float w = oldCell.percentOverLap(newCell); 
-						weight += w;
-						tempSum += grid.getTemperature(n, m)*w;
-					}
+		
+		// First we'll just reestablish stored original values (columns)
+		int inCol = 0;
+		for(int i = 0; i < newWidth; i++){
+			if(keepMask[i]) {
+				for(int j = 0; j < newGrid.getGridHeight(); j++){
+					newGrid.setTemperature(i, j, grid.getTemperature(inCol, j));
 				}
-				int precision = properties.getPropertyInt(EarthGridProperty.PRECISION);
-				newGrid.setTemperature(i, j, roundTemp(tempSum/weight,precision));
+				inCol++;
 			}
 		}
 		
+		// now it's time to interpolate to restore missing values
+		// For each column not in the keep mask, we'll find the closest columns
+		// on either side(which may wrap) and linearly interpolate them to fill 
+		// in values for the column.  We'll skip columns that were stored full 
+		// quality.
+		for(int i = 0; i < newWidth; i++){
+			if(!keepMask[i]) {
+				// Find westward populated column
+				int westIdx = findValidCol(keepMask, i, -1);
+				int eastIdx = findValidCol(keepMask, i,  1);
+				// find scaled distance to valid entry in each direction
+				double westDist = i-westIdx;
+				if(westDist < 0) {
+					westDist = i-(westIdx-newWidth); // account for possible wrap
+				}
+				double eastDist = eastIdx-i;
+				if(eastDist < 0) {
+					eastDist = (eastIdx+newWidth)-i; // account for possible wrap
+				}
+				double totalDist = westDist+eastDist;
+				//normalize distances
+				westDist = westDist / totalDist;
+				eastDist = eastDist / totalDist;
+				//now interpolate column values
+				for(int j = 0; j < newGrid.getGridHeight(); j++){
+					//NOTE: now that we've normlized distances, we'll use 1-dist
+					//      in calc below because lower distance==more weight
+					double interpTemp = newGrid.getTemperature(westIdx, j) * (1-westDist) + 
+										newGrid.getTemperature(eastIdx, j) * (1-eastDist);
+					newGrid.setTemperature(i, j, interpTemp);
+				}
+			}
+		}
 		return newGrid;
 	}
 	
+	private int findValidCol(boolean[] keepMask, int start, int step) {
+		// helper function for locating the index of the next valid column
+		// in a given direction.  Use step=-1 to search west, 1 to search east.
+		int numCol = keepMask.length;
+		int curIdx = start;
+		while(!keepMask[curIdx]) {
+			curIdx += step;
+			// Take care of wrapping
+			if(curIdx < 0) {
+				curIdx = numCol-1;
+			}
+			if(curIdx >= numCol) {
+				curIdx = 0;
+			}
+			if(curIdx == start) {
+				throw new RuntimeException("It should never be possible to return back to start since keepMask is assumed to always have atleast 1 true value.");
+			}
+		}
+		return curIdx;
+	}
 	public IGrid decimateTime(IGrid grid){
 		if(grid.getTime() == 0)
 			return grid;

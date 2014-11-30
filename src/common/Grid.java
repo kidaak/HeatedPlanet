@@ -6,7 +6,7 @@ import java.util.TreeMap;
 
 public class Grid implements IGrid, Serializable, Comparable<Grid> {
 	
-	static final long serialVersionUID = -7894194242L;
+	static final long serialVersionUID = -7894194243L;
 	
 	// Used to transport the temps in the buffer
 	private final int sunPosition, time, width, height, timestep;
