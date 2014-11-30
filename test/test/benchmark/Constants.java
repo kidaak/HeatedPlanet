@@ -47,7 +47,7 @@ public class Constants {
 	public static final EarthGridProperties argsBaseline100 = createDefault("100");
 	public static final EarthGridProperties argsBaseline1000 = createDefault("1000");
 	
-	
+	// Precision = 0
 	public static final EarthGridProperties args0PR_1GP_1TP = createVariableTrifecta("args0PR_1GP_1TP",0,1,1);
 	public static final EarthGridProperties args0PR_1GP_5TP = createVariableTrifecta("args0PR_1GP_5TP",0,1,5);
 	public static final EarthGridProperties args0PR_1GP_10TP = createVariableTrifecta("args0PR_1GP_10TP",0,1,10);
@@ -78,13 +78,98 @@ public class Constants {
 	public static final EarthGridProperties args0PR_100GP_50TP = createVariableTrifecta("args0PR_100GP_50TP",0,100,50);
 	public static final EarthGridProperties args0PR_100GP_100TP = createVariableTrifecta("args0PR_100GP_100TP",0,100,100);
 	
-	//TODO Duplicate set above for Precision = 5
+// Precision = 5
+	public static final EarthGridProperties args5PR_1GP_1TP = createVariableTrifecta("args5PR_1GP_1TP",5,1,1);
+	public static final EarthGridProperties args5PR_1GP_5TP = createVariableTrifecta("args5PR_1GP_5TP",5,1,5);
+	public static final EarthGridProperties args5PR_1GP_10TP = createVariableTrifecta("args5PR_1GP_10TP",5,1,10);
+	public static final EarthGridProperties args5PR_1GP_50TP = createVariableTrifecta("args5PR_1GP_50TP",5,1,50);
+	public static final EarthGridProperties args5PR_1GP_100TP = createVariableTrifecta("args5PR_1GP_100TP",5,1,100);
 	
+	public static final EarthGridProperties args5PR_5GP_1TP = createVariableTrifecta("args5PR_5GP_1TP",5,5,1);
+	public static final EarthGridProperties args5PR_5GP_5TP = createVariableTrifecta("args5PR_5GP_5TP",5,5,5);
+	public static final EarthGridProperties args5PR_5GP_10TP = createVariableTrifecta("args5PR_5GP_10TP",5,5,10);
+	public static final EarthGridProperties args5PR_5GP_50TP = createVariableTrifecta("args5PR_5GP_50TP",5,5,50);
+	public static final EarthGridProperties args5PR_5GP_100TP = createVariableTrifecta("args5PR_5GP_100TP",5,5,100);
 	
-	//TODO Duplicate set above for Precision = 10
+	public static final EarthGridProperties args5PR_10GP_1TP = createVariableTrifecta("args5PR_10GP_1TP",5,10,1);
+	public static final EarthGridProperties args5PR_10GP_5TP = createVariableTrifecta("args5PR_10GP_5TP",5,10,5);
+	public static final EarthGridProperties args5PR_10GP_10TP = createVariableTrifecta("args5PR_10GP_10TP",5,10,10);
+	public static final EarthGridProperties args5PR_10GP_50TP = createVariableTrifecta("args5PR_10GP_50TP",5,10,50);
+	public static final EarthGridProperties args5PR_10GP_100TP = createVariableTrifecta("args5PR_10GP_100TP",5,10,100);
 	
+	public static final EarthGridProperties args5PR_50GP_1TP = createVariableTrifecta("args5PR_50GP_1TP",5,50,1);
+	public static final EarthGridProperties args5PR_50GP_5TP = createVariableTrifecta("args5PR_50GP_5TP",5,50,5);
+	public static final EarthGridProperties args5PR_50GP_10TP = createVariableTrifecta("args5PR_50GP_10TP",5,50,10);
+	public static final EarthGridProperties args5PR_50GP_50TP = createVariableTrifecta("args5PR_50GP_50TP",5,50,50);
+	public static final EarthGridProperties args5PR_50GP_100TP = createVariableTrifecta("args5PR_50GP_100TP",5,50,100);
 	
-	//TODO Duplicate set above for Precision = 16	
+	public static final EarthGridProperties args5PR_100GP_1TP = createVariableTrifecta("args5PR_100GP_1TP",5,100,1);
+	public static final EarthGridProperties args5PR_100GP_5TP = createVariableTrifecta("args5PR_100GP_5TP",5,100,5);
+	public static final EarthGridProperties args5PR_100GP_10TP = createVariableTrifecta("args5PR_100GP_10TP",5,100,10);
+	public static final EarthGridProperties args5PR_100GP_50TP = createVariableTrifecta("args5PR_100GP_50TP",5,100,50);
+	public static final EarthGridProperties args5PR_100GP_100TP = createVariableTrifecta("args5PR_100GP_100TP",5,100,100);
+		
+// Precision = 10
+	public static final EarthGridProperties args10PR_1GP_1TP = createVariableTrifecta("args10PR_1GP_1TP",10,1,1);
+	public static final EarthGridProperties args10PR_1GP_5TP = createVariableTrifecta("args10PR_1GP_5TP",10,1,5);
+	public static final EarthGridProperties args10PR_1GP_10TP = createVariableTrifecta("args10PR_1GP_10TP",10,1,10);
+	public static final EarthGridProperties args10PR_1GP_50TP = createVariableTrifecta("args10PR_1GP_50TP",10,1,50);
+	public static final EarthGridProperties args10PR_1GP_100TP = createVariableTrifecta("args10PR_1GP_100TP",10,1,100);
+	
+	public static final EarthGridProperties args10PR_5GP_1TP = createVariableTrifecta("args10PR_5GP_1TP",10,5,1);
+	public static final EarthGridProperties args10PR_5GP_5TP = createVariableTrifecta("args10PR_5GP_5TP",10,5,5);
+	public static final EarthGridProperties args10PR_5GP_10TP = createVariableTrifecta("args10PR_5GP_10TP",10,5,10);
+	public static final EarthGridProperties args10PR_5GP_50TP = createVariableTrifecta("args10PR_5GP_50TP",10,5,50);
+	public static final EarthGridProperties args10PR_5GP_100TP = createVariableTrifecta("args10PR_5GP_100TP",10,5,100);
+	
+	public static final EarthGridProperties args10PR_10GP_1TP = createVariableTrifecta("args10PR_10GP_1TP",10,10,1);
+	public static final EarthGridProperties args10PR_10GP_5TP = createVariableTrifecta("args10PR_10GP_5TP",10,10,5);
+	public static final EarthGridProperties args10PR_10GP_10TP = createVariableTrifecta("args10PR_10GP_10TP",10,10,10);
+	public static final EarthGridProperties args10PR_10GP_50TP = createVariableTrifecta("args10PR_10GP_50TP",10,10,50);
+	public static final EarthGridProperties args10PR_10GP_100TP = createVariableTrifecta("args10PR_10GP_100TP",10,10,100);
+	
+	public static final EarthGridProperties args10PR_50GP_1TP = createVariableTrifecta("args10PR_50GP_1TP",10,50,1);
+	public static final EarthGridProperties args10PR_50GP_5TP = createVariableTrifecta("args10PR_50GP_5TP",10,50,5);
+	public static final EarthGridProperties args10PR_50GP_10TP = createVariableTrifecta("args10PR_50GP_10TP",10,50,10);
+	public static final EarthGridProperties args10PR_50GP_50TP = createVariableTrifecta("args10PR_50GP_50TP",10,50,50);
+	public static final EarthGridProperties args10PR_50GP_100TP = createVariableTrifecta("args10PR_50GP_100TP",10,50,100);
+	
+	public static final EarthGridProperties args10PR_100GP_1TP = createVariableTrifecta("args10PR_100GP_1TP",10,100,1);
+	public static final EarthGridProperties args10PR_100GP_5TP = createVariableTrifecta("args10PR_100GP_5TP",10,100,5);
+	public static final EarthGridProperties args10PR_100GP_10TP = createVariableTrifecta("args10PR_100GP_10TP",10,100,10);
+	public static final EarthGridProperties args10PR_100GP_50TP = createVariableTrifecta("args10PR_100GP_50TP",10,100,50);
+	public static final EarthGridProperties args10PR_100GP_100TP = createVariableTrifecta("args10PR_100GP_100TP",10,100,100);
+		
+// Precision = 16	
+	public static final EarthGridProperties args16PR_1GP_1TP = createVariableTrifecta("args16PR_1GP_1TP",16,1,1);
+	public static final EarthGridProperties args16PR_1GP_5TP = createVariableTrifecta("args16PR_1GP_5TP",16,1,5);
+	public static final EarthGridProperties args16PR_1GP_10TP = createVariableTrifecta("args16PR_1GP_10TP",16,1,10);
+	public static final EarthGridProperties args16PR_1GP_50TP = createVariableTrifecta("args16PR_1GP_50TP",16,1,50);
+	public static final EarthGridProperties args16PR_1GP_100TP = createVariableTrifecta("args16PR_1GP_100TP",16,1,100);
+	
+	public static final EarthGridProperties args16PR_5GP_1TP = createVariableTrifecta("args16PR_5GP_1TP",16,5,1);
+	public static final EarthGridProperties args16PR_5GP_5TP = createVariableTrifecta("args16PR_5GP_5TP",16,5,5);
+	public static final EarthGridProperties args16PR_5GP_10TP = createVariableTrifecta("args16PR_5GP_10TP",16,5,10);
+	public static final EarthGridProperties args16PR_5GP_50TP = createVariableTrifecta("args16PR_5GP_50TP",16,5,50);
+	public static final EarthGridProperties args16PR_5GP_100TP = createVariableTrifecta("args16PR_5GP_100TP",16,5,100);
+	
+	public static final EarthGridProperties args16PR_10GP_1TP = createVariableTrifecta("args16PR_10GP_1TP",16,10,1);
+	public static final EarthGridProperties args16PR_10GP_5TP = createVariableTrifecta("args16PR_10GP_5TP",16,10,5);
+	public static final EarthGridProperties args16PR_10GP_10TP = createVariableTrifecta("args16PR_10GP_10TP",16,10,10);
+	public static final EarthGridProperties args16PR_10GP_50TP = createVariableTrifecta("args16PR_10GP_50TP",16,10,50);
+	public static final EarthGridProperties args16PR_10GP_100TP = createVariableTrifecta("args16PR_10GP_100TP",16,10,100);
+	
+	public static final EarthGridProperties args16PR_50GP_1TP = createVariableTrifecta("args16PR_50GP_1TP",16,50,1);
+	public static final EarthGridProperties args16PR_50GP_5TP = createVariableTrifecta("args16PR_50GP_5TP",16,50,5);
+	public static final EarthGridProperties args16PR_50GP_10TP = createVariableTrifecta("args16PR_50GP_10TP",16,50,10);
+	public static final EarthGridProperties args16PR_50GP_50TP = createVariableTrifecta("args16PR_50GP_50TP",16,50,50);
+	public static final EarthGridProperties args16PR_50GP_100TP = createVariableTrifecta("args16PR_50GP_100TP",16,50,100);
+	
+	public static final EarthGridProperties args16PR_100GP_1TP = createVariableTrifecta("args16PR_100GP_1TP",16,100,1);
+	public static final EarthGridProperties args16PR_100GP_5TP = createVariableTrifecta("args16PR_100GP_5TP",16,100,5);
+	public static final EarthGridProperties args16PR_100GP_10TP = createVariableTrifecta("args16PR_100GP_10TP",16,100,10);
+	public static final EarthGridProperties args16PR_100GP_50TP = createVariableTrifecta("args16PR_100GP_50TP",16,100,50);
+	public static final EarthGridProperties args16PR_100GP_100TP = createVariableTrifecta("args16PR_100GP_100TP",16,100,100);
 	
 	
 	
