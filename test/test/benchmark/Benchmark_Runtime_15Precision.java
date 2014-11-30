@@ -20,7 +20,7 @@ import common.EarthGridProperties;
 import database.SimulationDatabase;
 
 @BenchmarkOptions(callgc = true, benchmarkRounds = Constants.numberOfBenchmarkRounds, warmupRounds = 5)
-public class Benchmark_Runtime_16Precision extends AbstractBenchmark {
+public class Benchmark_Runtime_15Precision extends AbstractBenchmark {
 
 	Earth model;
 	PersistenceManager pm;
@@ -30,108 +30,108 @@ public class Benchmark_Runtime_16Precision extends AbstractBenchmark {
 	private PrintStream original = System.out;
 	
 	@Test
-	public void args16PR_1GP_1TP() {
-		runTest(Constants.args16PR_1GP_1TP);
+	public void args15PR_1GP_1TP() {
+		runTest(Constants.args15PR_1GP_1TP);
 	}
 	@Test
-	public void args16PR_1GP_5TP() {
-		runTest(Constants.args16PR_1GP_5TP);
+	public void args15PR_1GP_5TP() {
+		runTest(Constants.args15PR_1GP_5TP);
 	}
 	@Test
-	public void args16PR_1GP_10TP() {
-		runTest(Constants.args16PR_1GP_10TP);
+	public void args15PR_1GP_10TP() {
+		runTest(Constants.args15PR_1GP_10TP);
 	}
 	@Test
-	public void args16PR_1GP_50TP() {
-		runTest(Constants.args16PR_1GP_50TP);
+	public void args15PR_1GP_50TP() {
+		runTest(Constants.args15PR_1GP_50TP);
 	}
 	@Test
-	public void args16PR_1GP_100TP() {
-		runTest(Constants.args16PR_1GP_100TP);
-	}
-		
-	@Test
-	public void args16PR_5GP_1TP() {
-		runTest(Constants.args16PR_5GP_1TP);
-	}
-	@Test
-	public void args16PR_5GP_5TP() {
-		runTest(Constants.args16PR_5GP_5TP);
-	}
-	@Test
-	public void args16PR_5GP_10TP() {
-		runTest(Constants.args16PR_5GP_10TP);
-	}
-	@Test
-	public void args16PR_5GP_50TP() {
-		runTest(Constants.args16PR_5GP_50TP);
-	}
-	@Test
-	public void args16PR_5GP_100TP() {
-		runTest(Constants.args16PR_5GP_100TP);
+	public void args15PR_1GP_100TP() {
+		runTest(Constants.args15PR_1GP_100TP);
 	}
 		
 	@Test
-	public void args16PR_10GP_1TP() {
-		runTest(Constants.args16PR_10GP_1TP);
+	public void args15PR_5GP_1TP() {
+		runTest(Constants.args15PR_5GP_1TP);
 	}
 	@Test
-	public void args16PR_10GP_5TP() {
-		runTest(Constants.args16PR_10GP_5TP);
+	public void args15PR_5GP_5TP() {
+		runTest(Constants.args15PR_5GP_5TP);
 	}
 	@Test
-	public void args16PR_10GP_10TP() {
-		runTest(Constants.args16PR_10GP_10TP);
+	public void args15PR_5GP_10TP() {
+		runTest(Constants.args15PR_5GP_10TP);
 	}
 	@Test
-	public void args16PR_10GP_50TP() {
-		runTest(Constants.args16PR_10GP_50TP);
+	public void args15PR_5GP_50TP() {
+		runTest(Constants.args15PR_5GP_50TP);
 	}
 	@Test
-	public void args16PR_10GP_100TP() {
-		runTest(Constants.args16PR_10GP_100TP);
+	public void args15PR_5GP_100TP() {
+		runTest(Constants.args15PR_5GP_100TP);
 	}
 		
 	@Test
-	public void args16PR_50GP_1TP() {
-		runTest(Constants.args16PR_50GP_1TP);
+	public void args15PR_10GP_1TP() {
+		runTest(Constants.args15PR_10GP_1TP);
 	}
 	@Test
-	public void args16PR_50GP_5TP() {
-		runTest(Constants.args16PR_50GP_5TP);
+	public void args15PR_10GP_5TP() {
+		runTest(Constants.args15PR_10GP_5TP);
+	}
+	@Test
+	public void args15PR_10GP_10TP() {
+		runTest(Constants.args15PR_10GP_10TP);
+	}
+	@Test
+	public void args15PR_10GP_50TP() {
+		runTest(Constants.args15PR_10GP_50TP);
+	}
+	@Test
+	public void args15PR_10GP_100TP() {
+		runTest(Constants.args15PR_10GP_100TP);
+	}
+		
+	@Test
+	public void args15PR_50GP_1TP() {
+		runTest(Constants.args15PR_50GP_1TP);
+	}
+	@Test
+	public void args15PR_50GP_5TP() {
+		runTest(Constants.args15PR_50GP_5TP);
 	}
 	@Test
 	public void defaultTest() {
-		runTest(Constants.args16PR_50GP_10TP);
+		runTest(Constants.args15PR_50GP_10TP);
 	}
 	@Test
-	public void args16PR_50GP_10TP() {
-		runTest(Constants.args16PR_50GP_50TP);
+	public void args15PR_50GP_10TP() {
+		runTest(Constants.args15PR_50GP_50TP);
 	}
 	@Test
-	public void args16PR_50GP_100TP() {
-		runTest(Constants.args16PR_50GP_100TP);
+	public void args15PR_50GP_100TP() {
+		runTest(Constants.args15PR_50GP_100TP);
 	}
 		
 	@Test
-	public void args16PR_100GP_1TP() {
-		runTest(Constants.args16PR_100GP_1TP);
+	public void args15PR_100GP_1TP() {
+		runTest(Constants.args15PR_100GP_1TP);
 	}
 	@Test
-	public void args16PR_100GP_5TP() {
-		runTest(Constants.args16PR_100GP_5TP);
+	public void args15PR_100GP_5TP() {
+		runTest(Constants.args15PR_100GP_5TP);
 	}
 	@Test
-	public void args16PR_100GP_10TP() {
-		runTest(Constants.args16PR_100GP_10TP);
+	public void args15PR_100GP_10TP() {
+		runTest(Constants.args15PR_100GP_10TP);
 	}
 	@Test
-	public void args16PR_100GP_50TP() {
-		runTest(Constants.args16PR_100GP_50TP);
+	public void args15PR_100GP_50TP() {
+		runTest(Constants.args15PR_100GP_50TP);
 	}
 	@Test
-	public void args16PR_100GP_100TP() {
-		runTest(Constants.args16PR_100GP_100TP);
+	public void args15PR_100GP_100TP() {
+		runTest(Constants.args15PR_100GP_100TP);
 	}
 	
 	

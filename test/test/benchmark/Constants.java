@@ -140,36 +140,36 @@ public class Constants {
 	public static final EarthGridProperties args10PR_100GP_50TP = createVariableTrifecta("args10PR_100GP_50TP",10,100,50);
 	public static final EarthGridProperties args10PR_100GP_100TP = createVariableTrifecta("args10PR_100GP_100TP",10,100,100);
 		
-// Precision = 16	
-	public static final EarthGridProperties args16PR_1GP_1TP = createVariableTrifecta("args16PR_1GP_1TP",16,1,1);
-	public static final EarthGridProperties args16PR_1GP_5TP = createVariableTrifecta("args16PR_1GP_5TP",16,1,5);
-	public static final EarthGridProperties args16PR_1GP_10TP = createVariableTrifecta("args16PR_1GP_10TP",16,1,10);
-	public static final EarthGridProperties args16PR_1GP_50TP = createVariableTrifecta("args16PR_1GP_50TP",16,1,50);
-	public static final EarthGridProperties args16PR_1GP_100TP = createVariableTrifecta("args16PR_1GP_100TP",16,1,100);
+// Precision = 15	
+	public static final EarthGridProperties args15PR_1GP_1TP = createVariableTrifecta("args15PR_1GP_1TP",15,1,1);
+	public static final EarthGridProperties args15PR_1GP_5TP = createVariableTrifecta("args15PR_1GP_5TP",15,1,5);
+	public static final EarthGridProperties args15PR_1GP_10TP = createVariableTrifecta("args15PR_1GP_10TP",15,1,10);
+	public static final EarthGridProperties args15PR_1GP_50TP = createVariableTrifecta("args15PR_1GP_50TP",15,1,50);
+	public static final EarthGridProperties args15PR_1GP_100TP = createVariableTrifecta("args15PR_1GP_100TP",15,1,100);
 	
-	public static final EarthGridProperties args16PR_5GP_1TP = createVariableTrifecta("args16PR_5GP_1TP",16,5,1);
-	public static final EarthGridProperties args16PR_5GP_5TP = createVariableTrifecta("args16PR_5GP_5TP",16,5,5);
-	public static final EarthGridProperties args16PR_5GP_10TP = createVariableTrifecta("args16PR_5GP_10TP",16,5,10);
-	public static final EarthGridProperties args16PR_5GP_50TP = createVariableTrifecta("args16PR_5GP_50TP",16,5,50);
-	public static final EarthGridProperties args16PR_5GP_100TP = createVariableTrifecta("args16PR_5GP_100TP",16,5,100);
+	public static final EarthGridProperties args15PR_5GP_1TP = createVariableTrifecta("args15PR_5GP_1TP",15,5,1);
+	public static final EarthGridProperties args15PR_5GP_5TP = createVariableTrifecta("args15PR_5GP_5TP",15,5,5);
+	public static final EarthGridProperties args15PR_5GP_10TP = createVariableTrifecta("args15PR_5GP_10TP",15,5,10);
+	public static final EarthGridProperties args15PR_5GP_50TP = createVariableTrifecta("args15PR_5GP_50TP",15,5,50);
+	public static final EarthGridProperties args15PR_5GP_100TP = createVariableTrifecta("args15PR_5GP_100TP",15,5,100);
 	
-	public static final EarthGridProperties args16PR_10GP_1TP = createVariableTrifecta("args16PR_10GP_1TP",16,10,1);
-	public static final EarthGridProperties args16PR_10GP_5TP = createVariableTrifecta("args16PR_10GP_5TP",16,10,5);
-	public static final EarthGridProperties args16PR_10GP_10TP = createVariableTrifecta("args16PR_10GP_10TP",16,10,10);
-	public static final EarthGridProperties args16PR_10GP_50TP = createVariableTrifecta("args16PR_10GP_50TP",16,10,50);
-	public static final EarthGridProperties args16PR_10GP_100TP = createVariableTrifecta("args16PR_10GP_100TP",16,10,100);
+	public static final EarthGridProperties args15PR_10GP_1TP = createVariableTrifecta("args15PR_10GP_1TP",15,10,1);
+	public static final EarthGridProperties args15PR_10GP_5TP = createVariableTrifecta("args15PR_10GP_5TP",15,10,5);
+	public static final EarthGridProperties args15PR_10GP_10TP = createVariableTrifecta("args15PR_10GP_10TP",15,10,10);
+	public static final EarthGridProperties args15PR_10GP_50TP = createVariableTrifecta("args15PR_10GP_50TP",15,10,50);
+	public static final EarthGridProperties args15PR_10GP_100TP = createVariableTrifecta("args15PR_10GP_100TP",15,10,100);
 	
-	public static final EarthGridProperties args16PR_50GP_1TP = createVariableTrifecta("args16PR_50GP_1TP",16,50,1);
-	public static final EarthGridProperties args16PR_50GP_5TP = createVariableTrifecta("args16PR_50GP_5TP",16,50,5);
-	public static final EarthGridProperties args16PR_50GP_10TP = createVariableTrifecta("args16PR_50GP_10TP",16,50,10);
-	public static final EarthGridProperties args16PR_50GP_50TP = createVariableTrifecta("args16PR_50GP_50TP",16,50,50);
-	public static final EarthGridProperties args16PR_50GP_100TP = createVariableTrifecta("args16PR_50GP_100TP",16,50,100);
+	public static final EarthGridProperties args15PR_50GP_1TP = createVariableTrifecta("args15PR_50GP_1TP",15,50,1);
+	public static final EarthGridProperties args15PR_50GP_5TP = createVariableTrifecta("args15PR_50GP_5TP",15,50,5);
+	public static final EarthGridProperties args15PR_50GP_10TP = createVariableTrifecta("args15PR_50GP_10TP",15,50,10);
+	public static final EarthGridProperties args15PR_50GP_50TP = createVariableTrifecta("args15PR_50GP_50TP",15,50,50);
+	public static final EarthGridProperties args15PR_50GP_100TP = createVariableTrifecta("args15PR_50GP_100TP",15,50,100);
 	
-	public static final EarthGridProperties args16PR_100GP_1TP = createVariableTrifecta("args16PR_100GP_1TP",16,100,1);
-	public static final EarthGridProperties args16PR_100GP_5TP = createVariableTrifecta("args16PR_100GP_5TP",16,100,5);
-	public static final EarthGridProperties args16PR_100GP_10TP = createVariableTrifecta("args16PR_100GP_10TP",16,100,10);
-	public static final EarthGridProperties args16PR_100GP_50TP = createVariableTrifecta("args16PR_100GP_50TP",16,100,50);
-	public static final EarthGridProperties args16PR_100GP_100TP = createVariableTrifecta("args16PR_100GP_100TP",16,100,100);
+	public static final EarthGridProperties args15PR_100GP_1TP = createVariableTrifecta("args15PR_100GP_1TP",15,100,1);
+	public static final EarthGridProperties args15PR_100GP_5TP = createVariableTrifecta("args15PR_100GP_5TP",15,100,5);
+	public static final EarthGridProperties args15PR_100GP_10TP = createVariableTrifecta("args15PR_100GP_10TP",15,100,10);
+	public static final EarthGridProperties args15PR_100GP_50TP = createVariableTrifecta("args15PR_100GP_50TP",15,100,50);
+	public static final EarthGridProperties args15PR_100GP_100TP = createVariableTrifecta("args15PR_100GP_100TP",15,100,100);
 	
 	
 	
