@@ -2,7 +2,6 @@ package test.benchmark;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
 import java.io.PrintStream;
 
 import org.junit.After;
@@ -11,46 +10,43 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import persistenceManager.PersistenceManager;
-
 import com.carrotsearch.junitbenchmarks.AbstractBenchmark;
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 
-import common.EarthGridProperties;
-import database.SimulationDatabase;
 import simulation.Earth;
-import test.benchmark.Constants;
+import common.EarthGridProperties;
+import common.EarthGridProperties.EarthGridProperty;
+import database.SimulationDatabase;
 
-//TODO Add the @BenchmarkOptions to each TestCase
 @BenchmarkOptions(callgc = true, benchmarkRounds = Constants.numberOfBenchmarkRounds, warmupRounds = 5)
-//TODO Add "extends AbstractBenchmark" to each TestCase
-public class ProtoBenchmark extends AbstractBenchmark{
+public class Benchmark_Runtime_Baseline extends AbstractBenchmark{
 	
-	//TODO Example Test Case. Note the test/method name is the same as the argument name
-	// Need one of these for each argument
-	@Test
-	public void args6PR_100GP_100TP() {
-		runTest(Constants.args6PR_100GP_100TP);
-	}
-	
-	//Copy-Paste this body into each TestCase
-	//TODO Start Copy
 	Earth model;
-	PersistenceManager pm;
-	File dbFile;
 	
 	Runtime runtime = Runtime.getRuntime();
-	private PrintStream original = System.out;
+	private PrintStream original = System.out;	
 	
+	@Test
+	public void benchmark_ThreadSleep10() throws Exception {
+		runTest(Constants.argsBaseline10);
+	}
 	
+	@Test
+	public void benchmark_ThreadSleep100() throws Exception {
+		runTest(Constants.argsBaseline100);
+	}
+	
+	@Test
+	public void benchmark_ThreadSleep1000() throws Exception {
+		runTest(Constants.argsBaseline1000);
+	}
 	
 	private void runTest(EarthGridProperties simProp){
-		model.configure(simProp);
-		model.start();
+		int sleepCount = Integer.parseInt(simProp.getPropertyString(EarthGridProperty.NAME));
 		while(true) {
 			try {
-				model.generate();
-				pm.processMessageQueue();
+				Thread.sleep(sleepCount);
+				break;
 			} catch (InterruptedException e) {
 				assertEquals(true, e.getMessage().contains("Simulation Completed!"));
 				break;
@@ -74,27 +70,11 @@ public class ProtoBenchmark extends AbstractBenchmark{
 
 	@Before
 	public void setUp() throws Exception {
-		disableOutput();
-		model = new Earth();
-		pm = new PersistenceManager();
+		SimulationDatabase.getSimulationDatabase().resetDatabase();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		enableOutput();
-		dbFile = new File(Constants.DATABASE_FILE);
-		if(dbFile.exists())
-			System.out.println("#DBFILESIZE:"+dbFile.length());
-		model = null;
-		pm = null;
+		SimulationDatabase.getSimulationDatabase().resetDatabase();
 	}
-	
-	private void disableOutput(){
-		System.setOut(Constants.outNull);
-	}
-	
-	private void enableOutput(){
-		System.setOut(original);
-	}
-	//TODO End Copy
 }

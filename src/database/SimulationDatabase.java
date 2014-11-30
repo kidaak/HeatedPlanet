@@ -9,6 +9,7 @@ import java.util.Properties;
 import javax.swing.JOptionPane;
 
 import org.h2.jdbc.JdbcSQLException;
+import org.h2.jdbcx.JdbcConnectionPool;
 
 /**
  * Created by David Welker on 11/20/14.
@@ -16,10 +17,11 @@ import org.h2.jdbc.JdbcSQLException;
 public class SimulationDatabase
 {
     private static Connection connection;
+    private static JdbcConnectionPool cp;
     private static final SimulationDatabase sdb;
     
     private static final String DB_DRIVER = "org.h2.Driver";
-    private static final String DB_CONNECTION = "jdbc:h2:split:~/PlanetSim";
+    private static final String DB_CONNECTION = "jdbc:h2:split:~/PlanetSim;AUTO_SERVER=TRUE";
     private static final String DB_USER = "sa";
     private static final String DB_PASSWORD = "";
     
@@ -184,7 +186,7 @@ public class SimulationDatabase
     }
     
     public void resetDatabase() throws SQLException{
-    	sdb.executeSqlGeneral("DROP ALL OBJECTS");
+    	sdb.executeSqlGeneral("DROP ALL OBJECTS DELETE FILES");
     	sdb.createSimulationTable();
 		sdb.createGridTable();
     }

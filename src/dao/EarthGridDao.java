@@ -277,6 +277,7 @@ public class EarthGridDao implements IEarthGridDao {
 		int numGrids = allGrids.length;
 		EarthGridProperties simProps = insert.getProperties();
 		String simName = simProps.getPropertyString(EarthGridProperty.NAME);
+		
 		if(numGrids == 0)
 			throw new IllegalArgumentException("EarthGridInsert does not contain any Grids to insert.");
 		if(isNameUnique(simName)){

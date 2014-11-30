@@ -1,5 +1,7 @@
 package test.benchmark;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Calendar;
 
 import common.EarthGridProperties;
@@ -10,6 +12,7 @@ public class Constants {
 	public static final int KB = 1024;
 	public static final int MB = 1024*1024;
 	public static final int GB = 1024*1024*1024;
+	public static final String DATABASE_FILE = System.getProperty("user.home")+"/PlanetSim.mv.db";
 	
 	//Default Values
 	private static final int GRIDSPACING = 15;
@@ -40,7 +43,56 @@ public class Constants {
 	 * TP = Time/Temporal Precision
 	 */
 	public static final EarthGridProperties args6PR_100GP_100TP = createDefault("default");
+	public static final EarthGridProperties argsBaseline10 = createDefault("10");
+	public static final EarthGridProperties argsBaseline100 = createDefault("100");
+	public static final EarthGridProperties argsBaseline1000 = createDefault("1000");
 	
+	
+	public static final EarthGridProperties args0PR_1GP_1TP = createVariableTrifecta("args0PR_1GP_1TP",0,1,1);
+	public static final EarthGridProperties args0PR_1GP_5TP = createVariableTrifecta("args0PR_1GP_5TP",0,1,5);
+	public static final EarthGridProperties args0PR_1GP_10TP = createVariableTrifecta("args0PR_1GP_10TP",0,1,10);
+	public static final EarthGridProperties args0PR_1GP_50TP = createVariableTrifecta("args0PR_1GP_50TP",0,1,50);
+	public static final EarthGridProperties args0PR_1GP_100TP = createVariableTrifecta("args0PR_1GP_100TP",0,1,100);
+	
+	public static final EarthGridProperties args0PR_5GP_1TP = createVariableTrifecta("args0PR_5GP_1TP",0,5,1);
+	public static final EarthGridProperties args0PR_5GP_5TP = createVariableTrifecta("args0PR_5GP_5TP",0,5,5);
+	public static final EarthGridProperties args0PR_5GP_10TP = createVariableTrifecta("args0PR_5GP_10TP",0,5,10);
+	public static final EarthGridProperties args0PR_5GP_50TP = createVariableTrifecta("args0PR_5GP_50TP",0,5,50);
+	public static final EarthGridProperties args0PR_5GP_100TP = createVariableTrifecta("args0PR_5GP_100TP",0,5,100);
+	
+	public static final EarthGridProperties args0PR_10GP_1TP = createVariableTrifecta("args0PR_10GP_1TP",0,10,1);
+	public static final EarthGridProperties args0PR_10GP_5TP = createVariableTrifecta("args0PR_10GP_5TP",0,10,5);
+	public static final EarthGridProperties args0PR_10GP_10TP = createVariableTrifecta("args0PR_10GP_10TP",0,10,10);
+	public static final EarthGridProperties args0PR_10GP_50TP = createVariableTrifecta("args0PR_10GP_50TP",0,10,50);
+	public static final EarthGridProperties args0PR_10GP_100TP = createVariableTrifecta("args0PR_10GP_100TP",0,10,100);
+	
+	public static final EarthGridProperties args0PR_50GP_1TP = createVariableTrifecta("args0PR_50GP_1TP",0,50,1);
+	public static final EarthGridProperties args0PR_50GP_5TP = createVariableTrifecta("args0PR_50GP_5TP",0,50,5);
+	public static final EarthGridProperties args0PR_50GP_10TP = createVariableTrifecta("args0PR_50GP_10TP",0,50,10);
+	public static final EarthGridProperties args0PR_50GP_50TP = createVariableTrifecta("args0PR_50GP_50TP",0,50,50);
+	public static final EarthGridProperties args0PR_50GP_100TP = createVariableTrifecta("args0PR_50GP_100TP",0,50,100);
+	
+	public static final EarthGridProperties args0PR_100GP_1TP = createVariableTrifecta("args0PR_100GP_1TP",0,100,1);
+	public static final EarthGridProperties args0PR_100GP_5TP = createVariableTrifecta("args0PR_100GP_5TP",0,100,5);
+	public static final EarthGridProperties args0PR_100GP_10TP = createVariableTrifecta("args0PR_100GP_10TP",0,100,10);
+	public static final EarthGridProperties args0PR_100GP_50TP = createVariableTrifecta("args0PR_100GP_50TP",0,100,50);
+	public static final EarthGridProperties args0PR_100GP_100TP = createVariableTrifecta("args0PR_100GP_100TP",0,100,100);
+	
+	//TODO Duplicate set above for Precision = 5
+	
+	
+	//TODO Duplicate set above for Precision = 10
+	
+	
+	//TODO Duplicate set above for Precision = 16	
+	
+	
+	
+	//Ease of use methods to create EarthGridProperties
+	private static EarthGridProperties createVariableTrifecta(String testName, int precision, int geoPrecision, int timePrecision){
+		return configureProperties(testName, GRIDSPACING, SIMULATIONTIMESTEP, SIMULATIONLENGTH, precision, geoPrecision,
+				timePrecision, AXIALTILT, ECCENTRICITY, PRESENTATIONRATE, STARTDATE,ENDDATE);
+	}
 	
 	private static EarthGridProperties createDefault(String testName){
 		return configureProperties(testName, GRIDSPACING, SIMULATIONTIMESTEP, SIMULATIONLENGTH, PRECISION, GEOPRECISION,
@@ -80,4 +132,10 @@ public class Constants {
 		ed.add(Calendar.MONTH, 12);
 		return egp;
 	}
+	
+	protected static final PrintStream outNull = new PrintStream(new OutputStream() {
+        public void write(int b) {
+            //DO NOTHING
+        }
+    });
 }
