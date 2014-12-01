@@ -33,84 +33,84 @@ public class Benchmark_Memory_15Precision extends AbstractBenchmark{
 	public void args15PR_100GP_100TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_100GP_100TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_100GP_100TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_100GP_10TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_100GP_10TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_100GP_10TP);
 		enableOutput();
 	}	
 	@Test
 	public void args15PR_100GP_1TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_100GP_1TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_100GP_1TP);
 		enableOutput();
 	}	
 	@Test
 	public void args15PR_100GP_50TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_100GP_50TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_100GP_50TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_100GP_5TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_100GP_5TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_100GP_5TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_10GP_100TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_10GP_100TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_10GP_100TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_10GP_10TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_10GP_10TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_10GP_10TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_10GP_1TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_10GP_1TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_10GP_1TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_10GP_50TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_10GP_50TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_10GP_50TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_10GP_5TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_10GP_5TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_10GP_5TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_1GP_100TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_1GP_100TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_1GP_100TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_1GP_10TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_1GP_10TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_1GP_10TP);
 		enableOutput();
 	}
 	@Test
@@ -124,84 +124,84 @@ public class Benchmark_Memory_15Precision extends AbstractBenchmark{
 	public void args15PR_1GP_50TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_1GP_50TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_1GP_50TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_1GP_5TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_1GP_5TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_1GP_5TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_50GP_100TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_50GP_100TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_50GP_100TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_50GP_10TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_50GP_10TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_50GP_10TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_50GP_1TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_50GP_1TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_50GP_1TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_50GP_50TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_50GP_50TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_50GP_50TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_50GP_5TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_50GP_5TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_50GP_5TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_5GP_100TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_5GP_100TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_5GP_100TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_5GP_10TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_5GP_10TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_5GP_10TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_5GP_1TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_5GP_1TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_5GP_1TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_5GP_50TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_5GP_50TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_5GP_50TP);
 		enableOutput();
 	}
 	@Test
 	public void args15PR_5GP_5TP() {
 		System.out.print("*"+this.getClass().getSimpleName()+".args15PR_5GP_5TP,");
 		disableOutput();
-		runTest(Constants.args15PR_1GP_1TP);
+		runTest(Constants.args15PR_5GP_5TP);
 		enableOutput();
 	}
 
