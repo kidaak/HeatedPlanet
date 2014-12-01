@@ -97,6 +97,10 @@ public class Benchmark_Runtime_0Precision extends AbstractBenchmark {
 		runTest(Constants.args0PR_50GP_1TP);
 	}
 	@Test
+	public void args0PR_50GP_50TP() {
+		runTest(Constants.args0PR_50GP_5TP);
+	}
+	@Test
 	public void args0PR_50GP_5TP() {
 		runTest(Constants.args0PR_50GP_5TP);
 	}
