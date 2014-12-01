@@ -51,10 +51,10 @@ public class Constants {
 	
 	//Persistence vs Simulation
 	public static final EarthGridProperties args6Pr_100GP_100TP = createVariableTrifecta("args6Pr_100GP_100TP",6,100,100);
-	public static final EarthGridProperties args6Pr_75GP_75TP = createVariableTrifecta("args6Pr_100GP_100TP",6,75,75);
-	public static final EarthGridProperties args6Pr_50GP_50TP = createVariableTrifecta("args6Pr_100GP_100TP",6,50,50);
-	public static final EarthGridProperties args6Pr_25GP_25TP = createVariableTrifecta("args6Pr_100GP_100TP",6,25,25);
-	public static final EarthGridProperties args6Pr_0GP_0TP = createVariableTrifecta("args6Pr_100GP_100TP",6,0,0);
+	public static final EarthGridProperties args6Pr_75GP_75TP = createVariableTrifecta("args6Pr_75GP_75TP",6,75,75);
+	public static final EarthGridProperties args6Pr_50GP_50TP = createVariableTrifecta("args6Pr_50GP_50TP",6,50,50);
+	public static final EarthGridProperties args6Pr_25GP_25TP = createVariableTrifecta("args6Pr_25GP_25TP",6,25,25);
+	public static final EarthGridProperties args6Pr_0GP_0TP = createVariableTrifecta("args6Pr_0GP_0TP",6,0,0);
 	
 	// Precision = 0
 	public static final EarthGridProperties args0PR_1GP_1TP = createVariableTrifecta("args0PR_1GP_1TP",0,1,1);
