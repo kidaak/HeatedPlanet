@@ -7,7 +7,6 @@ import java.util.Queue;
 import messaging.Publisher;
 import messaging.events.SimResultMessage;
 import simulation.util.GridCell;
-import common.Buffer;
 import common.EarthGridProperties;
 import common.Grid;
 import common.IGrid;

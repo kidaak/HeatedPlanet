@@ -1,8 +1,6 @@
 package common;
 
 import java.io.Serializable;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class Grid implements IGrid, Serializable, Comparable<Grid> {
 	
