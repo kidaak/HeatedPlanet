@@ -23,7 +23,7 @@ import database.SimulationDatabase;
 public class Benchmark_Runtime_15Precision extends AbstractBenchmark {
 
 	Earth model;
-	PersistenceManager pm;
+	static PersistenceManager pm;
 	File dbFile;
 	
 	Runtime runtime = Runtime.getRuntime();
@@ -161,6 +161,7 @@ public class Benchmark_Runtime_15Precision extends AbstractBenchmark {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		SimulationDatabase.getSimulationDatabase().resetDatabase();
+		pm = new PersistenceManager();
 		System.gc();
 	}
 
@@ -174,7 +175,6 @@ public class Benchmark_Runtime_15Precision extends AbstractBenchmark {
 	public void setUp() throws Exception {
 		disableOutput();
 		model = new Earth();
-		pm = new PersistenceManager();
 		System.gc();
 		runtime.gc();
 	}
@@ -186,7 +186,6 @@ public class Benchmark_Runtime_15Precision extends AbstractBenchmark {
 		if(dbFile.exists())
 			System.out.println("#DBFILESIZE:"+dbFile.length());
 		model = null;
-		pm = null;
 		System.gc();
 		runtime.gc();
 	}

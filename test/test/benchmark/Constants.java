@@ -42,10 +42,19 @@ public class Constants {
 	 * GP = Geographic Precision
 	 * TP = Time/Temporal Precision
 	 */
-	public static final EarthGridProperties args6PR_100GP_100TP = createDefault("default");
+	public static final EarthGridProperties argsDefault = createDefault("default");
+	
+	//Baselines
 	public static final EarthGridProperties argsBaseline10 = createDefault("10");
 	public static final EarthGridProperties argsBaseline100 = createDefault("100");
 	public static final EarthGridProperties argsBaseline1000 = createDefault("1000");
+	
+	//Persistence vs Simulation
+	public static final EarthGridProperties args6Pr_100GP_100TP = createVariableTrifecta("args6Pr_100GP_100TP",6,100,100);
+	public static final EarthGridProperties args6Pr_75GP_75TP = createVariableTrifecta("args6Pr_100GP_100TP",6,75,75);
+	public static final EarthGridProperties args6Pr_50GP_50TP = createVariableTrifecta("args6Pr_100GP_100TP",6,50,50);
+	public static final EarthGridProperties args6Pr_25GP_25TP = createVariableTrifecta("args6Pr_100GP_100TP",6,25,25);
+	public static final EarthGridProperties args6Pr_0GP_0TP = createVariableTrifecta("args6Pr_100GP_100TP",6,0,0);
 	
 	// Precision = 0
 	public static final EarthGridProperties args0PR_1GP_1TP = createVariableTrifecta("args0PR_1GP_1TP",0,1,1);

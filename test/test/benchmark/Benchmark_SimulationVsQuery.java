@@ -12,45 +12,76 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import persistenceManager.PersistenceManager;
+import simulation.Earth;
 
 import com.carrotsearch.junitbenchmarks.AbstractBenchmark;
-import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
-
 import common.EarthGridProperties;
-import database.SimulationDatabase;
-import simulation.Earth;
-import test.benchmark.Constants;
 
-//TODO Add the @BenchmarkOptions to each TestCase
-@BenchmarkOptions(callgc = true, benchmarkRounds = Constants.numberOfBenchmarkRounds, warmupRounds = 5)
-//TODO Add "extends AbstractBenchmark" to each TestCase
-public class ProtoBenchmark extends AbstractBenchmark{
+import database.SimulationDatabase;
+
+public class Benchmark_SimulationVsQuery extends AbstractBenchmark{
 	
-	//TODO Example Test Case. Note the test/method name is the same as the argument name
-	// Need one of these for each argument
-	@Test
-	public void args6PR_100GP_100TP() {
-		runTest(Constants.argsDefault);
-	}
-	
-	//Copy-Paste this body into each TestCase
-	//TODO Start Copy
 	Earth model;
-	PersistenceManager pm;
+	static PersistenceManager pm;
 	File dbFile;
 	
 	Runtime runtime = Runtime.getRuntime();
 	private PrintStream original = System.out;
 	
+	@Test
+	public void args6Pr_100GP_100TP_NP() {
+		runTest(Constants.args6Pr_100GP_100TP,false);
+	}
+	@Test
+	public void args6Pr_100GP_100TP_P() {
+		runTest(Constants.args6Pr_100GP_100TP,true);
+	}
+	
+	@Test
+	public void args6Pr_75GP_75TP_NP() {
+		runTest(Constants.args6Pr_75GP_75TP,false);
+	}
+	@Test
+	public void args6Pr_75GP_75TP_P() {
+		runTest(Constants.args6Pr_75GP_75TP,true);
+	}
+	
+	@Test
+	public void args6Pr_50GP_50TP_NP() {
+		runTest(Constants.args6Pr_50GP_50TP,false);
+	}
+	@Test
+	public void args6Pr_50GP_50TP_P() {
+		runTest(Constants.args6Pr_50GP_50TP,true);
+	}
+	
+	@Test
+	public void args6Pr_25GP_25TP_NP() {
+		runTest(Constants.args6Pr_25GP_25TP,false);
+	}
+	@Test
+	public void args6Pr_25GP_25TP_P() {
+		runTest(Constants.args6Pr_25GP_25TP,true);
+	}
+	
+	@Test
+	public void args6Pr_0GP_0TP_NP() {
+		runTest(Constants.args6Pr_0GP_0TP,false);
+	}
+	@Test
+	public void args6Pr_0GP_0TP_P() {
+		runTest(Constants.args6Pr_0GP_0TP,true);
+	}
 	
 	
-	private void runTest(EarthGridProperties simProp){
+	private void runTest(EarthGridProperties simProp,boolean usePersistence){
 		model.configure(simProp);
 		model.start();
 		while(true) {
 			try {
 				model.generate();
-				pm.processMessageQueue();
+				if(usePersistence)
+					pm.processMessageQueue();
 			} catch (InterruptedException e) {
 				assertEquals(true, e.getMessage().contains("Simulation Completed!"));
 				break;
@@ -65,12 +96,12 @@ public class ProtoBenchmark extends AbstractBenchmark{
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		SimulationDatabase.getSimulationDatabase().resetDatabase();
+		pm = new PersistenceManager();
 		System.gc();
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		SimulationDatabase.getSimulationDatabase().resetDatabase();
 		System.gc();
 	}
 
@@ -78,7 +109,6 @@ public class ProtoBenchmark extends AbstractBenchmark{
 	public void setUp() throws Exception {
 		disableOutput();
 		model = new Earth();
-		pm = new PersistenceManager();
 		System.gc();
 		runtime.gc();
 	}
@@ -86,11 +116,7 @@ public class ProtoBenchmark extends AbstractBenchmark{
 	@After
 	public void tearDown() throws Exception {
 		enableOutput();
-		dbFile = new File(Constants.DATABASE_FILE);
-		if(dbFile.exists())
-			System.out.println("#DBFILESIZE:"+dbFile.length());
 		model = null;
-		pm = null;
 		System.gc();
 		runtime.gc();
 	}
@@ -102,5 +128,4 @@ public class ProtoBenchmark extends AbstractBenchmark{
 	private void enableOutput(){
 		System.setOut(original);
 	}
-	//TODO End Copy
 }
